@@ -10,7 +10,7 @@
 | thClaws | 0.156.0 | L1–L4 | จำลอง |
 | OpenClaw | 2026.11.3 | L1–L4 | จำลอง |
 
-**ขอบเขตของผลทดสอบ:** Claude Code ทดสอบทั้ง 2 skill (init event เห็น server `subnet-calc` และ `fwrule` เป็น `connected`) ส่วน Hermes, Codex, thClaws, OpenClaw ทดสอบกับ `subnet-calculator` เท่านั้น `fwrule-analyzer` บน 4 runtime นี้ **ยังรอทดสอบซ้ำ** (หลังเพิ่ม launcher ที่ใส่ `readOnlyHint`)
+**ขอบเขตของผลทดสอบ:** Claude Code ทดสอบทั้ง 2 skill (init event เห็น server `subnet-calc` และ `fwrule` เป็น `connected`) OpenClaw ผ่าน L1–L4 ทั้ง 2 skill, thClaws ผ่าน L3–L4 ของ `fwrule` (อนุมัติ MCP 2 ครั้งเพราะมี 2 server), Codex ผ่าน L4 ของ `subnet-calculator` แต่ **`fwrule` ไม่ถูกลงทะเบียนใน Codex 0.169.0** (config รับ, handshake ผ่าน แต่ session ไม่เห็น tool ของ fwrule; ยังไม่ทราบสาเหตุ — ถือว่า `fwrule` บน Codex ยังไม่รองรับจนกว่าจะวินิจฉัย) Hermes ทดสอบกับ `subnet-calculator` เท่านั้น
 
 L4 ด้วยโมเดลจำลองพิสูจน์เส้นทาง runtime → MCP เท่านั้น **ไม่ได้พิสูจน์** ว่า LLM จริงเลือก tool เองหรือทำตามข้อความใน SKILL.md การทดสอบกับโมเดลจริงต้องให้เจ้าของล็อกอินบนเครื่องทดสอบเอง (ห้ามคัดลอก token)
 

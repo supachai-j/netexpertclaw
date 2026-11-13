@@ -3,7 +3,7 @@
 | อาการ | สาเหตุที่พบ | วิธีแก้ |
 |---|---|---|
 | MCP ขึ้น `failed` ครั้งแรก | ต้องดึง package จากอินเทอร์เน็ต หรือไม่มี `uv` | ตรวจ `uv --version` และการเชื่อมต่อ ; รันคำสั่งใน `dist/<runtime>/…snippet` ด้วยมือเพื่อดู error |
-| Codex ตอบว่า `MCP tool call requires approval, but approval policy is never` | tool ไม่มี `readOnlyHint` (หรือเป็น tool เขียน) | ตรวจ annotation ด้วย `tests/smoke_mcp.py` ; tool ของเรามีครบแล้ว |
+| Codex ตอบว่า `MCP tool call requires approval, but approval policy is never` | tool ไม่มี `readOnlyHint` (หรือเป็น tool เขียน) | ตรวจ annotation ด้วย `tests/smoke_mcp.py` ; `subnet-calc` ทดสอบแล้วว่าผ่าน ; `fwrule` บน Codex ดู [ความเข้ากันได้](compat.html) |
 | thClaws `mcp spawn refused … not in the user allowlist` | เปลี่ยน args/โฟลเดอร์ หรือรัน headless ครั้งแรก | เปิด REPL แล้วอนุมัติ (`y`) ใหม่ |
 | OpenClaw ไม่เห็น tool ตรง ๆ | พฤติกรรมของ OpenClaw | ให้โมเดลใช้ `tool_search` แล้ว `dispatch_action` |
 | OpenClaw ลงแล้วได้เวอร์ชันเก่า | Node 22 | อัปเกรดเป็น Node ≥ 24.16 |

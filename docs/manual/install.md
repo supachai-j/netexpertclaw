@@ -66,6 +66,8 @@ codex debug prompt-input | grep -E 'subnet-calculator|fwrule-analyzer'
 codex mcp get subnet-calc
 ```
 
+> `fwrule-analyzer` บน Codex 0.169.0: server เชื่อมได้แต่ tool ไม่ถูกลงทะเบียนใน session ยังไม่ทราบสาเหตุ (ดู [ความเข้ากันได้](compat.html)) ใช้ `subnet-calculator` บน Codex ได้ตามปกติ
+
 - Codex เรียก MCP tool เป็น namespace `mcp__subnet_calc` — ไม่ต้องพิมพ์ชื่อ tool เต็ม ให้บอกเป้าหมายเป็นภาษาธรรมดา
 - tool ทุกตัวของเราติด `readOnlyHint` แล้ว ซึ่งจำเป็นต่อ `codex exec` (ถ้าไม่มี Codex จะปฏิเสธการเรียก)
 
@@ -78,9 +80,15 @@ openclaw skills install dist/openclaw/skills/subnet-calculator
 openclaw skills install dist/openclaw/skills/fwrule-analyzer
 openclaw skills info subnet-calculator            # ควรเป็น Ready และ Visible to model: yes
 # MCP: ใส่เฉพาะ "ตัว server" ไม่ใช่ทั้งก้อน {"mcpServers": ...}
-openclaw mcp set subnet-calc '{"command":"uv","args":[...]}'   # ค่าจาก dist/openclaw/mcp.json.snippet
+python3 - <<'PY'
+import json, subprocess
+for name, cfg in json.load(open("dist/openclaw/mcp.json.snippet"))["mcpServers"].items():
+    subprocess.run(["openclaw", "mcp", "set", name, json.dumps(cfg)], check=True)
+PY
 openclaw mcp probe                                 # ควรเห็น 4 tools ต่อ server
 ```
+
+`openclaw skills install` จะพิมพ์ "gateway refresh failed, requires credentials" ถ้าไม่มี gateway — การติดตั้งยังสำเร็จตามปกติ
 
 OpenClaw ไม่เปิด MCP tool ให้โมเดลโดยตรง โมเดลต้องค้นด้วย `tool_search` แล้วเรียกด้วย `dispatch_action` ผลจาก tool ถูกห่อเป็นเนื้อหา "ไม่น่าเชื่อถือ" ซึ่งเป็นพฤติกรรมที่ตั้งใจ
 
@@ -94,7 +102,9 @@ cp -r dist/thclaws/.thclaws ./
 thclaws          # เปิด REPL แล้วพิมพ์ /skills และ /mcp
 ```
 
-ครั้งแรก thClaws จะถามอนุมัติการรัน MCP stdio (`Approve and remember? [y/N]`) การอนุมัติผูกกับ **command line ทั้งบรรทัดและ cwd** เปลี่ยน args หรือย้ายโฟลเดอร์ต้องอนุมัติใหม่ และโหมด headless (`-p`) จะปฏิเสธถ้ายังไม่เคยอนุมัติ
+บนเครื่อง Linux headless ที่จะใช้ `--cli` ต้องมี `libwebkit2gtk-4.1-0 libsoup-3.0-0 libjavascriptcoregtk-4.1-0` (apt) ก่อน
+
+ครั้งแรก thClaws จะถามอนุมัติการรัน MCP stdio **ครั้งละ 1 server (ตอนนี้มี 2 server จึงถาม 2 ครั้ง)** (`Approve and remember? [y/N]`) การอนุมัติผูกกับ **command line ทั้งบรรทัดและ cwd** เปลี่ยน args หรือย้ายโฟลเดอร์ต้องอนุมัติใหม่ และโหมด headless (`-p`) จะปฏิเสธถ้ายังไม่เคยอนุมัติ
 
 ## ตรวจว่าใช้ได้จริง
 
