@@ -24,3 +24,6 @@ Known quirk: opening Claude Code *inside* this repo also reads the root `.mcp.js
 
 ## Manual (website)
 Source: `docs/manual/*.md` (Thai). Build: `pip install markdown && python3 scripts/build_site.py` -> `site/` (static). Pages: overview, install per runtime, usage, skills/tools, safety, develop, compatibility, troubleshooting.
+
+## Manual (public)
+https://supachai-j.github.io/netexpertclaw-docs/ (source: public repo supachai-j/netexpertclaw-docs; this repo keeps docs/manual as the source of truth - copy changes over, see docs/DECISIONS.md D-5).
