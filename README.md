@@ -19,3 +19,6 @@ Known quirk: opening Claude Code *inside* this repo also reads the root `.mcp.js
 
 ## Imported from NetClaw
 `python3 scripts/import-netclaw.py [--upstream <checkout>]` re-creates imported skills from `imports/netclaw.json` (pinned commit, exact-match edits, hashed requirements, NOTICE entries). Per-import review: `docs/imports/`. Imported so far: `fwrule-analyzer` (+ `fwrule` MCP pinned to AutomateIP/fwrule-mcp@3bd52d79).
+
+## Manual (website)
+Source: `docs/manual/*.md` (Thai). Build: `pip install markdown && python3 scripts/build_site.py` -> `site/` (static). Pages: overview, install per runtime, usage, skills/tools, safety, develop, compatibility, troubleshooting.
