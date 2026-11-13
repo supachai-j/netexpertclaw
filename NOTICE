@@ -9,3 +9,6 @@ Derived files (upstream path -> local path | modified):
 
 Rule: every file copied or derived from NetClaw must be listed here with upstream path, commit and "modified: yes/no".
 scripts/import-netclaw.py (planned) writes these entries; lint fails on a skill that mentions NetClaw without an entry.
+
+Imported by scripts/import-netclaw.py from commit cfafa46c3227356ca6ef38261fa9c1f4ba4711cb (Apache-2.0):
+- workspace/skills/fwrule-analyzer/SKILL.md (sha256 61db7901b65b8c10...) -> skills/fwrule-analyzer/SKILL.md | modified: yes (frontmatter rewritten, 6 text replacement(s))

@@ -25,8 +25,10 @@ def main() -> int:
     for n, e in srv.items():
         if e.get("capability") not in ("read", "write"): errs.append(f"server {n}: capability must be read|write")
         a = e.get("args", [])
-        if e.get("command") == "uv" and ("--no-project" not in a or not any(x.startswith("mcp==") for x in a)):
-            errs.append(f"server {n}: uv run needs --no-project and exact == pins (F-8/F-10)")
+        if e.get("command") == "uv":
+            pinned = any(x.startswith("mcp==") for x in a) or ("--with-requirements" in a and any(re.search(r"^git\+\S+@[0-9a-f]{40}$", x) for x in a))
+            if "--no-project" not in a or "--isolated" not in a or not pinned:
+                errs.append(f"server {n}: uv run needs --no-project --isolated and exact pins (== or requirements + git@sha) (F-8/F-10)")
     for s in skills():
         m, d = s["meta"], s["dir"]
         for k in REQUIRED:
