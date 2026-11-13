@@ -79,6 +79,7 @@ def main() -> int:
                 errs.append(f"{d.name}: {fld} contains ': ' or ' #' in an unquoted YAML scalar (official skills-ref validator rejects it)")
         comp = m.get("compatibility", "")
         if not comp or len(comp) > 500: errs.append(f"{d.name}: compatibility (<=500 chars: requirements, network access) is required")
+        if (m.get("metadata") or {}).get("maturity") not in ("experimental", "tested", "recommended"): errs.append(f"{d.name}: metadata.maturity must be experimental|tested|recommended (see docs/READINESS.md)")
         nlines = s["body"].count("\n") + 1
         if nlines > 500 or len(s["text"]) / 4 > 5000: errs.append(f"{d.name}: SKILL.md too long ({nlines} lines, ~{len(s['text']) // 4} tokens; limit 500 lines / 5000 tokens, move detail to references/)")
         if not re.search(r"(?m)^## Gotchas\s*$", s["body"]): errs.append(f"{d.name}: needs a '## Gotchas' section (concrete, verified corrections)")

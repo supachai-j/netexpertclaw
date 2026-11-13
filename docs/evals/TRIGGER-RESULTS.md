@@ -17,3 +17,5 @@ Findings
 - rfc-lookup improved clearly after naming the failure mode in the description; subnet-calculator barely did. The model is confident at subnet arithmetic, so a description alone may not be enough. Next options: tell the model (in the description) which exact outputs must come from the tool, test with 3 runs, then compare answer correctness with and without the skill (evals.json) before deciding the skill is worth its tokens.
 - A first run scored ~0 because of a bug in the harness (tool-name match); fixed in the same change. Numbers above come from the fixed harness.
 - The earlier all-zero baseline is discarded.
+
+- Subnet-calculator and rfc-lookup trigger numbers vary by about 2 queries between identical runs (rfc-lookup train/validation 11/12 and 8/8 in one run, 12/12 and 6/8 in the next); read them as ranges.
