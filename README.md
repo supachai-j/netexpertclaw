@@ -6,7 +6,7 @@ Targets: Claude Code · Codex · Hermes Agent · OpenClaw · thclaw
 
 Inspired by [automateyournetwork/netclaw](https://github.com/automateyournetwork/netclaw) (Apache-2.0). Ideas only; code reuse must keep license + attribution (see NOTICE).
 
-Codename / CLI: **nxclaw** (`bin/nxclaw`; run `bin/nxclaw doctor`, `bin/nxclaw list`, `bin/nxclaw install <runtime>`). Not put on PATH automatically.
+Codename / CLI: **netpaw** (`bin/netpaw`; run `bin/netpaw doctor`, `bin/netpaw list`, `bin/netpaw install <runtime>`). Not put on PATH automatically.
 
 Status: P0 done (runtime research). See [docs/PLAN.md](docs/PLAN.md), [docs/RUNTIME-MATRIX.md](docs/RUNTIME-MATRIX.md).
 

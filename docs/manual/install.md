@@ -4,21 +4,21 @@
 
 repo เป็น **private** (`supachai-j/netexpertclaw`) ต้องมีสิทธิ์ git เข้าถึงก่อน อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
 
-## คำสั่ง `nxclaw` (codename ของแพ็กเกจ)
+## คำสั่ง `netpaw` (codename ของแพ็กเกจ)
 
-`bin/nxclaw` เป็น CLI ตัวเดียวห่อสคริปต์ทั้งหมด (stdlib ล้วน):
+`bin/netpaw` เป็น CLI ตัวเดียวห่อสคริปต์ทั้งหมด (stdlib ล้วน):
 
 ```bash
-bin/nxclaw doctor                       # เช็กว่ามี uv, python3 และ runtime อะไรบ้าง
-bin/nxclaw list                         # skill ที่มี พร้อม risk และ capability ของ server
-bin/nxclaw install hermes --root "$PWD" # ดูแผนติดตั้ง (dry run ไม่เขียนอะไร)
-bin/nxclaw install hermes --root "$PWD" --apply   # คัดลอกเฉพาะโฟลเดอร์ skill (ไม่แตะ config)
-bin/nxclaw build | lint | test | smoke | site | import
+bin/netpaw doctor                       # เช็กว่ามี uv, python3 และ runtime อะไรบ้าง
+bin/netpaw list                         # skill ที่มี พร้อม risk และ capability ของ server
+bin/netpaw install hermes --root "$PWD" # ดูแผนติดตั้ง (dry run ไม่เขียนอะไร)
+bin/netpaw install hermes --root "$PWD" --apply   # คัดลอกเฉพาะโฟลเดอร์ skill (ไม่แตะ config)
+bin/netpaw build | lint | test | smoke | site | import
 ```
 
 `install --apply` คัดลอก skill ให้เฉพาะ Codex และ Hermes ส่วน config ของ MCP **พิมพ์ให้แล้วคุณ merge เอง** เสมอ ไม่มีการอ่านหรือเขียน credential ทั้ง Claude Code, OpenClaw และ thClaws ให้ทำตามขั้นตอนด้านล่าง
 
-> `bin/nxclaw` ไม่ถูกใส่ลง PATH ให้อัตโนมัติ เรียกด้วย path เต็มหรือสร้าง alias เอง (เช่น `alias nxclaw=~/netexpertclaw/bin/nxclaw`)
+> `bin/netpaw` ไม่ถูกใส่ลง PATH ให้อัตโนมัติ เรียกด้วย path เต็มหรือสร้าง alias เอง (เช่น `alias netpaw=~/netexpertclaw/bin/netpaw`)
 
 ## ขั้นตอนทั่วไป (ทุก runtime ยกเว้น Claude Code plugin)
 
