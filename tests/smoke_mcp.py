@@ -11,6 +11,8 @@ async def other(name, tool, expect):
             await s.initialize()
             names = {t.name for t in (await s.list_tools()).tools}
             assert expect <= names, names
+            ro = {x.name: bool(x.annotations and x.annotations.readOnlyHint) for x in (await s.list_tools()).tools}
+            assert all(ro.values()), f"read server tools missing readOnlyHint: {ro}"
             res = await s.call_tool(tool, {})
             assert not res.isError and "panos" in res.content[0].text
             print(name, "ok", sorted(names))
@@ -23,6 +25,7 @@ async def main():
         async with ClientSession(r, w) as s:
             await s.initialize()
             tools = sorted(t.name for t in (await s.list_tools()).tools)
+            assert all(x.annotations and x.annotations.readOnlyHint for x in (await s.list_tools()).tools), "missing readOnlyHint"
             res = await s.call_tool("subnet_calculator", {"cidr": "192.0.2.0/26"})
             txt = res.content[0].text
             assert "255.255.255.192" in txt and "62" in txt, txt
