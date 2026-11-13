@@ -35,5 +35,23 @@
       "python",
       "{root}/mcp/fwrule/launch.py"
     ]
+  },
+  "rfc-lookup": {
+    "command": "uv",
+    "args": [
+      "run",
+      "--quiet",
+      "--no-project",
+      "--isolated",
+      "--with",
+      "mcp==1.30.0",
+      "python",
+      "{root}/mcp/rfc-lookup/server.py"
+    ],
+    "env": {},
+    "capability": "read",
+    "egress": [
+      "www.rfc-editor.org"
+    ]
   }
 }

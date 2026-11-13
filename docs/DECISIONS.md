@@ -39,3 +39,6 @@ CI `security.yml` added (gitleaks pinned+sha256, bandit, semgrep in-repo rules, 
 
 ## D-8 Repo made public (owner approval, 2026-11-13)
 Before: gitleaks clean; tip sanitized of internal hostnames, team/agent names, local paths (cfc9f48). NOT sanitized: git history before cfc9f48 still contains worker hostnames/last octets, agent/team names and local paths (no secrets, customer data or tailnet names found by grep). Enabled: secret scanning + push protection, Dependabot alerts/security updates, private vulnerability reporting, branch protection on main (required checks test/secrets/sast/deps/workflows/policy, no force-push/deletion, linear history, admins may bypass). Pending: Dependabot PRs #1-#5, history rewrite decision.
+
+## D-9 rfc-lookup: reimplement instead of import (2026-11-13)
+NetClaw's rfc-lookup runs `npx -y @mjpitz/mcp-rfc` (unpinned, caret-range deps incl. jsdom/axios, no repo link, unvalidated number in URL, no timeout/size cap). Reimplemented as a stdlib-only server with one fixed egress host; first skill with network egress, so servers.json gained an `egress` field (linted, stripped from runtime configs) and a new profile `online`. Details and unverified items: docs/imports/rfc-lookup.md. Rule for later skills: network-using servers must declare `egress` and be offline-testable with fixtures.

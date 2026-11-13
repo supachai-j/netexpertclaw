@@ -17,7 +17,22 @@ async def other(name, tool, expect):
             assert not res.isError and "panos" in res.content[0].text
             print(name, "ok", sorted(names))
 
+async def rfc():
+    e = json.loads((R/".mcp.json").read_text())["mcpServers"]["rfc-lookup"]
+    assert "egress" not in e and "capability" not in e, "registry-only keys must not reach runtime configs"
+    args = [a.replace("${CLAUDE_PLUGIN_ROOT}", str(R)) for a in e["args"]]
+    async with stdio_client(StdioServerParameters(command=e["command"], args=args)) as (r, w):
+        async with ClientSession(r, w) as s:
+            await s.initialize()
+            tl = (await s.list_tools()).tools
+            assert {t.name for t in tl} == {"get_rfc", "get_rfc_section", "search_rfcs"}, tl
+            assert all(t.annotations and t.annotations.readOnlyHint and t.annotations.openWorldHint for t in tl)
+            bad = await s.call_tool("get_rfc", {"number": "4271/../x"})   # rejected before any network access
+            assert bad.isError and "RFC number" in bad.content[0].text, bad
+            print("rfc-lookup ok", sorted(t.name for t in tl))
+
 async def main():
+    await rfc()
     await other("fwrule", "list_supported_vendors", {"parse_policy", "analyze_firewall_rule_overlap", "list_supported_vendors", "batch_analyze_overlap"})
     e = json.loads((R/".mcp.json").read_text())["mcpServers"]["subnet-calc"]
     args = [a.replace("${CLAUDE_PLUGIN_ROOT}", str(R)) for a in e["args"]]
