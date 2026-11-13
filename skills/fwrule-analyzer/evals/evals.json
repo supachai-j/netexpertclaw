@@ -1,0 +1,35 @@
+{
+ "skill_name": "fwrule-analyzer",
+ "evals": [
+  {
+   "id": 1,
+   "prompt": "Existing rules: r1 position 1 deny tcp/443 from 10.0.0.0/8 to 192.0.2.0/24. New rule c1 position 2 permit tcp/443 from 10.1.0.0/16 to 192.0.2.10/32. Will c1 ever match?",
+   "expected_output": "c1 is shadowed by r1 (the earlier deny covers it fully), severity high/critical, recommendation to reorder or remove.",
+   "assertions": [
+    "Concludes c1 is shadowed or never matches",
+    "Names r1 as the covering rule",
+    "The result came from the analyze tool, not mental reasoning",
+    "Recommends a concrete action (reorder, narrow r1, or drop c1)"
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "Existing: r1 pos 1 permit tcp/22 10.1.0.0/16 -> 192.0.2.0/24. Candidate: c1 pos 2 permit tcp/22 10.1.0.0/16 -> 192.0.2.0/24. Anything wrong?",
+   "expected_output": "c1 is an exact duplicate of r1.",
+   "assertions": [
+    "Reports an exact duplicate",
+    "Names r1"
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "Check this rule against my policy: permit tcp/443 from 172.16.0.0/12 to 198.51.100.0/24 (no position given). Existing r1 pos 1 deny tcp/22 from 10.0.0.0/8 to 192.0.2.0/24.",
+   "expected_output": "The tool reports a missing `position` (success:false in the payload); the answer asks for or assigns a position explicitly and re-runs, then reports no overlap.",
+   "assertions": [
+    "Notices the validation failure instead of reporting it as 'no overlap'",
+    "Supplies a position and re-runs",
+    "Final result states no overlap"
+   ]
+  }
+ ]
+}

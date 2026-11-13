@@ -1,7 +1,8 @@
 ---
 name: fwrule-analyzer
-description: Multi-vendor firewall rule analysis — overlap detection, shadowing, conflict identification, duplication checking across PAN-OS, ASA, FTD, IOS/IOS-XE, IOS-XR, Check Point, SRX, Junos, Nokia SR OS, and Fortinet FortiOS/FortiGate. Use when validating firewall rule changes, auditing rulesets for conflicts, or normalizing vendor configs to a common schema.
+description: Analyze firewall rules for overlap, shadowing, conflicts and duplicates across PAN-OS, ASA, FTD, IOS/IOS-XE, IOS-XR, Check Point, SRX/Junos, Nokia SR OS and FortiGate, or normalize vendor policies to one schema. Use this skill whenever the user wants to check a new or changed firewall rule against an existing ruleset, audit a policy for redundant, shadowed or never-matching rules, or compare policies across vendors, even if they only paste a rule list or config and never say 'overlap'. Read-only analysis of text you provide; it never contacts or changes a firewall. Not for writing new rules or pushing config.
 license: Apache-2.0
+compatibility: Requires uv. First start needs network access to fetch hash-locked dependencies (PyPI) and the pinned fwrule-mcp commit (GitHub); the analysis itself makes no network or device calls. Input is text you provide (sanitize customer data first).
 metadata:
   version: "1.1.0"
   risk: read
@@ -102,3 +103,12 @@ When cleaning up an existing firewall policy:
 - **No credentials required** — works entirely on config text/JSON input, no API connections to firewalls
 - **Vendor parsers are best-effort** — use Mode 2 (normalized JSON) when parsers produce unexpected results
 - **Data handling** — firewall configs are sensitive. Use lab or sanitized configs; do not paste real customer rulesets, addresses or names into saved artifacts.
+
+## Gotchas
+
+These were observed by running the pinned server (docs/imports/fwrule-analyzer.md):
+- Every rule needs a `position`; order decides shadowing. A missing field comes back as a normal tool result with `"success": false` and `error.code: invalid_input` (not an MCP error), so check `success` before reading `overlap_exists`. "No overlap" from a failed call is not a result.
+- A later permit that sits under an earlier broader deny is reported as shadowed (never matches); a later broader deny over an earlier permit is reported as `superset` (medium), not as a conflict you can ignore. Quote the `overlap_type` and the rule ids.
+- Two identical rules are reported as `exact_duplicate` (severity high).
+- Rulesets and configs can hold customer names and addresses (PDPA). Replace them with documentation ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24) before sending them to the tool or saving output.
+- (Interpretive, not tested) The tool sees only the policy text you pass. NAT, routing and zones you left out are not considered, so state what was out of scope.

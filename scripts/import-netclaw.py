@@ -41,8 +41,10 @@ def transform(up_text: str, s: dict) -> tuple[str, str]:
             sys.exit(f"{s['name']}: replacement target not found (upstream drifted?): {old[:60]!r}")
         body = body.replace(old, new)
     ver = m.get("version", "0.0.0")
-    desc = m["description"].replace('"', "'")
-    out = (f"---\nname: {s['name']}\ndescription: {desc}\nlicense: {m.get('license', 'Apache-2.0')}\nmetadata:\n"
+    desc = (s.get("description") or m["description"]).replace('"', "'")
+    if s.get("append"): body = body.rstrip("\n") + "\n\n" + s["append"].strip("\n") + "\n"
+    comp = f"compatibility: {s['compatibility']}\n" if s.get("compatibility") else ""
+    out = (f"---\nname: {s['name']}\ndescription: {desc}\nlicense: {m.get('license', 'Apache-2.0')}\n{comp}metadata:\n"
            f"  version: \"{ver}\"\n  risk: {s['risk']}\n  mcp_servers: \"{s['mcp_server']}\"\n  requires_bins: \"{s['requires_bins']}\"\n---\n"
            f"{MARK}\n{body.lstrip(chr(10))}")
     return out, ver

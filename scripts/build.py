@@ -15,7 +15,7 @@ def mcp_entry(e: dict, root: str) -> dict:
 
 def copy_skill(s, dest):
     if dest.exists(): shutil.rmtree(dest)
-    shutil.copytree(s["dir"], dest, symlinks=True)
+    shutil.copytree(s["dir"], dest, symlinks=True, ignore=shutil.ignore_patterns("evals"))  # evals are dev-only
     for p in dest.rglob("*"):
         if p.is_symlink(): raise SystemExit(f"symlink in output: {p}")
 

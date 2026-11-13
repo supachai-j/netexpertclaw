@@ -1,0 +1,102 @@
+[
+ {
+  "query": "I'm carving 10.20.0.0/16 into per-site blocks: 3 sites need 500 hosts, 4 need 100, 6 need 30. can you lay out a VLSM plan?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "what's the ACL wildcard mask for 172.16.8.0/21",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "are 192.0.2.77 and 192.0.2.130 on the same /25?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "we got a /48 from our ISP, how should I split it between 12 sites and their VLANs",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "hey is a /31 ok for a point to point link between two routers or do I need a /30",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "need the next subnet after 198.51.100.64/26 so I can assign it to the new vlan",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "Write the OSPF network statement for the 10.4.32.0/20 interface range and include the right wildcard",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "how many usable hosts do I get from 203.0.113.0/27? and first/last",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "which subnet does 2001:db8:1234:5600::/56 break into for /64 vlans? how many?",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "my teammate configured 10.1.1.5/24 on the uplink and the neighbour 10.1.2.6/24 can't reach it, why?",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "Explain the difference between a Layer 2 and Layer 3 switch.",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "What DNS records do I need for mail delivery on a new domain?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "show me the BGP neighbours on the edge router and their state",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "Configure DHCP on the core switch to hand out 192.0.2.0/24 with a 8 hour lease",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "write a python function that parses a CSV and sums a column",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "Which RFC defines /31 point-to-point links?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "Summarize this firewall policy and tell me which rules are redundant",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "troubleshoot why my VPN tunnel flaps every 10 minutes",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "explain how spanning tree elects a root bridge",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "generate a Terraform module for an AWS VPC with two public subnets",
+  "should_trigger": false,
+  "split": "validation"
+ }
+]

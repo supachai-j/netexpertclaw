@@ -1,0 +1,102 @@
+[
+ {
+  "query": "what does RFC 4271 say a BGP speaker must do when it gets a malformed UPDATE?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "is the hold timer negotiation MUST or SHOULD in the BGP spec",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "quote the security considerations section of RFC 7454",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "find the RFC that obsoleted RFC 2460",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "I need the standards reference for IPv6 neighbor discovery, which RFC and what section covers duplicate address detection",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "search for RFCs about BGP route leak prevention and tell me which are standards track",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "what does the OSPF spec say about the DR election tie-break",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "cite the correct RFC section for the NTP kiss-o'-death packet",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "Is /127 allowed on IPv6 point-to-point links per the standards?",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "our vendor claims they are 'fully compliant with the TCP spec'. what does RFC 9293 actually require for the initial window?",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "calculate the subnet mask for a /26",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "tell me about the history of the Internet Engineering Task Force",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "what is the latest Cisco IOS XE release and its known bugs",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "check whether our edge router is vulnerable to CVE-2023-20198",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "explain BGP to a beginner in simple words",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "show interface counters on switch1",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "write a Python script to download a web page",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "what's the difference between TCP and UDP",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "summarize this vendor datasheet pdf",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "how do I configure OSPF on a Juniper router",
+  "should_trigger": false,
+  "split": "validation"
+ }
+]

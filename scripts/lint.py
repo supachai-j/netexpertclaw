@@ -4,7 +4,7 @@ import json, pathlib, re, sys
 from common import ROOT, REQUIRED, META_REQUIRED, RISKS, skills, servers, parse_fm
 
 ALLOWED_TOP = {"name", "description", "license", "metadata", "compatibility"}
-ALLOWED_FILES = re.compile(r"^(SKILL\.md|references/[^/]+\.md|agents/[^/]+\.yaml)$")
+ALLOWED_FILES = re.compile(r"^(SKILL\.md|references/[^/]+\.md|agents/[^/]+\.yaml|evals/(evals|trigger_queries)\.json)$")
 SECRET = [re.compile(p) for p in (
     r"(?i)(password|passwd|secret|token|api[_-]?key|community)\s*[:=]\s*['\"]?[^\s'\"]{6,}",
     r"(?i)\b(enable\s+)?(secret|password)\s+[0-9]\s+\S{4,}",           # Cisco type 0-9
@@ -17,6 +17,27 @@ SECRET = [re.compile(p) for p in (
 TEXT_SUFFIX = {".py", ".json", ".md", ".toml", ".yaml", ".yml", ".sh", ".txt", ".ini", ".cfg", ".env", ".js", ".cfg"}
 SKIP_SECRET = {"scripts/lint.py", "docs/SECURITY-REVIEW.md"}  # exact paths only
 SKIP_DIRS = {".git", "dist", "__pycache__", "security-evidence"}
+
+
+def eval_files(d: pathlib.Path) -> list[str]:
+    """agentskills.io 'Optimizing descriptions' / 'Evaluating skills': trigger queries (>=8 each way, train+validation) and output evals with assertions."""
+    out, tq, ev = [], d / "evals" / "trigger_queries.json", d / "evals" / "evals.json"
+    try:
+        q = json.loads(tq.read_text())
+        for label in (True, False):
+            for sp in ("train", "validation"):
+                n = sum(1 for x in q if x.get("should_trigger") is label and x.get("split") == sp)
+                if n < 3: out.append(f"{d.name}/evals/trigger_queries.json: need >=3 should_trigger={label} queries in {sp} (have {n})")
+            if sum(1 for x in q if x.get("should_trigger") is label) < 8: out.append(f"{d.name}/evals/trigger_queries.json: need >=8 should_trigger={label} queries")
+        if any(not x.get("query") or x.get("split") not in ("train", "validation") for x in q): out.append(f"{d.name}/evals/trigger_queries.json: every item needs query + split train|validation")
+    except (OSError, ValueError): out.append(f"{d.name}/evals/trigger_queries.json missing or invalid")
+    try:
+        e = json.loads(ev.read_text())
+        if e.get("skill_name") != d.name or len(e.get("evals", [])) < 2: out.append(f"{d.name}/evals/evals.json: skill_name must match and >=2 evals")
+        for c in e.get("evals", []):
+            if not (c.get("prompt") and c.get("expected_output") and isinstance(c.get("assertions"), list) and c["assertions"]): out.append(f"{d.name}/evals/evals.json: eval {c.get('id')} needs prompt, expected_output, assertions[]")
+    except (OSError, ValueError): out.append(f"{d.name}/evals/evals.json missing or invalid")
+    return out
 
 
 def main() -> int:
@@ -37,6 +58,9 @@ def main() -> int:
             pinned = any(x.startswith("mcp==") for x in ca) or ("--with-requirements" in ca and any(re.search(r"^git\+\S+@[0-9a-f]{40}$", x) for x in ca))
             if "--no-project" not in ca or "--isolated" not in ca or not pinned:
                 errs.append(f"server {n}: uv run needs --no-project --isolated and exact pins (== or requirements + git@sha) (F-8/F-10)")
+    for n in srv:
+        if not any((ROOT / "mcp" / n / f).exists() for f in ("tools.lock.json", "tools.cache.json")):
+            errs.append(f"server {n}: no pinned tool definitions (run scripts/gen_tools_cache.py {n}) - rug-pull detection")
     for s in skills():
         m, d = s["meta"], s["dir"]
         for k in REQUIRED:
@@ -44,8 +68,21 @@ def main() -> int:
         for k in m:
             if k not in ALLOWED_TOP: errs.append(f"{d.name}: frontmatter key '{k}' not allowed (F-5)")
         if m.get("name") != d.name: errs.append(f"{d.name}: name != directory")
-        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", m.get("name", "")): errs.append(f"{d.name}: bad name")
-        if len(m.get("description", "")) > 1024: errs.append(f"{d.name}: description >1024")
+        if not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", m.get("name", "")) or len(m.get("name", "")) > 64:
+            errs.append(f"{d.name}: bad name (agentskills.io: <=64 chars, [a-z0-9-], no leading/trailing/double hyphen)")
+        desc = m.get("description", "")
+        if len(desc) > 1024: errs.append(f"{d.name}: description >1024")
+        if not re.search(r"\bUse (this skill )?(when|whenever)\b", desc):
+            errs.append(f"{d.name}: description must say when to use it ('Use this skill when ...') - it is the only trigger signal")
+        for fld in ("description", "compatibility"):
+            if re.search(r": |\s#", m.get(fld, "")) and not m.get(fld, "").startswith(("'", '"')):
+                errs.append(f"{d.name}: {fld} contains ': ' or ' #' in an unquoted YAML scalar (official skills-ref validator rejects it)")
+        comp = m.get("compatibility", "")
+        if not comp or len(comp) > 500: errs.append(f"{d.name}: compatibility (<=500 chars: requirements, network access) is required")
+        nlines = s["body"].count("\n") + 1
+        if nlines > 500 or len(s["text"]) / 4 > 5000: errs.append(f"{d.name}: SKILL.md too long ({nlines} lines, ~{len(s['text']) // 4} tokens; limit 500 lines / 5000 tokens, move detail to references/)")
+        if not re.search(r"(?m)^## Gotchas\s*$", s["body"]): errs.append(f"{d.name}: needs a '## Gotchas' section (concrete, verified corrections)")
+        errs += eval_files(d)
         meta = m.get("metadata") or {}
         for k in META_REQUIRED:
             if not meta.get(k): errs.append(f"{d.name}: metadata.{k} missing")

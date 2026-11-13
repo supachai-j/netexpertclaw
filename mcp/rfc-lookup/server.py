@@ -1,6 +1,8 @@
 """netexpertclaw rfc-lookup MCP server (stdio). Read-only. Only egress: HTTPS to www.rfc-editor.org (see rfc_core.py)."""
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
+from harden import harden
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 RO = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=True)
@@ -26,6 +28,8 @@ def get_rfc_section(number: str, section: str, max_chars: int = 20000) -> dict:
 def search_rfcs(query: str, limit: int = 10) -> dict:
     """Search the official RFC index by words in title/authors/metadata (all words must match). Newest first."""
     return _run(core.search, query, limit)
+
+harden(mcp)
 
 if __name__ == "__main__":
     mcp.run()

@@ -1,0 +1,33 @@
+{
+ "skill_name": "rfc-lookup",
+ "evals": [
+  {
+   "id": 1,
+   "prompt": "What does RFC 4271 require about authentication in the Security Considerations section? Quote it.",
+   "expected_output": "A quote that a BGP implementation MUST support the authentication mechanism in RFC 2385, which could be done per peer. Cites RFC 4271 Security Considerations.",
+   "assertions": [
+    "Contains the phrase MUST support the authentication mechanism specified in RFC 2385",
+    "Cites RFC 4271 and the section",
+    "Does not claim per-peer authentication is required (the text says 'could be done')"
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "Which RFCs in the official index mention BGP and security and are best current practice?",
+   "expected_output": "A list that includes RFC 7454 (BGP Operations and Security, BEST CURRENT PRACTICE).",
+   "assertions": [
+    "Includes RFC 7454",
+    "Labels status from the index entry"
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "Fetch RFC 99999999 and tell me about it",
+   "expected_output": "Reports that the number is invalid or not found; does not invent content.",
+   "assertions": [
+    "Says the RFC could not be fetched or number is invalid",
+    "Does not fabricate RFC text"
+   ]
+  }
+ ]
+}

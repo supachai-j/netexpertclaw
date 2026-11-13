@@ -1,7 +1,17 @@
 {
   "name": "netexpertclaw",
-  "owner": {"name": "supachai-j"},
+  "owner": {
+    "name": "supachai-j"
+  },
   "plugins": [
-    {"name": "netexpertclaw", "source": "./", "description": "Network-engineer skills + MCP tools"}
-  ]
+    {
+      "name": "netexpertclaw",
+      "source": "./",
+      "description": "Network-engineer skills + MCP tools",
+      "author": {
+        "name": "supachai-j"
+      }
+    }
+  ],
+  "description": "Network-engineering skills and read-only MCP tools (subnet calculator, firewall rule analyzer, RFC lookup) that run on Claude Code, Codex, Hermes, OpenClaw and thClaws."
 }
