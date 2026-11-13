@@ -1,0 +1,7 @@
+{
+  "name": "netexpertclaw",
+  "owner": {"name": "supachai-j"},
+  "plugins": [
+    {"name": "netexpertclaw", "source": "./", "description": "Network-engineer skills + MCP tools"}
+  ]
+}
