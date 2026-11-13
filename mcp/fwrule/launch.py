@@ -8,13 +8,26 @@ import fwrule_mcp.server as s
 REVIEWED = {"analyze_firewall_rule_overlap", "batch_analyze_overlap", "list_supported_vendors", "parse_policy"}
 RO = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
 
+def fix_schema(node):
+    """Advertise array items as objects instead of the empty schema {} (some clients, e.g. Codex, may drop a server whose
+    tool schema has `items: {}`). Advertised schema only; call-time validation is upstream's and unchanged."""
+    if isinstance(node, dict):
+        if node.get("type") == "array" and node.get("items") == {}:
+            node["items"] = {"type": "object"}
+        for v in node.values(): fix_schema(v)
+    elif isinstance(node, list):
+        for v in node: fix_schema(v)
+
+
 async def annotate():
     tools = await s.mcp.list_tools()
     names = {t.name for t in tools}
     if names != REVIEWED:
         sys.exit(f"fwrule launcher: tool set changed {sorted(names ^ REVIEWED)}; re-review before use")
     for n in names:
-        (await s.mcp.get_tool(n)).annotations = RO
+        t = await s.mcp.get_tool(n)
+        t.annotations = RO
+        fix_schema(t.parameters)
 
 asyncio.run(annotate())
 s.main()

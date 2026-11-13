@@ -11,7 +11,7 @@
 | Skill ที่ใช้ได้ | `subnet-calculator` (คำนวณ subnet), `fwrule-analyzer` (วิเคราะห์ rule firewall ซ้อนทับ/shadow) |
 | ทั้งสองตัว | **read-only** ไม่แตะอุปกรณ์ ไม่ใช้ credential |
 | Claude Code, Hermes | ทดสอบกับ runtime จริงแล้ว (Claude Code ทดสอบกับโมเดลจริง) |
-| Codex, OpenClaw, thClaws | ทดสอบ `subnet-calculator` ครบเส้นทาง runtime → MCP ด้วยโมเดลจำลอง ยังไม่ได้ทดสอบกับโมเดลจริง และ `fwrule-analyzer` ยังรอทดสอบซ้ำ |
+| Codex, OpenClaw, thClaws | ทดสอบเส้นทาง runtime → MCP ด้วยโมเดลจำลอง ยังไม่ได้ทดสอบกับโมเดลจริง ; `fwrule-analyzer` ใช้ได้บน OpenClaw และ thClaws แต่ **ยังไม่ขึ้นใน Codex** (กำลังวินิจฉัย) |
 | Skill ที่เขียน config อุปกรณ์ | **ยังไม่มี** ตั้งใจเลื่อนไปจนกว่าจะมีด่านอนุมัติฝั่ง server (ดูหน้า [ความปลอดภัย](safety.html)) |
 
 > อย่าอ่านตารางข้างบนเป็น "รองรับครบ" — ดูรายละเอียดและข้อจำกัดที่หน้า [ความเข้ากันได้](compat.html)

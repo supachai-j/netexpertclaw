@@ -59,4 +59,4 @@ uv run --no-project --isolated --with mcp==1.30.0 python tests/smoke_mcp.py
 ## ใช้ใน automation / headless
 
 - Codex `exec`: tool read-only ทำงานได้ (มี annotation) ; tool แบบเขียน (ในอนาคต) จะถูกบล็อกถ้าไม่มีคนอนุมัติ
-- thClaws `-p` และ OpenClaw `agent --local` **ไม่ถามอนุมัติ** สำหรับ MCP tool ที่เคยอนุมัติไว้ ดังนั้นอย่าต่อ tool ที่แก้อุปกรณ์เข้ากับโหมดเหล่านี้ (ดู [ความปลอดภัย](safety.html))
+- thClaws `-p` และ OpenClaw `agent --local` **ไม่ถามอนุมัติเลยสำหรับการเรียก MCP tool ทุกครั้ง รวมครั้งแรก** (allowlist ของ thClaws คุมแค่การสตาร์ท server ไม่ได้คุมการเรียก tool) ดังนั้นอย่าต่อ tool ที่แก้อุปกรณ์เข้ากับโหมดเหล่านี้ (ดู [ความปลอดภัย](safety.html))
