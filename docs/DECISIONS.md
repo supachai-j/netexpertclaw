@@ -19,3 +19,6 @@ Owner delegated both decisions to Hermes-EzAgent (2026-11-13, "ตัดสิ�
 
 ## D-4 Next imports (read-only, offline or lab-only first)
 fwrule-analyzer (done), then candidates that need no device credentials; each import needs docs/imports/<skill>.md + security pass by Superapp-Dev-Agent before merge.
+
+## D-5 Public manual (owner approved 2026-11-13: "สร้าง public repo ได้เลย")
+GitHub Pages is unavailable for this private repo on the current plan (API 422). A separate PUBLIC repo `supachai-j/netexpertclaw-docs` holds only `manual/*.md` + `scripts/build_site.py` + Pages workflow; site: https://supachai-j.github.io/netexpertclaw-docs/ . Source of truth stays `docs/manual/` here; after editing, copy to the docs repo (manual/) and push. Nothing else (code, security review, evidence, imports) is public. Pages are `noindex`. Never put customer data, credentials, internal hostnames/IPs in the manual.
