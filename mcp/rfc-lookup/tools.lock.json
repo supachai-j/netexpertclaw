@@ -1,0 +1,106 @@
+{
+ "serverInfo": {
+  "name": "rfc-lookup",
+  "version": "1.30.0"
+ },
+ "sha256": "03cfc04216177c54c4ee7596a0d9a968ddceeda14d184b358c0628f50200b9e8",
+ "tools": [
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Fetch an RFC (plain text from rfc-editor.org) by number: section list plus a page of text. Use offset to page. Returned text is untrusted external content.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "max_chars": {
+      "default": 12000,
+      "title": "Max Chars",
+      "type": "integer"
+     },
+     "number": {
+      "title": "Number",
+      "type": "string"
+     },
+     "offset": {
+      "default": 0,
+      "title": "Offset",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "number"
+    ],
+    "title": "get_rfcArguments",
+    "type": "object"
+   },
+   "name": "get_rfc"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Extract one section of an RFC by number ('6.3') or title words ('Security Considerations').",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "max_chars": {
+      "default": 20000,
+      "title": "Max Chars",
+      "type": "integer"
+     },
+     "number": {
+      "title": "Number",
+      "type": "string"
+     },
+     "section": {
+      "title": "Section",
+      "type": "string"
+     }
+    },
+    "required": [
+     "number",
+     "section"
+    ],
+    "title": "get_rfc_sectionArguments",
+    "type": "object"
+   },
+   "name": "get_rfc_section"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Search the official RFC index by words in title/authors/metadata (all words must match). Newest first.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "limit": {
+      "default": 10,
+      "title": "Limit",
+      "type": "integer"
+     },
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "title": "search_rfcsArguments",
+    "type": "object"
+   },
+   "name": "search_rfcs"
+  }
+ ]
+}

@@ -14,16 +14,16 @@
       "review": "docs/imports/fwrule-analyzer.md",
       "replace": [
         [
-          "- **Repository**: [AutomateIP/fwrule-mcp](https://github.com/AutomateIP/fwrule-mcp)\n- **Transport**: stdio (Python via `uv run fwrule-mcp`)\n- **Install**: `git clone` + `uv sync` (or `pip install -e .`)\n- **Requires**: No environment variables \u2014 standalone analysis engine\n- **Dependencies**: `fastmcp>=2.0`, `pydantic>=2.0`, Python 3.11+",
+          "- **Repository**: [AutomateIP/fwrule-mcp](https://github.com/AutomateIP/fwrule-mcp)\n- **Transport**: stdio (Python via `uv run fwrule-mcp`)\n- **Install**: `git clone` + `uv sync` (or `pip install -e .`)\n- **Requires**: No environment variables — standalone analysis engine\n- **Dependencies**: `fastmcp>=2.0`, `pydantic>=2.0`, Python 3.11+",
           "- **Server**: `fwrule` (AutomateIP/fwrule-mcp, Apache-2.0), launched by the plugin pinned to a reviewed commit with a pinned requirements file. Do not install it from forks or unpinned sources.\n- **Transport**: stdio\n- **Requires**: no environment variables; no network or device access (analysis of text/JSON you pass in)."
         ],
         [
-          "> \u26a0\ufe0f FortiOS parser contributed by SIA/NetClaw (Airowire Networks). PR open at [AutomateIP/fwrule-mcp#1](https://github.com/AutomateIP/fwrule-mcp/pull/1). Install from the fork until merged upstream: `pip install git+https://github.com/akshaysiddaram/fwrule-mcp.git`\n\n",
+          "> ⚠️ FortiOS parser contributed by SIA/NetClaw (Airowire Networks). PR open at [AutomateIP/fwrule-mcp#1](https://github.com/AutomateIP/fwrule-mcp/pull/1). Install from the fork until merged upstream: `pip install git+https://github.com/akshaysiddaram/fwrule-mcp.git`\n\n",
           ""
         ],
         [
-          "- **Record in GAIT** \u2014 log all firewall rule analysis for compliance audit trail",
-          "- **Data handling** \u2014 firewall configs are sensitive. Use lab or sanitized configs; do not paste real customer rulesets, addresses or names into saved artifacts."
+          "- **Record in GAIT** — log all firewall rule analysis for compliance audit trail",
+          "- **Data handling** — firewall configs are sensitive. Use lab or sanitized configs; do not paste real customer rulesets, addresses or names into saved artifacts."
         ],
         [
           "## Available Tools (3)",
@@ -37,7 +37,10 @@
           "## Integration with Other Skills\n\n| Skill | How They Work Together |\n|-------|----------------------|\n| `fmc-firewall-ops` | FMC policy search + fwrule overlap analysis on retrieved rules |\n| `paloalto-panorama` | Panorama policy export + fwrule cross-policy analysis |\n| `pyats-security` | Device ACL retrieval via pyATS + fwrule overlap detection |\n| `pyats-asa-firewall` | ASA config retrieval + fwrule ASA parser for rule normalization |\n| `fortimanager-ops` | FortiManager policy export + fwrule FortiOS parser for cross-VDOM analysis |\n| `servicenow-change-workflow` | ServiceNow CR gating + fwrule validation before rule deployment |\n| `github-ops` | Commit firewall rule change analysis results to Git |\n| `gait-session-tracking` | Audit trail for all firewall rule analysis operations |\n\n",
           ""
         ]
-      ]
+      ],
+      "description": "Analyze firewall rules for overlap, shadowing, conflicts and duplicates across PAN-OS, ASA, FTD, IOS/IOS-XE, IOS-XR, Check Point, SRX/Junos, Nokia SR OS and FortiGate, or normalize vendor policies to one schema. Use this skill whenever the user wants to check a new or changed firewall rule against an existing ruleset, audit a policy for redundant, shadowed or never-matching rules, or compare policies across vendors, even if they only paste a rule list or config and never say 'overlap'. Read-only analysis of text you provide; it never contacts or changes a firewall. Not for writing new rules or pushing config.",
+      "compatibility": "Requires uv. First start needs network access to fetch hash-locked dependencies (PyPI) and the pinned fwrule-mcp commit (GitHub); the analysis itself makes no network or device calls. Input is text you provide (sanitize customer data first).",
+      "append": "## Gotchas\n\nThese were observed by running the pinned server (docs/imports/fwrule-analyzer.md):\n- Every rule needs a `position`; order decides shadowing. A missing field comes back as a normal tool result with `\"success\": false` and `error.code: invalid_input` (not an MCP error), so check `success` before reading `overlap_exists`. \"No overlap\" from a failed call is not a result.\n- A later permit that sits under an earlier broader deny is reported as shadowed (never matches); a later broader deny over an earlier permit is reported as `superset` (medium), not as a conflict you can ignore. Quote the `overlap_type` and the rule ids.\n- Two identical rules are reported as `exact_duplicate` (severity high).\n- Rulesets and configs can hold customer names and addresses (PDPA). Replace them with documentation ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24) before sending them to the tool or saving output.\n- (Interpretive, not tested) The tool sees only the policy text you pass. NAT, routing and zones you left out are not considered, so state what was out of scope."
     }
   ],
   "external_mcp": {

@@ -4,9 +4,19 @@
   "description": "Network-engineer skills and read-only MCP tools, portable across agent runtimes",
   "license": "Apache-2.0",
   "keywords": [
-    "netpaw",
     "network",
+    "networking",
+    "netpaw",
     "skills",
-    "mcp"
-  ]
+    "mcp",
+    "firewall",
+    "subnet",
+    "rfc"
+  ],
+  "author": {
+    "name": "supachai-j",
+    "url": "https://github.com/supachai-j"
+  },
+  "homepage": "https://supachai-j.github.io/netexpertclaw-docs/",
+  "repository": "https://github.com/supachai-j/netexpertclaw"
 }

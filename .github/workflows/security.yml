@@ -69,8 +69,13 @@ jobs:
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
       - name: repo policy (write-skill gate, symlinks, allow-list, secrets, doc IPs)
         run: python3 scripts/lint.py
-      - name: upstream pin / tool-list drift (live; fails if fwrule tool list != reviewed cache)
-        run: uv run --quiet --no-project --isolated --with "mcp==1.30.0" python scripts/gen_tools_cache.py fwrule --check
+      - name: tool-definition drift, all MCP servers (full definitions incl. annotations; rug-pull detection)
+        run: uv run --quiet --no-project --isolated --with "mcp==1.30.0" python scripts/gen_tools_cache.py --all --check
+      - name: official Agent Skills validator (agentskills/agentskills skills-ref, pinned commit)
+        run: |
+          for d in skills/*/; do
+            uvx --from "git+https://github.com/agentskills/agentskills@83021e2be457a9b6679148719c1f6074f0ad975e#subdirectory=skills-ref" skills-ref validate "$d"
+          done
   sbom:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

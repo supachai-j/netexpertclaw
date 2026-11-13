@@ -1,0 +1,36 @@
+{
+ "skill_name": "subnet-calculator",
+ "evals": [
+  {
+   "id": 1,
+   "prompt": "I have 10.20.0.0/24 to split between a user LAN needing 100 hosts, a server LAN needing 50, and a management LAN needing 10. Give me a VLSM plan with gateways.",
+   "expected_output": "A table with three non-overlapping subnets taken from 10.20.0.0/24 (/25, /26, /28 or tighter), each with network, prefix, usable host count and gateway = first usable host, values taken from the tool.",
+   "assertions": [
+    "Three subnets are listed and none overlap",
+    "Each subnet has enough usable hosts for its requirement",
+    "The prefix lengths are /25, /26 and /28 (or a justified tighter fit)",
+    "Every subnet lies inside 10.20.0.0/24",
+    "Gateway is stated as the first usable host and the assumption is named"
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "what's the ACL wildcard for 192.0.2.64/26 and how many hosts can I use?",
+   "expected_output": "Wildcard 0.0.0.63 and 62 usable hosts.",
+   "assertions": [
+    "States wildcard 0.0.0.63",
+    "States 62 usable hosts"
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "Calculate 192.0.2.5/24 for me",
+   "expected_output": "The tool rejects host bits; the answer explains the canonical network 192.0.2.0/24 and then reports its values.",
+   "assertions": [
+    "Does not silently compute for the host address",
+    "Mentions the corrected network 192.0.2.0/24",
+    "Reports 254 usable hosts after correction"
+   ]
+  }
+ ]
+}

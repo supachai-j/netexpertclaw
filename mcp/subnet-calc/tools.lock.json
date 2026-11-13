@@ -1,0 +1,115 @@
+{
+ "serverInfo": {
+  "name": "subnet-calc",
+  "version": "1.30.0"
+ },
+ "sha256": "87707a28dc49bfe2aeab96e2726254418af7a8793de4f430dcfaa70cb56de6ca",
+ "tools": [
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "Check whether two addresses fall in the same /prefix subnet.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "ip_a": {
+      "title": "Ip A",
+      "type": "string"
+     },
+     "ip_b": {
+      "title": "Ip B",
+      "type": "string"
+     },
+     "prefix": {
+      "title": "Prefix",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "ip_a",
+     "ip_b",
+     "prefix"
+    ],
+    "title": "same_subnetArguments",
+    "type": "object"
+   },
+   "name": "same_subnet"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "IPv4 CIDR details: mask, wildcard, usable hosts, neighbours, classification. cidr must be canonical (no host bits).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cidr": {
+      "title": "Cidr",
+      "type": "string"
+     }
+    },
+    "required": [
+     "cidr"
+    ],
+    "title": "subnet_calculatorArguments",
+    "type": "object"
+   },
+   "name": "subnet_calculator"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "Auto-detect IPv4/IPv6 and calculate.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cidr": {
+      "title": "Cidr",
+      "type": "string"
+     }
+    },
+    "required": [
+     "cidr"
+    ],
+    "title": "subnet_calculator_autoArguments",
+    "type": "object"
+   },
+   "name": "subnet_calculator_auto"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "IPv6 CIDR details: range, /64 count, neighbours, classification, allocation note.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cidr": {
+      "title": "Cidr",
+      "type": "string"
+     }
+    },
+    "required": [
+     "cidr"
+    ],
+    "title": "subnet_calculator_v6Arguments",
+    "type": "object"
+   },
+   "name": "subnet_calculator_v6"
+  }
+ ]
+}
