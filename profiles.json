@@ -1,5 +1,15 @@
 {
-  "minimal": ["subnet-calculator"],
-  "standard": ["subnet-calculator", "fwrule-analyzer"],
-  "full": "*"
+  "minimal": [
+    "subnet-calculator"
+  ],
+  "standard": [
+    "subnet-calculator",
+    "fwrule-analyzer"
+  ],
+  "full": "*",
+  "online": [
+    "subnet-calculator",
+    "fwrule-analyzer",
+    "rfc-lookup"
+  ]
 }

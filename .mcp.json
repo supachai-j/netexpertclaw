@@ -34,6 +34,20 @@
         "python",
         "${CLAUDE_PLUGIN_ROOT}/mcp/fwrule/launch.py"
       ]
+    },
+    "rfc-lookup": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--quiet",
+        "--no-project",
+        "--isolated",
+        "--with",
+        "mcp==1.30.0",
+        "python",
+        "${CLAUDE_PLUGIN_ROOT}/mcp/rfc-lookup/server.py"
+      ],
+      "env": {}
     }
   }
 }

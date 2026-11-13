@@ -24,6 +24,9 @@ def main() -> int:
     srv = servers()
     for n, e in srv.items():
         if e.get("capability") not in ("read", "write"): errs.append(f"server {n}: capability must be read|write")
+        eg = e.get("egress", [])
+        if not isinstance(eg, list) or not all(isinstance(h, str) and re.fullmatch(r"[a-z0-9.-]+\.[a-z]{2,}", h) for h in eg):
+            errs.append(f"server {n}: egress must be a list of hostnames")
         a = e.get("args", [])
         cmd, ca = e.get("command"), a
         if cmd == "python3" and a and a[0].endswith("/mcp/" + n + "/proxy.py") and "--" in a:

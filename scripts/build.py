@@ -10,7 +10,7 @@ DIST = ROOT / "dist"
 
 
 def mcp_entry(e: dict, root: str) -> dict:
-    return {**{k: v for k, v in e.items() if k != "capability"}, "args": [a.replace("{root}", root) for a in e["args"]]}
+    return {**{k: v for k, v in e.items() if k not in ("capability", "egress")}, "args": [a.replace("{root}", root) for a in e["args"]]}
 
 
 def copy_skill(s, dest):

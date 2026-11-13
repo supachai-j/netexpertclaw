@@ -1,0 +1,13 @@
+RFC INDEX
+---------
+
+9998 Synthetic Routing Security Notes. A. Example. February 2030.
+     (Format: TXT) (Obsoletes RFC9990) (Status: INFORMATIONAL)
+
+9999 Synthetic Test Protocol (STP). A. Example, Ed.. January 2030.
+     (Format: TXT, HTML) (Status: PROPOSED STANDARD) (DOI:
+     10.17487/RFC9999)
+
+10000 Five Digit Routing Specification. B. Sample. March 2031.
+     (Format: TXT) (Status: PROPOSED STANDARD)
+
