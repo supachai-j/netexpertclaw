@@ -12,7 +12,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 9911
 LOG = os.environ.get("MOCK_LOG", "/tmp/mock_model.log")
-ARGS = {"ip_a": "192.0.2.10", "ip_b": "192.0.2.20", "prefix": 24}
+ARGS = json.loads(os.environ.get("MOCK_ARGS", '{"ip_a": "192.0.2.10", "ip_b": "192.0.2.20", "prefix": 24}'))
+PICK = os.environ.get("MOCK_PICK", "same_subnet")
 
 def log(s):
     with open(LOG, "a") as f:
@@ -30,7 +31,7 @@ def tool_names(body):
 
 def pick(names):
     for n in names:
-        if n.endswith("same_subnet"):
+        if n.endswith(PICK):
             return n
     return None
 

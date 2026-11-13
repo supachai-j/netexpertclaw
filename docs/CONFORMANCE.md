@@ -1,4 +1,4 @@
-# Runtime conformance (the runtime-test agent lane), v2 - 2026-11-13
+# Runtime conformance (the runtime-test agent lane), v3 - 2026-11-13 (supersedes v2; adds section "Added in v3")
 
 Pin: repo commit `f72eaba07e8fa63261238aa21d12fc7c61fcd92c` (tarball sha256 `ac3a6dc397356923...`; v1 of this report used `e58af2e`).
 Built on each worker with `python3 scripts/build.py --root $HOME/nec-conf/f72`; `grep -rn /home/ dist/` found only that root (C-1 fixed upstream).
@@ -19,8 +19,38 @@ It proves the runtime -> MCP path end to end. It does NOT prove a real LLM picks
 | OpenClaw 2026.11.3 | VERIFIED `skills info` -> Ready, Visible to model: yes, `uv` found | VERIFIED `mcp set` | VERIFIED `mcp probe` -> 4 tools | VERIFIED via `tool_search` then `dispatch_action` (C-12); result `same_subnet: true` returned, wrapped as EXTERNAL_UNTRUSTED_CONTENT |
 | Generic stdio check (all generated configs) | n/a | n/a | VERIFIED `mcp_stdio_check.py`, 0.62 s on f72 | n/a |
 
-Repo's own tests on the worker (v1 pin): unittest 8/8 OK; `smoke_mcp.py` ok with `uv run --with mcp`. NOT re-run on f72 (Hermes reports 22 tests; not re-run by me).
-Claude Code and Hermes adapters: see 'Hermes lane' below.
+Repo's own checks on the worker at pin f72eaba (Python 3.12.3): `unittest discover -s tests` **22/22 OK**; `scripts/lint.py` -> `lint ok (1 skill(s), 1 server(s))`; `tests/smoke_mcp.py` ok (`uv run --no-project --isolated --with mcp==1.30.0`).
+Claude Code and Hermes adapters: Hermes lane.
+
+## Added in v3 (all VERIFIED on the workers, pin f72eaba, mock model, no credentials)
+
+### F-8 (uv runs the project's build backend from cwd): reproduced through each runtime, and the fix works in each
+Trap: a directory whose `pyproject.toml` points at a local build backend that only writes a marker file (harmless, same idea as SECURITY-REVIEW `repro_uv_cwd.sh`).
+Each runtime was started with cwd = trap dir.
+
+| Runtime | MCP child cwd | old args (no `--no-project --isolated`) | f72eaba args |
+|---|---|---|---|
+| Codex 0.169.0 (`codex exec` from trap dir) | session cwd | **backend EXECUTED** (marker written) | not executed; tool call completed |
+| thClaws 0.156.0 (REPL in trap dir) | project dir (`[cwd:...]`) | **backend EXECUTED**, server failed to start | not executed; 4 tools |
+| OpenClaw 2026.11.3 (`mcp probe` from trap dir) | process cwd | **backend EXECUTED**, server failed to start | not executed; 4 tools |
+
+So the cwd inheritance premise of F-8 holds for all three, and `--no-project --isolated` closes it for all three. Any new server entry must keep both flags (add a lint rule for `uv run` without `--no-project`).
+
+### Approval gate for a WRITE tool: runtimes do not agree (matters for P4)
+Toy server `tests/runtimes/toy_write_server.py` (no device; `apply_change` only creates a marker file; annotated `readOnlyHint=false, destructiveHint=true`; `read_state` is read-only). Mock model asks for `apply_change`. Unattended = no human at the runtime.
+
+| Runtime / mode | Result |
+|---|---|
+| Codex `exec` (default) | **BLOCKED**: `MCP tool call requires approval, but approval policy is never`; marker absent. Fail-closed. |
+| thClaws `-p` (headless), default permissions | **EXECUTED** unattended, marker present (banner `permissions=auto`) |
+| thClaws `-p --permission-mode ask` | **EXECUTED** unattended, marker present (banner `permissions=ask`: ask mode does not stop a headless run) |
+| thClaws interactive REPL, `--permission-mode ask` | Prompts `[approval] toy-write__apply_change input={...} [y]es / [n]o / yolo`; answering `n` -> marker absent |
+| OpenClaw `agent --local` (embedded, no gateway) | **EXECUTED** unattended via `dispatch_action`, marker present |
+
+Meaning: only Codex exec fail-closes on its own. thClaws headless and OpenClaw local run an MCP write tool without asking, whatever the annotations say.
+Do not rely on the runtime's approval UI or on `readOnlyHint`/`destructiveHint` as the control for write tools. The control must live in the MCP server
+(baseline -> change-request id -> verify -> audit, refuse when the approval token is missing), as SECURITY-REVIEW F-4/F-9 and the upstream design already say.
+Interactive approval prompts in OpenClaw's gateway/chat postures were not tested (no gateway on the worker).
 
 ## Findings still open on f72eaba
 
@@ -49,9 +79,9 @@ Claude Code and Hermes adapters: see 'Hermes lane' below.
 
 ## Not tested
 1. A real LLM turn in any runtime (needs credentials; worker-plane rule: agents do not copy tokens to workers). Mock endpoint only.
-2. Write-capable tools / approval flow (no write tool exists yet).
-3. Hermes adapter (Hermes lane). Codex `agents/openai.yaml` effect. thClaws default (non `--accept-all`) approval flow for MCP tool calls.
-4. cwd of the MCP child for Codex/OpenClaw (thClaws: project cwd, seen in the spawn log).
+2. A real write tool against a device (none exists; the toy server only writes a marker file).
+3. Hermes adapter (Hermes lane). Codex `agents/openai.yaml` effect (not tested). OpenClaw gateway/chat approval postures (no gateway on the worker).
+4. Windows/macOS hosts (all runs on Ubuntu 24.04, x86_64).
 
 ## Reproduce
 `tests/runtimes/mcp_stdio_check.py <config>` (stdlib). `tests/runtimes/mock_model.py [port]` (env `MOCK_LOG`, `MOCK_SEQ` multi-step chat script, `MOCK_DUMP`).
@@ -64,7 +94,7 @@ Claude Code and Hermes adapters: see 'Hermes lane' below.
 ## Still installed on workers (single root `~/nec-conf` each; remove only after owner OK)
 - worker-A: `~/nec-conf` (thClaws v0.156.0, Codex 0.169.0, venv/uv; mock endpoint stopped); apt: `libwebkit2gtk-4.1-0 libsoup-3.0-0 libjavascriptcoregtk-4.1-0` (+deps).
 - worker-B: `~/nec-conf` (OpenClaw 2026.11.3, user-space Node 24.22.3, venv/uv; mock endpoint stopped).
-- No daemon left running; port 9911 closed on both.
+- No daemon left running; port 9911 closed on both; trap dirs and marker files removed. OpenClaw/Codex configs inside `~/nec-conf/home` still contain the mock provider and the toy-write server (isolated HOME, goes with `rm -rf ~/nec-conf`).
 
 ## Hermes lane (the build agent, 2026-11-13)
 
