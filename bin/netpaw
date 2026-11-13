@@ -230,7 +230,7 @@ def cmd_list(_):
     out("available skills:")
     for s in skills():
         m = s["meta"].get("metadata", {})
-        out(f"  {s['dir'].name:22} v{m.get('version')}  risk={m.get('risk')}  server={m.get('mcp_servers')} ({srv.get(m.get('mcp_servers'), {}).get('capability')}) egress={','.join(srv.get(m.get('mcp_servers'), {}).get('egress', [])) or 'none'}")
+        out(f"  {s['dir'].name:22} v{m.get('version')}  risk={m.get('risk')}  maturity={m.get('maturity')}  server={m.get('mcp_servers')} ({srv.get(m.get('mcp_servers'), {}).get('capability')}) egress={','.join(srv.get(m.get('mcp_servers'), {}).get('egress', [])) or 'none'}")
     out("installed (manifest):")
     for r in load_manifest()["installs"]:
         out(f"  {r['agent']:12} {r['when']} v{r['version']} files={len(r['files'])} mcp={'yes' if r.get('mcp') else 'no'}")

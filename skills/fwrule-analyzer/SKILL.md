@@ -6,6 +6,7 @@ compatibility: Requires uv. First start needs network access to fetch hash-locke
 metadata:
   version: "1.1.0"
   risk: read
+  maturity: experimental
   mcp_servers: "fwrule"
   requires_bins: "uv"
 ---
