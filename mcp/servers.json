@@ -15,10 +15,15 @@
     "capability": "read"
   },
   "fwrule": {
-    "command": "uv",
+    "command": "python3",
     "capability": "read",
     "env": {},
     "args": [
+      "{root}/mcp/fwrule/proxy.py",
+      "--cache",
+      "{root}/mcp/fwrule/tools.cache.json",
+      "--",
+      "uv",
       "run",
       "--quiet",
       "--no-project",

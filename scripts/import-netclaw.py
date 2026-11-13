@@ -68,9 +68,13 @@ def main() -> int:
     for name, e in man["external_mcp"].items():
         req = ROOT / e["requirements"]
         if sha(req.read_bytes()) != e["requirements_sha256"]: sys.exit(f"{name}: requirements file hash mismatch")
-        servers[name] = {"command": "uv", "capability": e["capability"], "env": {},
-                         "args": ["run", "--quiet", "--no-project", "--isolated", "--with-requirements", "{root}/" + e["requirements"],
-                                  "--with", f"git+{e['git']}@{e['commit']}", "python", "{root}/" + e["launcher"]]}
+        child = ["uv", "run", "--quiet", "--no-project", "--isolated", "--with-requirements", "{root}/" + e["requirements"],
+                 "--with", f"git+{e['git']}@{e['commit']}", "python", "{root}/" + e["launcher"]]
+        if e.get("lazy_proxy"):
+            servers[name] = {"command": "python3", "capability": e["capability"], "env": {},
+                             "args": ["{root}/" + e["lazy_proxy"], "--cache", "{root}/" + e["tools_cache"], "--"] + child}
+        else:
+            servers[name] = {"command": "uv", "capability": e["capability"], "env": {}, "args": child[1:]}
     (ROOT / "mcp" / "servers.json").write_text(json.dumps(servers, indent=2) + "\n")
     block = ("\nImported by scripts/import-netclaw.py from commit " + man["upstream"]["commit"] + " (Apache-2.0):\n" + "\n".join(entries) + "\n")
     (ROOT / "NOTICE").write_text(head.rstrip("\n") + "\n" + block)

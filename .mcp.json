@@ -15,9 +15,14 @@
       "env": {}
     },
     "fwrule": {
-      "command": "uv",
+      "command": "python3",
       "env": {},
       "args": [
+        "${CLAUDE_PLUGIN_ROOT}/mcp/fwrule/proxy.py",
+        "--cache",
+        "${CLAUDE_PLUGIN_ROOT}/mcp/fwrule/tools.cache.json",
+        "--",
+        "uv",
         "run",
         "--quiet",
         "--no-project",
