@@ -1,0 +1,5 @@
+{
+  "minimal": ["subnet-calculator"],
+  "standard": ["subnet-calculator", "fwrule-analyzer"],
+  "full": "*"
+}

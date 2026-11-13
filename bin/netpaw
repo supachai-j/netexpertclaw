@@ -1,98 +1,269 @@
 #!/usr/bin/env python3
-"""netpaw - NetExpertClaw command line (codename: netpaw). Stdlib only; wraps the scripts in scripts/.
+"""netpaw - NetExpertClaw installer/CLI (stdlib only). Working name; the program name is the PROG constant below.
 
-  netpaw version | list | doctor | lint | test | smoke | build [--runtime R] [--root P] | site | import [--upstream D]
-  netpaw install <claude-code|codex|hermes|openclaw|thclaws> [--root P] [--apply]
+  netpaw agents | profiles | list | doctor | version
+  netpaw install -a AGENT [AGENT..] [-p minimal|standard|full] [-s SKILL..] [--project] [--with-mcp] [--root P] [--apply]
+  netpaw uninstall [-a AGENT..] [--apply]
+  netpaw build | lint | test | smoke | site | import      (repo checkout only)
 
-`install` prints the steps (dry run) unless --apply; --apply only copies skill folders into the runtime's skills dir
-and NEVER edits the runtime's config: the MCP snippet is printed for you to merge. No credentials are read or written.
-The script is not put on PATH automatically (call bin/netpaw or alias it).
+Dry run by default: nothing is written without --apply. Skills are copied; files are recorded with sha256 in
+~/.netpaw/manifest.json so `uninstall` removes only files that are still unmodified. --with-mcp edits a runtime config only
+where a safe merge exists (thClaws mcp.json, Codex config.toml, Hermes config.yaml), with a timestamped backup, a marker block,
+and a refusal if a server of that name already exists. No credentials are read or written. Not put on PATH automatically.
 """
-import argparse, os, pathlib, shutil, subprocess, sys
+import argparse, datetime, hashlib, json, os, pathlib, re, shutil, subprocess, sys
 
+PROG = "netpaw"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PY = sys.executable
-RUNTIMES = ("claude-code", "codex", "hermes", "openclaw", "thclaws")
+HOME = pathlib.Path(os.environ.get("HOME", "~")).expanduser()
+MANIFEST = HOME / ".netpaw" / "manifest.json"
+BEGIN, END = "# >>> netpaw >>>", "# <<< netpaw <<<"
 
 
-def run(*a, **kw):
-    return subprocess.run(list(a), cwd=ROOT, **kw).returncode
+def codex_home(): return pathlib.Path(os.environ.get("CODEX_HOME", HOME / ".codex"))
+
+# tested=True: we ran this runtime (docs/CONFORMANCE.md). Others come from arra-oracle-skills-cli's table (MIT) and are NOT verified by us.
+AGENTS = {
+    "claude-code": dict(tested=True, src="canonical", user=lambda: HOME / ".claude/skills", proj=".claude/skills", mcp="plugin"),
+    "codex": dict(tested=True, src="codex", user=lambda: codex_home() / "skills", proj=".codex/skills", mcp="toml"),
+    "hermes": dict(tested=True, src="hermes", user=lambda: HOME / ".hermes/skills", proj=None, mcp="yaml"),
+    "openclaw": dict(tested=True, src="openclaw", user=lambda: HOME / ".openclaw/skills", proj="skills", mcp="cli"),
+    "thclaws": dict(tested=True, src="thclaws", user=lambda: HOME / ".config/thclaws/skills", proj=".thclaws/skills", mcp="json"),
+    "opencode": dict(tested=False, src="canonical", user=lambda: HOME / ".config/opencode/skills", proj=".opencode/skills", mcp=None),
+    "cursor": dict(tested=False, src="canonical", user=lambda: HOME / ".cursor/skills", proj=".cursor/skills", mcp=None),
+    "gemini": dict(tested=False, src="canonical", user=lambda: HOME / ".gemini/skills", proj=".gemini/skills", mcp=None),
+}
 
 
-def version():
-    import json
-    return json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text())["version"]
+def sha(p): return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+def run(*a): return subprocess.run(list(a), cwd=ROOT).returncode
+def out(*a): print(*a)
+
+
+def version(): return json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["version"]
+
+
+def load_manifest():
+    return json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {"version": 1, "installs": []}
+
+
+def save_manifest(m):
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    tmp = MANIFEST.with_suffix(".tmp"); tmp.write_text(json.dumps(m, indent=2) + "\n"); tmp.replace(MANIFEST)
+
+
+def profile_skills(profile, extra):
+    prof = json.loads((ROOT / "profiles.json").read_text())
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from common import skills
+    allnames = [s["dir"].name for s in skills()]
+    if profile not in prof: sys.exit(f"unknown profile {profile}; have {sorted(prof)}")
+    names = allnames if prof[profile] == "*" else list(prof[profile])
+    for e in extra or []:
+        if e not in allnames: sys.exit(f"unknown skill {e}; have {allnames}")
+        if e not in names: names.append(e)
+    return names
+
+
+def render(agent, root):
+    """Return directory holding <skill>/ folders to copy for this agent (rendered by scripts/build.py)."""
+    a = AGENTS[agent]
+    if a["src"] == "canonical": return ROOT / "skills"
+    if run(PY, "scripts/build.py", "--runtime", a["src"], "--root", root) != 0: sys.exit("build failed")
+    d = ROOT / "dist" / a["src"]
+    return {"codex": d / "skills", "hermes": d / "skills" / "netexpertclaw", "openclaw": d / "skills", "thclaws": d / ".thclaws" / "skills"}[a["src"]]
+
+
+def server_snippets(root):
+    """name -> server dict with {root} substituted (drop capability)."""
+    s = json.loads((ROOT / "mcp/servers.json").read_text())
+    return {k: {**{x: y for x, y in v.items() if x != "capability"}, "args": [t.replace("{root}", root) for t in v["args"]]} for k, v in s.items()}
+
+
+def needed_servers(names):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from common import skills
+    need = set()
+    for s in skills():
+        if s["dir"].name in names:
+            need |= {x.strip() for x in (s["meta"].get("metadata", {}).get("mcp_servers") or "").split(",") if x.strip()}
+    return need
+
+
+def backup(p):
+    b = p.with_name(p.name + ".bak-netpaw-" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")); shutil.copy2(p, b); return b
+
+
+def merge_mcp(kind, cfg_path, servers, apply):
+    """Returns (message, record) ; record is stored in the manifest for uninstall."""
+    if kind == "json":
+        data = json.loads(cfg_path.read_text()) if cfg_path.exists() else {}
+        cur = data.setdefault("mcpServers", {})
+        clash = [k for k in servers if k in cur]
+        if clash: return f"refused: server(s) already in {cfg_path}: {clash} (merge by hand)", None
+        if apply:
+            if cfg_path.exists(): backup(cfg_path)
+            cfg_path.parent.mkdir(parents=True, exist_ok=True); cur.update(servers); cfg_path.write_text(json.dumps(data, indent=2) + "\n")
+        return f"{'added' if apply else 'would add'} {sorted(servers)} to {cfg_path}", {"file": str(cfg_path), "kind": "json", "servers": sorted(servers)}
+    text = cfg_path.read_text() if cfg_path.exists() else ""
+    if BEGIN in text: return f"refused: netpaw block already in {cfg_path}", None
+    if kind == "toml":
+        clash = [k for k in servers if re.search(rf"(?m)^\[mcp_servers\.{re.escape(k)}\]", text) or re.search(rf'(?m)^\[mcp_servers\."{re.escape(k)}"\]', text)]
+        if clash: return f"refused: server(s) already in {cfg_path}: {clash}", None
+        body = "\n".join(f'[mcp_servers.{k}]\ncommand = {json.dumps(v["command"])}\nargs = {json.dumps(v["args"])}\n' for k, v in servers.items())
+    else:  # yaml
+        if re.search(r"(?m)^mcp_servers:", text): return f"refused: {cfg_path} already has a top-level mcp_servers: (merge by hand)", None
+        lines = ["mcp_servers:"]
+        for k, v in servers.items():
+            lines += [f"  {k}:", f"    command: {v['command']}", "    args:"] + [f"      - {json.dumps(t)}" for t in v["args"]]
+        body = "\n".join(lines) + "\n"
+    block = f"\n{BEGIN}\n{body}{END}\n"
+    if apply:
+        if cfg_path.exists(): backup(cfg_path)
+        cfg_path.parent.mkdir(parents=True, exist_ok=True); cfg_path.write_text(text + block)
+    return f"{'added' if apply else 'would add'} marker block with {sorted(servers)} to {cfg_path}", {"file": str(cfg_path), "kind": kind, "servers": sorted(servers)}
+
+
+def cmd_install(a):
+    root = str(pathlib.Path(a.root).resolve())
+    names = profile_skills(a.profile, a.skills)
+    mf = load_manifest(); rc = 0
+    for agent in a.agent:
+        ag = AGENTS[agent]
+        if not ag["tested"] and not a.allow_untested:
+            out(f"[{agent}] NOT TESTED by us (path copied from another project). Re-run with --allow-untested to proceed."); rc = 1; continue
+        if a.project:
+            if not ag["proj"]: out(f"[{agent}] no project-level skills dir"); rc = 1; continue
+            dest = pathlib.Path.cwd() / ag["proj"]
+        else:
+            dest = ag["user"]()
+        if agent == "hermes": dest = dest / "netexpertclaw"
+        src = render(agent, root)
+        out(f"[{agent}] profile={a.profile} skills={names} -> {dest}" + ("" if a.apply else "   (dry run)"))
+        rec_files = {}
+        for n in names:
+            s, t = src / n, dest / n
+            if t.exists(): out(f"  skip (exists): {t}"); continue
+            out(f"  {'copy' if a.apply else 'would copy'}: {n}")
+            if a.apply:
+                shutil.copytree(s, t, symlinks=True)
+                for f in t.rglob("*"):
+                    if f.is_file(): rec_files[str(f)] = sha(f)
+        mcp_rec = None
+        need = needed_servers(names)
+        if a.with_mcp and need:
+            sn = {k: v for k, v in server_snippets(root).items() if k in need}
+            kind = ag["mcp"]
+            if kind == "json" and not a.project:
+                out("  mcp: thClaws MCP config is per project (.thclaws/mcp.json); use --project --with-mcp or follow the manual")
+            elif kind in ("json", "toml", "yaml"):
+                cfg = {"json": (pathlib.Path.cwd() / ".thclaws/mcp.json") if a.project else (HOME / ".config/thclaws/mcp.json"),
+                       "toml": (pathlib.Path.cwd() / ".codex/config.toml") if a.project else (codex_home() / "config.toml"),
+                       "yaml": HOME / ".hermes/config.yaml"}[kind]
+                msg, mcp_rec = merge_mcp(kind, cfg, sn, a.apply); out(f"  mcp: {msg}")
+            else:
+                out(f"  mcp: no automatic merge for {agent} (kind={kind}); run `{PROG} build --runtime {ag['src']} --root {root}` and follow the manual")
+        elif need:
+            out(f"  mcp servers needed: {sorted(need)} (add --with-mcp, or follow the manual)")
+        if a.apply and (rec_files or mcp_rec):
+            mf["installs"].append({"agent": agent, "when": datetime.datetime.now().isoformat(timespec="seconds"), "version": version(),
+                                   "files": rec_files, "mcp": mcp_rec})
+            save_manifest(mf)
+    if not a.apply: out("\ndry run. Add --apply to write.")
+    return rc
+
+
+def cmd_uninstall(a):
+    mf = load_manifest(); keep = []; n_rm = n_keep = 0
+    for rec in mf["installs"]:
+        if a.agent and rec["agent"] not in a.agent: keep.append(rec); continue
+        out(f"[{rec['agent']}] installed {rec['when']} (v{rec['version']})")
+        for f, h in rec["files"].items():
+            p = pathlib.Path(f)
+            if not p.exists(): continue
+            if sha(p) != h: out(f"  keep (modified): {f}"); n_keep += 1; continue
+            out(f"  {'remove' if a.apply else 'would remove'}: {f}"); n_rm += 1
+            if a.apply: p.unlink()
+        if a.apply:
+            dirs = {pathlib.Path(f).parent for f in rec["files"]}
+            dirs |= {d.parent for d in dirs if d.parent.name == "netexpertclaw"}
+            for d in sorted(dirs, key=lambda x: -len(x.parts)):
+                try: d.rmdir()
+                except OSError: pass
+        m = rec.get("mcp")
+        if m:
+            cfg = pathlib.Path(m["file"])
+            if cfg.exists():
+                if m["kind"] == "json":
+                    data = json.loads(cfg.read_text()); cur = data.get("mcpServers", {})
+                    gone = [k for k in m["servers"] if k in cur]
+                    out(f"  {'remove' if a.apply else 'would remove'} mcp servers {gone} from {cfg}")
+                    if a.apply and gone:
+                        backup(cfg); [cur.pop(k) for k in gone]; cfg.write_text(json.dumps(data, indent=2) + "\n")
+                else:
+                    t = cfg.read_text()
+                    if BEGIN in t and END in t:
+                        out(f"  {'remove' if a.apply else 'would remove'} netpaw marker block from {cfg}")
+                        if a.apply:
+                            backup(cfg); cfg.write_text(re.sub(rf"\n?{re.escape(BEGIN)}.*?{re.escape(END)}\n?", "\n", t, flags=re.S))
+        if not a.apply: keep.append(rec)
+    if a.apply:
+        mf["installs"] = keep; save_manifest(mf)
+    out(f"{n_rm} file(s) {'removed' if a.apply else 'would be removed'}, {n_keep} kept (modified)." + ("" if a.apply else " Dry run; add --apply."))
+    return 0
 
 
 def cmd_list(_):
     sys.path.insert(0, str(ROOT / "scripts"))
     from common import skills, servers
     srv = servers()
+    out("available skills:")
     for s in skills():
         m = s["meta"].get("metadata", {})
-        print(f"{s['dir'].name:22} v{m.get('version')}  risk={m.get('risk')}  server={m.get('mcp_servers')} ({srv.get(m.get('mcp_servers'), {}).get('capability')})")
+        out(f"  {s['dir'].name:22} v{m.get('version')}  risk={m.get('risk')}  server={m.get('mcp_servers')} ({srv.get(m.get('mcp_servers'), {}).get('capability')})")
+    out("installed (manifest):")
+    for r in load_manifest()["installs"]:
+        out(f"  {r['agent']:12} {r['when']} v{r['version']} files={len(r['files'])} mcp={'yes' if r.get('mcp') else 'no'}")
     return 0
 
 
 def cmd_doctor(_):
     ok = True
     for name, need in (("uv", True), ("python3", True), ("git", False), ("claude", False), ("codex", False), ("hermes", False), ("openclaw", False), ("thclaws", False)):
-        p = shutil.which(name)
-        print(f"{'ok ' if p else ('MISSING' if need else '-  ')} {name:9} {p or ''}")
-        ok &= bool(p) or not need
-    print("python", sys.version.split()[0])
-    return 0 if ok else 1
-
-
-def cmd_install(a):
-    root = str(pathlib.Path(a.root).resolve())
-    if run(PY, "scripts/build.py", "--runtime", a.runtime, "--root", root) != 0:
-        return 1
-    d = ROOT / "dist" / a.runtime
-    home = pathlib.Path(os.environ.get("HOME", "~")).expanduser()
-    plan = {
-        "claude-code": ("(none)", f"claude --plugin-dir {root}", None),
-        "codex": (pathlib.Path(os.environ.get("CODEX_HOME", home / ".codex")) / "skills", "append dist/codex/config.toml.snippet to $CODEX_HOME/config.toml", d / "skills"),
-        "hermes": (home / ".hermes" / "skills", "merge dist/hermes/mcp_servers.yaml.snippet into ~/.hermes/config.yaml", d / "skills"),
-        "openclaw": ("openclaw skills install <dir> (per skill)", "openclaw mcp set <name> '<server json>' for each entry in dist/openclaw/mcp.json.snippet", d / "skills"),
-        "thclaws": ("<project>/.thclaws", "copy dist/thclaws/.thclaws into your project, approve the MCP servers on first run", d / ".thclaws"),
-    }
-    dest, mcp, src = plan[a.runtime]
-    print(f"runtime     : {a.runtime}\nrendered    : {d}\nskills dest : {dest}\nMCP (manual): {mcp}")
-    if not a.apply:
-        print("\ndry run. Add --apply to copy skills (config is never edited).")
-        return 0
-    if a.runtime in ("claude-code", "openclaw", "thclaws"):
-        print("--apply has nothing to copy for this runtime; follow the lines above (see manual: install).")
-        return 0
-    dest = pathlib.Path(dest); dest.mkdir(parents=True, exist_ok=True)
-    for s in sorted(p for p in src.iterdir() if p.is_dir()):
-        t = dest / s.name
-        if t.exists():
-            print(f"skip (exists): {t}"); continue
-        shutil.copytree(s, t, symlinks=True); print(f"copied: {t}")
-    print("Now merge the MCP snippet by hand, then verify with the runtime (see manual: install).")
-    return 0
+        p = shutil.which(name); out(f"{'ok ' if p else ('MISSING' if need else '-  ')} {name:9} {p or ''}"); ok &= bool(p) or not need
+    out("python", sys.version.split()[0]); return 0 if ok else 1
 
 
 def main():
-    ap = argparse.ArgumentParser(prog="netpaw", description="NetExpertClaw CLI")
+    ap = argparse.ArgumentParser(prog=PROG, description="NetExpertClaw installer")
     sub = ap.add_subparsers(dest="c", required=True)
-    for n in ("version", "list", "doctor", "lint", "test", "smoke", "site"): sub.add_parser(n)
+    for n in ("version", "list", "doctor", "agents", "profiles", "lint", "test", "smoke", "site"): sub.add_parser(n)
     b = sub.add_parser("build"); b.add_argument("--runtime", default="all"); b.add_argument("--root", default=str(ROOT))
     i = sub.add_parser("import"); i.add_argument("--upstream")
-    n = sub.add_parser("install"); n.add_argument("runtime", choices=RUNTIMES); n.add_argument("--root", default=str(ROOT)); n.add_argument("--apply", action="store_true")
+    n = sub.add_parser("install")
+    n.add_argument("-a", "--agent", nargs="+", required=True, choices=sorted(AGENTS)); n.add_argument("-p", "--profile", default="minimal")
+    n.add_argument("-s", "--skills", nargs="*"); n.add_argument("--project", action="store_true"); n.add_argument("--with-mcp", action="store_true")
+    n.add_argument("--allow-untested", action="store_true"); n.add_argument("--root", default=str(ROOT)); n.add_argument("--apply", action="store_true")
+    u = sub.add_parser("uninstall"); u.add_argument("-a", "--agent", nargs="*", choices=sorted(AGENTS)); u.add_argument("--apply", action="store_true")
     a = ap.parse_args()
-    if a.c == "version": print("netpaw", version()); return 0
+    if a.c == "version": out(PROG, version()); return 0
+    if a.c == "agents":
+        for k, v in AGENTS.items(): out(f"{k:12} {'tested' if v['tested'] else 'NOT TESTED'}  user={v['user']()}  project={v['proj']}  mcp-merge={v['mcp']}")
+        return 0
+    if a.c == "profiles":
+        for k, v in json.loads((ROOT / "profiles.json").read_text()).items(): out(f"{k:9} {v if v != '*' else 'all skills'}")
+        return 0
     if a.c == "list": return cmd_list(a)
     if a.c == "doctor": return cmd_doctor(a)
+    if a.c == "install": return cmd_install(a)
+    if a.c == "uninstall": return cmd_uninstall(a)
     if a.c == "lint": return run(PY, "scripts/lint.py")
     if a.c == "test": return run(PY, "-m", "unittest", "discover", "-s", "tests")
     if a.c == "smoke": return run("uv", "run", "--quiet", "--no-project", "--isolated", "--with", "mcp==1.30.0", "python", "tests/smoke_mcp.py")
     if a.c == "site": return run(PY, "scripts/build_site.py")
     if a.c == "build": return run(PY, "scripts/build.py", "--runtime", a.runtime, "--root", a.root)
     if a.c == "import": return run(PY, "scripts/import-netclaw.py", *(["--upstream", a.upstream] if a.upstream else []))
-    if a.c == "install": return cmd_install(a)
 
 if __name__ == "__main__":
     sys.exit(main())

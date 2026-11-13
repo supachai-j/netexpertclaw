@@ -56,6 +56,10 @@ def main() -> int:
             elif p.is_file() and not ALLOWED_FILES.match(rel): errs.append(f"{d.name}/{rel}: file type/path not allow-listed (F-7)")
         if re.search(r"(?i)netclaw", s["text"]) and d.name not in (ROOT / "NOTICE").read_text():
             errs.append(f"{d.name}: mentions NetClaw but has no NOTICE entry (F-11)")
+    names = {s["dir"].name for s in skills()}
+    prof = json.loads((ROOT / "profiles.json").read_text())
+    for pn, v in prof.items():
+        if v != "*" and not set(v) <= names: errs.append(f"profiles.json: {pn} references unknown skill {sorted(set(v) - names)}")
     if not (ROOT / "LICENSE").exists(): errs.append("LICENSE missing (F-11)")
     for p in ROOT.rglob("*"):
         rel = p.relative_to(ROOT).as_posix()
