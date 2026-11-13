@@ -1,0 +1,42 @@
+name: release
+# Tag vX.Y.Z -> tests, source tarball + SHA256SUMS + CycloneDX SBOM, build-provenance attestation, GitHub release (pre-release while 0.x).
+on:
+  push: { tags: ["v[0-9]+.[0-9]+.[0-9]+*"] }
+permissions: {}
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env: { TAG: "${{ github.ref_name }}" }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with: { python-version: "3.12" }
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with: { enable-cache: false }
+      - name: tag must equal plugin version
+        run: |
+          v=$(python3 -c "import json;print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          [ "v$v" = "${TAG}" ] || { echo "tag ${TAG} != plugin.json v$v"; exit 1; }
+      - run: python3 scripts/lint.py
+      - run: python3 -m unittest discover -s tests
+      - run: uv run --quiet --no-project --isolated --with "mcp==1.30.0" python tests/smoke_mcp.py
+      - run: pip install cyclonedx-bom==8.0.1
+      - name: build artifacts
+        run: |
+          mkdir out
+          git archive --format=tar.gz --prefix="netexpertclaw-${TAG}/" -o "out/netexpertclaw-${TAG}.tar.gz" "${TAG}"
+          cyclonedx-py requirements mcp/fwrule/requirements.txt --of JSON -o "out/netexpertclaw-${TAG}.sbom.cdx.json"
+          (cd out && sha256sum * > SHA256SUMS && cat SHA256SUMS)
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
+        with: { subject-path: "out/*" }
+      - name: publish GitHub release
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          pre=""; case "${TAG}" in v0.*|*-*) pre="--prerelease";; esac
+          gh release create "${TAG}" out/* $pre --verify-tag --title "${TAG}" --generate-notes \
+            --notes "Install from this tag only (never pip install netpaw / npx netpaw). Verify: sha256sum -c SHA256SUMS; gh attestation verify <file> --repo ${GITHUB_REPOSITORY}."
