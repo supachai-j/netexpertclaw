@@ -1,0 +1,6 @@
+title = "netpaw"
+[extend]
+useDefault = true
+[[allowlists]]
+description = "Deliberately fake strings in the F-3 lint-scope repro (docs/SECURITY-REVIEW.md); exactly these two files"
+paths = ['''docs/security-evidence/repro_local\.py''', '''docs/security-evidence/out_repro_local\.txt''']

@@ -1,6 +1,6 @@
 # AI SDLC plan (netexpertclaw / netpaw)
 
-Status: PLAN (not implemented unless marked DONE). Standards referenced: NIST SSDF (SP 800-218), OWASP Top 10 for LLM Apps, OWASP ASVS, ISO/IEC 27001, PDPA. security-by-design rule (security by design) applies.
+Status: PLAN. S1 CI implemented in `.github/workflows/security.yml` (jobs secrets, sast, deps, workflows, policy, sbom) + dependabot + CODEOWNERS + SECURITY.md; PX-6 done (hash-locked fwrule requirements). Not yet: release job, branch protection, PX-7, B-3. Standards referenced: NIST SSDF (SP 800-218), OWASP Top 10 for LLM Apps, OWASP ASVS, ISO/IEC 27001, PDPA. security-by-design rule (security by design) applies.
 
 ## 1. Principles
 1. Humans own decisions; agents propose, build, test, review. Owner = the owner for names, publishing, spending, anything external and irreversible.

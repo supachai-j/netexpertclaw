@@ -1,0 +1,38 @@
+rules:
+  - id: netpaw-shell-true
+    languages: [python]
+    severity: ERROR
+    message: subprocess with shell=True (command injection risk); use an argv list
+    pattern-either:
+      - pattern: subprocess.$F(..., shell=True, ...)
+  - id: netpaw-os-system
+    languages: [python]
+    severity: ERROR
+    message: os.system/os.popen run a shell; use subprocess with an argv list
+    pattern-either:
+      - pattern: os.system(...)
+      - pattern: os.popen(...)
+  - id: netpaw-eval-exec
+    languages: [python]
+    severity: ERROR
+    message: eval/exec on dynamic input
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: exec($X)
+      - pattern-not: eval("...")
+  - id: netpaw-unsafe-deserialization
+    languages: [python]
+    severity: ERROR
+    message: unsafe deserialization (pickle / yaml.load without SafeLoader)
+    pattern-either:
+      - pattern: pickle.load(...)
+      - pattern: pickle.loads(...)
+      - pattern: yaml.load(...)
+  - id: netpaw-unverified-tls
+    languages: [python]
+    severity: ERROR
+    message: TLS verification disabled
+    pattern-either:
+      - pattern: ssl._create_unverified_context(...)
+      - pattern: requests.$F(..., verify=False, ...)
