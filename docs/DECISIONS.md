@@ -14,7 +14,7 @@ Owner delegated both decisions to the build agent (2026-11-13, "ตัดสิ�
 - `risk: write` skills stay off by default and are `disable-model-invocation`/`allow_implicit_invocation: false` where the runtime supports it; lab device only until P4 passes on all runtimes.
 
 ## D-3 Worker clean-up  - DECIDED
-- the runtime-test agent re-runs Codex L4 on commit 4c243ea+ for both read servers (confirms C-8 fix), then removes `~/nec-conf` on worker-A/worker-B and the 3 apt packages on worker-A, and records it in a shared state file. Hermes lane (worker-C `~/nec-test`) is already removed.
+- the runtime-test agent re-runs Codex L4 on commit 4c243ea+ for both read servers (confirms C-8 fix), then removes `~/nec-conf` on worker-A/worker-B and the 3 apt packages on worker-A, and records it in shared-task-state. Hermes lane (worker-C `~/nec-test`) is already removed.
 - Real-model tests stay out until the owner logs in on a worker himself (worker-plane rule).
 
 ## D-4 Next imports (read-only, offline or lab-only first)

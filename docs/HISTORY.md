@@ -1,0 +1,2 @@
+# History note
+Before the repository was made public (2026-11-13) the git history was rewritten once to remove internal worker hostnames, team/agent names and local paths from old commits and messages. File contents at the tip are unchanged apart from those substitutions. Commit hashes cited in older documents (for example in `docs/CONFORMANCE.md`) refer to the pre-rewrite commits and no longer exist; find the corresponding change by its commit message.
