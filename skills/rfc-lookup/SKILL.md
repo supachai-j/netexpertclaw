@@ -2,7 +2,7 @@
 name: rfc-lookup
 description: Look up IETF RFCs - search the official RFC index, fetch an RFC by number, or extract one section such as Security Considerations. Use this skill whenever the user asks what a protocol standard requires, wants an RFC cited, quoted or checked, asks whether a behaviour is MUST or SHOULD, wants to know which RFC obsoleted or updated another, or discusses BGP, OSPF, NTP, IPv6 or TCP behaviour per the spec, even if they never write "RFC". Needs internet access to www.rfc-editor.org only. Use it even when you think you remember the answer, because requirement words (MUST/SHOULD) and section numbers must be quoted from the fetched text and not recalled. Not for vendor documentation, CVEs or live device state.
 license: Apache-2.0
-compatibility: Requires uv. Network egress to www.rfc-editor.org over HTTPS only (no other hosts, no device access).
+compatibility: Requires uv. Network egress to www.rfc-editor.org over HTTPS only (no other hosts, no device access). Honors HTTPS_PROXY from the environment, so behind a proxy the TCP peer is the proxy.
 metadata:
   version: "0.1.0"
   risk: read

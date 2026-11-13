@@ -14,7 +14,7 @@ Every skill carries `metadata.maturity` (checked by lint, shown by `netpaw list`
 - The scanner reads the skill folders only (SKILL.md and evals). It does not read `mcp/` code; that is covered by bandit, semgrep, review and tests. A clean scan is not proof of safety.
 - Trigger eval (Claude Code, 1 run per query, noisy): see docs/evals/TRIGGER-RESULTS.md. subnet-calculator is below the 80% bar.
 - Output evals are written, not run. Other runtimes were not re-tested on these skill versions.
-- rfc-lookup (network egress) has no independent security review yet, so it stays experimental by its own rule.
+- rfc-lookup (network egress): cross-reviewed by a different agent (read-only code review plus probes; findings R6-1 proxy env documented, R6-2 unbounded cache fixed with a 16-entry cap). SkillSpector and Cisco scans of PR #7 by that reviewer: no HIGH/CRITICAL; one MEDIUM (undeclared network permission, declared in `compatibility`). Offline injection tests added (hostile RFC text stays flagged data, cannot widen egress). NOT done: a real-model injection test, and a review by the dedicated security-review agent (owner chose not to involve it), so it stays experimental.
 
 ## Safety layers in place
 lint (no symlinks or stray scripts, write needs approval gate), strict MCP input schemas, pinned full tool definitions, hash-locked deps, SHA-pinned actions, gitleaks/bandit/semgrep/pip-audit/zizmor in CI, SBOM and attestation on release, Cisco Skill Scanner (manual run on a worker).
