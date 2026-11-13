@@ -9,6 +9,7 @@
 | OpenClaw ลงแล้วได้เวอร์ชันเก่า | Node 22 | อัปเกรดเป็น Node ≥ 24.16 |
 | Hermes `mcp_servers:` ซ้ำ | ต่อท้าย config ที่มีบล็อกอยู่แล้ว | merge ด้วยมือ |
 | `subnet_calculator` ตอบ error `host bits set` | ใส่ `192.0.2.5/26` | ใช้ network address `192.0.2.0/26` |
+| `tool list changed upstream; regenerate tools cache` (จาก proxy ของ fwrule) | tool list จริงไม่ตรงกับ `tools.cache.json` | ตั้งใจให้หยุด : รัน `scripts/gen_tools_cache.py fwrule`, ตรวจ diff ของ tool ที่เปลี่ยน แล้ว commit |
 | `fwrule launcher: tool set changed` | upstream เพิ่ม/เปลี่ยน tool | ตั้งใจให้หยุด : ต้องรีวิว tool ใหม่ก่อน แล้วอัปเดต `REVIEWED` ใน `mcp/fwrule/launch.py` |
 | lint: `uv run needs --no-project --isolated …` | server entry ไม่ตรงกฎ | ใช้รูปแบบใน [พัฒนา](develop.html) |
 | `dist/` มี path ผิดเครื่อง | build ด้วย `--root` เดิม | build ใหม่ด้วย `--root` ของเครื่องนั้น |

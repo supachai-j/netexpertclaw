@@ -25,9 +25,14 @@ def main() -> int:
     for n, e in srv.items():
         if e.get("capability") not in ("read", "write"): errs.append(f"server {n}: capability must be read|write")
         a = e.get("args", [])
-        if e.get("command") == "uv":
-            pinned = any(x.startswith("mcp==") for x in a) or ("--with-requirements" in a and any(re.search(r"^git\+\S+@[0-9a-f]{40}$", x) for x in a))
-            if "--no-project" not in a or "--isolated" not in a or not pinned:
+        cmd, ca = e.get("command"), a
+        if cmd == "python3" and a and a[0].endswith("/mcp/" + n + "/proxy.py") and "--" in a:
+            cmd, ca = a[a.index("--") + 1], a[a.index("--") + 2:]   # lint the real child command behind the lazy proxy
+            cache = ROOT / "mcp" / n / "tools.cache.json"
+            if not cache.exists(): errs.append(f"server {n}: proxy needs {cache.name}")
+        if cmd == "uv":
+            pinned = any(x.startswith("mcp==") for x in ca) or ("--with-requirements" in ca and any(re.search(r"^git\+\S+@[0-9a-f]{40}$", x) for x in ca))
+            if "--no-project" not in ca or "--isolated" not in ca or not pinned:
                 errs.append(f"server {n}: uv run needs --no-project --isolated and exact pins (== or requirements + git@sha) (F-8/F-10)")
     for s in skills():
         m, d = s["meta"], s["dir"]

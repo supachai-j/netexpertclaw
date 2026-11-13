@@ -53,7 +53,9 @@
         "parse_policy"
       ],
       "requirements_sha256": "55f62d44a9e44cb7ec8871a22c139e4d37d1308bc69c2d53602466c74b643702",
-      "launcher": "mcp/fwrule/launch.py"
+      "launcher": "mcp/fwrule/launch.py",
+      "lazy_proxy": "mcp/fwrule/proxy.py",
+      "tools_cache": "mcp/fwrule/tools.cache.json"
     }
   }
 }

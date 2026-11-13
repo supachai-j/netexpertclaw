@@ -11,3 +11,10 @@ Reviewed by Hermes-EzAgent 2026-11-13 (read of source; labels: VERIFIED = grep/r
 - Skill risk: read. No device access, so no approval gate needed.
 
 - Added `mcp/fwrule/launch.py`: upstream tools carry no MCP annotations; Codex `exec` refuses unannotated tools (see docs/CONFORMANCE.md C-8). The launcher sets readOnlyHint on the 4 reviewed tools and exits if the tool set changes (fail closed).
+
+## Lazy proxy (`mcp/fwrule/proxy.py`, added for Codex)
+Codex `exec` drops a server that answers `initialize` late (Neo measured: a 2 s delay already loses the tools). fwrule needs ~1.8 s even with a prebuilt venv (FastMCP/pydantic import), more on a cold cache. `proxy.py` (stdlib, ~100 lines) answers `initialize`/`tools/list`/`ping` at once (measured 0.03 s) from `tools.cache.json` and starts the real server on the first other request (first call done in ~0.9 s here).
+- VERIFIED by tests/test_proxy.py: cache sha256 integrity; initialize/list served without starting the child; `tools/call` params and result forwarded unchanged (unicode included); a live tool list that differs from the cache makes every call fail closed with an error and a stderr line; a tampered cache refuses to start; committed cache == live server (`scripts/gen_tools_cache.py fwrule --check`).
+- Child environment is allow-listed (PATH, HOME, LANG, TMPDIR, XDG_*, SSL_CERT_*, UV_*); no shell; argv list only.
+- Regenerate the cache after any bump of the fwrule pin: `uv run --with mcp==1.30.0 python scripts/gen_tools_cache.py fwrule`, re-review the diff of the tool list, commit.
+- NOT verified: that Codex now registers fwrule (needs Neo's cold-cache run on .71); behaviour with clients that use server notifications or `tools/list_changed` (this server does not emit them).

@@ -1,0 +1,290 @@
+{
+ "serverInfo": {
+  "name": "FWRule MCP \u2014 Firewall Rule Analyzer",
+  "version": "3.1.0"
+ },
+ "sha256": "30b551a91ce7528b521790594c4d378ecc022a82c004a22ac6755d64d96ea0ea",
+ "tools": [
+  {
+   "_meta": {
+    "fastmcp": {
+     "tags": []
+    }
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "Analyze whether a candidate firewall rule overlaps with an existing ruleset. Detects exact duplicates, shadowed rules, action conflicts, and partial overlaps. Two input modes: (1) vendor-native configs via vendor + ruleset_payload + candidate_rule_payload, or (2) pre-normalized JSON via existing_rules + candidate_rule. Use parse_policy first to inspect parser output before analysis.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "candidate_position": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional 1-based intended insertion position of the candidate rule."
+     },
+     "candidate_rule": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Single normalized rule object (same schema as existing_rules elements). Example: {\"id\": \"candidate\", \"position\": 1, \"action\": \"permit\", \"source_addresses\": [\"10.20.35.76/32\"], \"destination_addresses\": [\"172.16.20.0/24\"], \"services\": [{\"protocol\": \"tcp\", \"ports\": \"6379\"}]}. Required for Mode 2."
+     },
+     "candidate_rule_payload": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Single candidate rule in vendor-native text format (e.g. one ACL line for IOS). Required for Mode 1."
+     },
+     "context_objects": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional JSON string with supplemental object definitions (address groups, service objects)."
+     },
+     "existing_rules": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Array of normalized rule objects from parse_policy output. Each object: {\"id\": \"rule_1\", \"position\": 1, \"action\": \"permit\"|\"deny\", \"source_addresses\": [\"10.0.0.0/8\"], \"destination_addresses\": [\"any\"], \"services\": [{\"protocol\": \"tcp\", \"ports\": \"443\"}], \"source_zones\": [\"any\"], \"destination_zones\": [\"any\"], \"applications\": [\"any\"]}. Required for Mode 2."
+     },
+     "os_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional OS version string for parser selection."
+     },
+     "ruleset_payload": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Complete firewall config in vendor-native text format (e.g. full 'show access-lists' output for IOS). Required for Mode 1."
+     },
+     "vendor": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Vendor identifier. One of: \"panos\", \"asa\", \"ftd\", \"ios\", \"iosxr\", \"checkpoint\", \"juniper\", \"junos\", \"sros\", \"fortios\". Required for Mode 1 (vendor-native)."
+     }
+    },
+    "type": "object"
+   },
+   "name": "analyze_firewall_rule_overlap",
+   "outputSchema": {
+    "additionalProperties": true,
+    "type": "object"
+   }
+  },
+  {
+   "_meta": {
+    "fastmcp": {
+     "tags": []
+    }
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "Analyze multiple candidate rules against the same existing ruleset in a single call. More efficient than calling analyze_firewall_rule_overlap multiple times \u2014 existing_rules is parsed once and reused for each candidate. Use parse_policy first to get normalized rules, then pass all candidates at once.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "candidate_rules": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Array of candidate rule objects to analyze. Each object: {\"id\": \"candidate-1\", \"position\": 1, \"action\": \"permit\"|\"deny\", \"source_addresses\": [\"CIDR\"], \"destination_addresses\": [\"CIDR\"], \"services\": [{\"protocol\": \"tcp\", \"ports\": \"443\"}], \"source_zones\": [\"any\"], \"destination_zones\": [\"any\"], \"applications\": [\"any\"]}."
+     },
+     "existing_rules": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Array of normalized rule objects from parse_policy output. Parsed once and reused for all candidates."
+     }
+    },
+    "type": "object"
+   },
+   "name": "batch_analyze_overlap",
+   "outputSchema": {
+    "additionalProperties": true,
+    "type": "object"
+   }
+  },
+  {
+   "_meta": {
+    "fastmcp": {
+     "tags": []
+    }
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "List all supported firewall vendors and their configuration format requirements. Use this to understand what vendor identifiers and payload formats are accepted by analyze_firewall_rule_overlap and parse_policy.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "name": "list_supported_vendors",
+   "outputSchema": {
+    "properties": {
+     "result": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "result"
+    ],
+    "type": "object",
+    "x-fastmcp-wrap-result": true
+   }
+  },
+  {
+   "_meta": {
+    "fastmcp": {
+     "tags": []
+    }
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "Parse a vendor-native firewall config and return normalized JSON rules. Use this to inspect what the built-in parser extracts \u2014 verify rule counts, object resolution, and address expansion before running overlap analysis. The output uses the same normalized schema accepted by analyze_firewall_rule_overlap.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "context_objects": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional JSON string with supplemental object definitions (address groups, service objects)."
+     },
+     "os_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional OS version string for parser variant selection."
+     },
+     "ruleset_payload": {
+      "default": "",
+      "description": "Complete firewall config in vendor-native text format. For IOS: paste the full 'show access-lists <name>' output. For PAN-OS: paste the full XML config tree.",
+      "type": "string"
+     },
+     "vendor": {
+      "description": "Vendor identifier. One of: \"panos\", \"asa\", \"ftd\", \"ios\", \"iosxr\", \"checkpoint\", \"juniper\", \"junos\", \"sros\", \"fortios\".",
+      "type": "string"
+     }
+    },
+    "required": [
+     "vendor"
+    ],
+    "type": "object"
+   },
+   "name": "parse_policy",
+   "outputSchema": {
+    "properties": {
+     "result": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "result"
+    ],
+    "type": "object",
+    "x-fastmcp-wrap-result": true
+   }
+  }
+ ]
+}
