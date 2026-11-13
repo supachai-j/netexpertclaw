@@ -30,6 +30,7 @@ AGENTS = {
     "hermes": dict(tested=True, src="hermes", user=lambda: HOME / ".hermes/skills", proj=None, mcp="yaml"),
     "openclaw": dict(tested=True, src="openclaw", user=lambda: HOME / ".openclaw/skills", proj="skills", mcp="cli"),
     "thclaws": dict(tested=True, src="thclaws", user=lambda: HOME / ".config/thclaws/skills", proj=".thclaws/skills", mcp="json"),
+    "agents": dict(tested=False, src="canonical", user=lambda: HOME / ".agents/skills", proj=".agents/skills", mcp=None),  # cross-agent convention (agentskills.io, Codex docs)
     "opencode": dict(tested=False, src="canonical", user=lambda: HOME / ".config/opencode/skills", proj=".opencode/skills", mcp=None),
     "cursor": dict(tested=False, src="canonical", user=lambda: HOME / ".cursor/skills", proj=".cursor/skills", mcp=None),
     "gemini": dict(tested=False, src="canonical", user=lambda: HOME / ".gemini/skills", proj=".gemini/skills", mcp=None),

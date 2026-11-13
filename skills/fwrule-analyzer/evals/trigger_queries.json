@@ -1,0 +1,102 @@
+[
+ {
+  "query": "I'm about to add a permit tcp/443 from 10.1.0.0/16 to 192.0.2.10 on our firewall. Here are the existing rules, will the new one ever match?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "audit this Palo Alto ruleset export for shadowed or duplicate rules",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "can you check whether rule 14 on this ASA is already covered by something above it",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "we're migrating from ASA to FortiGate, compare these two policies and tell me where they differ",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "find redundant rules in this iptables-like allow list I pasted: permit ip 10.0.0.0/8 any, permit tcp 10.2.0.0/16 any eq 22 ...",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "quick sanity check before change window: does my new deny conflict with anything already in the policy?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "cleanup time. which rules in this Check Point policy can be removed without changing behaviour?",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "is there any overlap between rule 'allow-web' and 'allow-any-internal' in these two JunOS SRX policies",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "normalize these Cisco IOS ACL lines and the FortiOS policy into one schema so I can diff them",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "Here's a list of 40 rules, order matters, find anything that can never be hit",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "Write an ACL that permits only SSH from the management subnet",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "how does a stateful firewall track UDP sessions?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "what's the CIDR range for 192.168.4.0/22",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "push this config to the firewall and commit it",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "which RFC covers NAT traversal?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "My firewall CPU is at 90%, how do I find the cause?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "create a PowerPoint about zero trust for the board",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "compare Palo Alto vs Fortinet pricing and licensing",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "explain what a DMZ is",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "is CVE-2024-3400 exploitable on our version?",
+  "should_trigger": false,
+  "split": "validation"
+ }
+]

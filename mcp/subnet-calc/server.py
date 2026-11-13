@@ -1,6 +1,8 @@
 """netexpertclaw subnet-calc MCP server (stdio). Read-only; no network or device access."""
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
+from harden import harden
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 RO = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
@@ -27,6 +29,8 @@ def subnet_calculator_auto(cidr: str) -> dict:
 def same_subnet(ip_a: str, ip_b: str, prefix: int) -> dict:
     """Check whether two addresses fall in the same /prefix subnet."""
     return core.same_subnet(ip_a, ip_b, prefix)
+
+harden(mcp)
 
 if __name__ == "__main__":
     mcp.run()
