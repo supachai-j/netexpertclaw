@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+"""nxc - NetExpertClaw command line (codename: nxc). Stdlib only; wraps the scripts in scripts/.
+
+  nxc version | list | doctor | lint | test | smoke | build [--runtime R] [--root P] | site | import [--upstream D]
+  nxc install <claude-code|codex|hermes|openclaw|thclaws> [--root P] [--apply]
+
+`install` prints the steps (dry run) unless --apply; --apply only copies skill folders into the runtime's skills dir
+and NEVER edits the runtime's config: the MCP snippet is printed for you to merge. No credentials are read or written.
+NOTE: NetExec (pentest tool) also installs a command named `nxc`; this script is not put on PATH automatically.
+"""
+import argparse, os, pathlib, shutil, subprocess, sys
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+PY = sys.executable
+RUNTIMES = ("claude-code", "codex", "hermes", "openclaw", "thclaws")
+
+
+def run(*a, **kw):
+    return subprocess.run(list(a), cwd=ROOT, **kw).returncode
+
+
+def version():
+    import json
+    return json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text())["version"]
+
+
+def cmd_list(_):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from common import skills, servers
+    srv = servers()
+    for s in skills():
+        m = s["meta"].get("metadata", {})
+        print(f"{s['dir'].name:22} v{m.get('version')}  risk={m.get('risk')}  server={m.get('mcp_servers')} ({srv.get(m.get('mcp_servers'), {}).get('capability')})")
+    return 0
+
+
+def cmd_doctor(_):
+    ok = True
+    for name, need in (("uv", True), ("python3", True), ("git", False), ("claude", False), ("codex", False), ("hermes", False), ("openclaw", False), ("thclaws", False)):
+        p = shutil.which(name)
+        print(f"{'ok ' if p else ('MISSING' if need else '-  ')} {name:9} {p or ''}")
+        ok &= bool(p) or not need
+    print("python", sys.version.split()[0])
+    return 0 if ok else 1
+
+
+def cmd_install(a):
+    root = str(pathlib.Path(a.root).resolve())
+    if run(PY, "scripts/build.py", "--runtime", a.runtime, "--root", root) != 0:
+        return 1
+    d = ROOT / "dist" / a.runtime
+    home = pathlib.Path(os.environ.get("HOME", "~")).expanduser()
+    plan = {
+        "claude-code": ("(none)", f"claude --plugin-dir {root}", None),
+        "codex": (pathlib.Path(os.environ.get("CODEX_HOME", home / ".codex")) / "skills", "append dist/codex/config.toml.snippet to $CODEX_HOME/config.toml", d / "skills"),
+        "hermes": (home / ".hermes" / "skills", "merge dist/hermes/mcp_servers.yaml.snippet into ~/.hermes/config.yaml", d / "skills"),
+        "openclaw": ("openclaw skills install <dir> (per skill)", "openclaw mcp set <name> '<server json>' for each entry in dist/openclaw/mcp.json.snippet", d / "skills"),
+        "thclaws": ("<project>/.thclaws", "copy dist/thclaws/.thclaws into your project, approve the MCP servers on first run", d / ".thclaws"),
+    }
+    dest, mcp, src = plan[a.runtime]
+    print(f"runtime     : {a.runtime}\nrendered    : {d}\nskills dest : {dest}\nMCP (manual): {mcp}")
+    if not a.apply:
+        print("\ndry run. Add --apply to copy skills (config is never edited).")
+        return 0
+    if a.runtime in ("claude-code", "openclaw", "thclaws"):
+        print("--apply has nothing to copy for this runtime; follow the lines above (see manual: install).")
+        return 0
+    dest = pathlib.Path(dest); dest.mkdir(parents=True, exist_ok=True)
+    for s in sorted(p for p in src.iterdir() if p.is_dir()):
+        t = dest / s.name
+        if t.exists():
+            print(f"skip (exists): {t}"); continue
+        shutil.copytree(s, t, symlinks=True); print(f"copied: {t}")
+    print("Now merge the MCP snippet by hand, then verify with the runtime (see manual: install).")
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="nxc", description="NetExpertClaw CLI")
+    sub = ap.add_subparsers(dest="c", required=True)
+    for n in ("version", "list", "doctor", "lint", "test", "smoke", "site"): sub.add_parser(n)
+    b = sub.add_parser("build"); b.add_argument("--runtime", default="all"); b.add_argument("--root", default=str(ROOT))
+    i = sub.add_parser("import"); i.add_argument("--upstream")
+    n = sub.add_parser("install"); n.add_argument("runtime", choices=RUNTIMES); n.add_argument("--root", default=str(ROOT)); n.add_argument("--apply", action="store_true")
+    a = ap.parse_args()
+    if a.c == "version": print("nxc", version()); return 0
+    if a.c == "list": return cmd_list(a)
+    if a.c == "doctor": return cmd_doctor(a)
+    if a.c == "lint": return run(PY, "scripts/lint.py")
+    if a.c == "test": return run(PY, "-m", "unittest", "discover", "-s", "tests")
+    if a.c == "smoke": return run("uv", "run", "--quiet", "--no-project", "--isolated", "--with", "mcp==1.30.0", "python", "tests/smoke_mcp.py")
+    if a.c == "site": return run(PY, "scripts/build_site.py")
+    if a.c == "build": return run(PY, "scripts/build.py", "--runtime", a.runtime, "--root", a.root)
+    if a.c == "import": return run(PY, "scripts/import-netclaw.py", *(["--upstream", a.upstream] if a.upstream else []))
+    if a.c == "install": return cmd_install(a)
+
+if __name__ == "__main__":
+    sys.exit(main())

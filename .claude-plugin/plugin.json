@@ -2,5 +2,11 @@
   "name": "netexpertclaw",
   "version": "0.1.0",
   "description": "Network-engineer skills and read-only MCP tools, portable across agent runtimes",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "keywords": [
+    "nxc",
+    "network",
+    "skills",
+    "mcp"
+  ]
 }

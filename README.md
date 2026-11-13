@@ -6,6 +6,8 @@ Targets: Claude Code · Codex · Hermes Agent · OpenClaw · thclaw
 
 Inspired by [automateyournetwork/netclaw](https://github.com/automateyournetwork/netclaw) (Apache-2.0). Ideas only; code reuse must keep license + attribution (see NOTICE).
 
+Codename / CLI: **nxc** (`bin/nxc`; run `bin/nxc doctor`, `bin/nxc list`, `bin/nxc install <runtime>`). Not put on PATH: NetExec also ships a command called `nxc`.
+
 Status: P0 done (runtime research). See [docs/PLAN.md](docs/PLAN.md), [docs/RUNTIME-MATRIX.md](docs/RUNTIME-MATRIX.md).
 
 ## Install
