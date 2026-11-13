@@ -1,0 +1,59 @@
+{
+  "upstream": {
+    "repo": "https://github.com/automateyournetwork/netclaw",
+    "commit": "cfafa46c3227356ca6ef38261fa9c1f4ba4711cb",
+    "license": "Apache-2.0"
+  },
+  "skills": [
+    {
+      "name": "fwrule-analyzer",
+      "upstream_path": "workspace/skills/fwrule-analyzer/SKILL.md",
+      "risk": "read",
+      "mcp_server": "fwrule",
+      "requires_bins": "uv",
+      "review": "docs/imports/fwrule-analyzer.md",
+      "replace": [
+        [
+          "- **Repository**: [AutomateIP/fwrule-mcp](https://github.com/AutomateIP/fwrule-mcp)\n- **Transport**: stdio (Python via `uv run fwrule-mcp`)\n- **Install**: `git clone` + `uv sync` (or `pip install -e .`)\n- **Requires**: No environment variables \u2014 standalone analysis engine\n- **Dependencies**: `fastmcp>=2.0`, `pydantic>=2.0`, Python 3.11+",
+          "- **Server**: `fwrule` (AutomateIP/fwrule-mcp, Apache-2.0), launched by the plugin pinned to a reviewed commit with a pinned requirements file. Do not install it from forks or unpinned sources.\n- **Transport**: stdio\n- **Requires**: no environment variables; no network or device access (analysis of text/JSON you pass in)."
+        ],
+        [
+          "> \u26a0\ufe0f FortiOS parser contributed by SIA/NetClaw (Airowire Networks). PR open at [AutomateIP/fwrule-mcp#1](https://github.com/AutomateIP/fwrule-mcp/pull/1). Install from the fork until merged upstream: `pip install git+https://github.com/akshaysiddaram/fwrule-mcp.git`\n\n",
+          ""
+        ],
+        [
+          "- **Record in GAIT** \u2014 log all firewall rule analysis for compliance audit trail",
+          "- **Data handling** \u2014 firewall configs are sensitive. Use lab or sanitized configs; do not paste real customer rulesets, addresses or names into saved artifacts."
+        ],
+        [
+          "## Available Tools (3)",
+          "## Available Tools (4)"
+        ],
+        [
+          "| `list_supported_vendors` |",
+          "| `batch_analyze_overlap` | Analyze several normalized candidate rules against the same normalized ruleset in one call (use `parse_policy` output as `existing_rules`). Pure analysis, normalized-JSON input only. |\n| `list_supported_vendors` |"
+        ],
+        [
+          "## Integration with Other Skills\n\n| Skill | How They Work Together |\n|-------|----------------------|\n| `fmc-firewall-ops` | FMC policy search + fwrule overlap analysis on retrieved rules |\n| `paloalto-panorama` | Panorama policy export + fwrule cross-policy analysis |\n| `pyats-security` | Device ACL retrieval via pyATS + fwrule overlap detection |\n| `pyats-asa-firewall` | ASA config retrieval + fwrule ASA parser for rule normalization |\n| `fortimanager-ops` | FortiManager policy export + fwrule FortiOS parser for cross-VDOM analysis |\n| `servicenow-change-workflow` | ServiceNow CR gating + fwrule validation before rule deployment |\n| `github-ops` | Commit firewall rule change analysis results to Git |\n| `gait-session-tracking` | Audit trail for all firewall rule analysis operations |\n\n",
+          ""
+        ]
+      ]
+    }
+  ],
+  "external_mcp": {
+    "fwrule": {
+      "git": "https://github.com/AutomateIP/fwrule-mcp",
+      "commit": "3bd52d79919b0aa5124e5d34fcbb12fb6112accd",
+      "requirements": "mcp/fwrule/requirements.txt",
+      "entrypoint": "fwrule-mcp",
+      "capability": "read",
+      "tools_reviewed": [
+        "analyze_firewall_rule_overlap",
+        "batch_analyze_overlap",
+        "list_supported_vendors",
+        "parse_policy"
+      ],
+      "requirements_sha256": "55f62d44a9e44cb7ec8871a22c139e4d37d1308bc69c2d53602466c74b643702"
+    }
+  }
+}

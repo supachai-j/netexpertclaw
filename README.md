@@ -16,3 +16,6 @@ Other runtimes: `python3 scripts/build.py --root <clone path>` then copy `dist/<
 `python3 scripts/lint.py && python3 -m unittest discover -s tests && uv run --with "mcp>=1.2,<2" python tests/smoke_mcp.py`
 
 Known quirk: opening Claude Code *inside* this repo also reads the root `.mcp.json` as a project server (shows `failed`, `${CLAUDE_PLUGIN_ROOT}` unresolved). The plugin copy connects fine. Harmless.
+
+## Imported from NetClaw
+`python3 scripts/import-netclaw.py [--upstream <checkout>]` re-creates imported skills from `imports/netclaw.json` (pinned commit, exact-match edits, hashed requirements, NOTICE entries). Per-import review: `docs/imports/`. Imported so far: `fwrule-analyzer` (+ `fwrule` MCP pinned to AutomateIP/fwrule-mcp@3bd52d79).
