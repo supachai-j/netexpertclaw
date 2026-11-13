@@ -1,0 +1,16 @@
+# แก้ปัญหา
+
+| อาการ | สาเหตุที่พบ | วิธีแก้ |
+|---|---|---|
+| MCP ขึ้น `failed` ครั้งแรก | ต้องดึง package จากอินเทอร์เน็ต หรือไม่มี `uv` | ตรวจ `uv --version` และการเชื่อมต่อ ; รันคำสั่งใน `dist/<runtime>/…snippet` ด้วยมือเพื่อดู error |
+| Codex ตอบว่า `MCP tool call requires approval, but approval policy is never` | tool ไม่มี `readOnlyHint` (หรือเป็น tool เขียน) | ตรวจ annotation ด้วย `tests/smoke_mcp.py` ; tool ของเรามีครบแล้ว |
+| thClaws `mcp spawn refused … not in the user allowlist` | เปลี่ยน args/โฟลเดอร์ หรือรัน headless ครั้งแรก | เปิด REPL แล้วอนุมัติ (`y`) ใหม่ |
+| OpenClaw ไม่เห็น tool ตรง ๆ | พฤติกรรมของ OpenClaw | ให้โมเดลใช้ `tool_search` แล้ว `dispatch_action` |
+| OpenClaw ลงแล้วได้เวอร์ชันเก่า | Node 22 | อัปเกรดเป็น Node ≥ 24.16 |
+| Hermes `mcp_servers:` ซ้ำ | ต่อท้าย config ที่มีบล็อกอยู่แล้ว | merge ด้วยมือ |
+| `subnet_calculator` ตอบ error `host bits set` | ใส่ `192.0.2.5/26` | ใช้ network address `192.0.2.0/26` |
+| `fwrule launcher: tool set changed` | upstream เพิ่ม/เปลี่ยน tool | ตั้งใจให้หยุด : ต้องรีวิว tool ใหม่ก่อน แล้วอัปเดต `REVIEWED` ใน `mcp/fwrule/launch.py` |
+| lint: `uv run needs --no-project --isolated …` | server entry ไม่ตรงกฎ | ใช้รูปแบบใน [พัฒนา](develop.html) |
+| `dist/` มี path ผิดเครื่อง | build ด้วย `--root` เดิม | build ใหม่ด้วย `--root` ของเครื่องนั้น |
+
+ยังแก้ไม่ได้: เปิด issue ใน repo (private) พร้อมคำสั่งและ output จริง ห้ามแนบข้อมูลลูกค้าหรือ credential
