@@ -12,6 +12,15 @@ MAX_RFC_BYTES = 5_000_000
 MAX_INDEX_BYTES = 4_000_000
 UA = "netexpertclaw-rfc-lookup/0.1 (+https://github.com/supachai-j/netexpertclaw)"
 _cache: dict[str, str] = {}   # in-memory only; nothing is written to disk
+CACHE_MAX = 16                # entries (each up to 5 MB); oldest dropped first
+
+
+def _cached(url: str, cap: int) -> str:
+    if url not in _cache:
+        text = _fetch(url, cap)
+        while len(_cache) >= CACHE_MAX: _cache.pop(next(iter(_cache)))
+        _cache[url] = text
+    return _cache[url]
 
 
 class RfcError(ValueError):
@@ -54,9 +63,7 @@ def parse_number(value) -> int:
 def load_rfc(number) -> tuple[int, str, str]:
     n = parse_number(number)
     url = f"https://{HOST}/rfc/rfc{n}.txt"
-    if url not in _cache:
-        _cache[url] = _fetch(url, MAX_RFC_BYTES)
-    return n, url, _cache[url]
+    return n, url, _cached(url, MAX_RFC_BYTES)
 
 
 _FOOT = re.compile(r".*\[Page \d+\]\s*$")
@@ -137,10 +144,9 @@ def get_section(number, section: str, max_chars: int = 20000) -> dict:
 
 def _index() -> list[tuple[int, str]]:
     url = f"https://{HOST}/rfc-index.txt"
-    if url not in _cache:
-        _cache[url] = _fetch(url, MAX_INDEX_BYTES)
+    text = _cached(url, MAX_INDEX_BYTES)
     entries, cur = [], None
-    for line in _cache[url].replace("\r", "").split("\n"):
+    for line in text.replace("\r", "").split("\n"):
         m = re.match(r"^([0-9]{4,5}) (\S.*)$", line)
         if m:
             if cur: entries.append(cur)
