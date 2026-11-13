@@ -6,6 +6,7 @@ compatibility: Requires uv. Network egress to www.rfc-editor.org over HTTPS only
 metadata:
   version: "0.1.0"
   risk: read
+  maturity: experimental
   mcp_servers: "rfc-lookup"
   requires_bins: "uv"
 ---

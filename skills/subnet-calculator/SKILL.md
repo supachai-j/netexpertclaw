@@ -6,6 +6,7 @@ compatibility: Requires uv (Python is fetched by uv). Offline, no network access
 metadata:
   version: "0.1.0"
   risk: read
+  maturity: experimental
   mcp_servers: "subnet-calc"
   requires_bins: "uv"
 ---
