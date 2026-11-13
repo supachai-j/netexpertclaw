@@ -1,7 +1,17 @@
 {
   "subnet-calc": {
     "command": "uv",
-    "args": ["run", "--quiet", "--with", "mcp>=1.2,<2", "python", "{root}/mcp/subnet-calc/server.py"],
-    "env": {}
+    "args": [
+      "run",
+      "--quiet",
+      "--no-project",
+      "--isolated",
+      "--with",
+      "mcp==1.30.0",
+      "python",
+      "{root}/mcp/subnet-calc/server.py"
+    ],
+    "env": {},
+    "capability": "read"
   }
 }
