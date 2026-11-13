@@ -45,7 +45,6 @@
       "git": "https://github.com/AutomateIP/fwrule-mcp",
       "commit": "3bd52d79919b0aa5124e5d34fcbb12fb6112accd",
       "requirements": "mcp/fwrule/requirements.txt",
-      "entrypoint": "fwrule-mcp",
       "capability": "read",
       "tools_reviewed": [
         "analyze_firewall_rule_overlap",
@@ -53,7 +52,8 @@
         "list_supported_vendors",
         "parse_policy"
       ],
-      "requirements_sha256": "55f62d44a9e44cb7ec8871a22c139e4d37d1308bc69c2d53602466c74b643702"
+      "requirements_sha256": "55f62d44a9e44cb7ec8871a22c139e4d37d1308bc69c2d53602466c74b643702",
+      "launcher": "mcp/fwrule/launch.py"
     }
   }
 }

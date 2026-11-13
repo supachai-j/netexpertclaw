@@ -70,7 +70,7 @@ def main() -> int:
         if sha(req.read_bytes()) != e["requirements_sha256"]: sys.exit(f"{name}: requirements file hash mismatch")
         servers[name] = {"command": "uv", "capability": e["capability"], "env": {},
                          "args": ["run", "--quiet", "--no-project", "--isolated", "--with-requirements", "{root}/" + e["requirements"],
-                                  "--with", f"git+{e['git']}@{e['commit']}", e["entrypoint"]]}
+                                  "--with", f"git+{e['git']}@{e['commit']}", "python", "{root}/" + e["launcher"]]}
     (ROOT / "mcp" / "servers.json").write_text(json.dumps(servers, indent=2) + "\n")
     block = ("\nImported by scripts/import-netclaw.py from commit " + man["upstream"]["commit"] + " (Apache-2.0):\n" + "\n".join(entries) + "\n")
     (ROOT / "NOTICE").write_text(head.rstrip("\n") + "\n" + block)

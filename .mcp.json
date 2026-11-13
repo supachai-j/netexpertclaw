@@ -26,7 +26,8 @@
         "${CLAUDE_PLUGIN_ROOT}/mcp/fwrule/requirements.txt",
         "--with",
         "git+https://github.com/AutomateIP/fwrule-mcp@3bd52d79919b0aa5124e5d34fcbb12fb6112accd",
-        "fwrule-mcp"
+        "python",
+        "${CLAUDE_PLUGIN_ROOT}/mcp/fwrule/launch.py"
       ]
     }
   }

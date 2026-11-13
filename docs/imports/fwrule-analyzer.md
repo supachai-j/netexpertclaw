@@ -9,3 +9,5 @@ Reviewed by Hermes-EzAgent 2026-11-13 (read of source; labels: VERIFIED = grep/r
 - Changes vs upstream skill: removed fork/install instructions and GAIT line, removed cross-references to skills that are not in this repo, documented the 4th tool, added data-handling rule.
 - RESIDUAL RISK: requirements.txt pins versions but has no hashes (transitive packages come from PyPI at first launch); PAN-OS XML parsing uses stdlib ElementTree with a regex DOCTYPE strip (upstream comment) - INTERPRETIVE, not fuzzed. Firewall configs passed to the tool/LLM can be sensitive (PDPA): sanitize first.
 - Skill risk: read. No device access, so no approval gate needed.
+
+- Added `mcp/fwrule/launch.py`: upstream tools carry no MCP annotations; Codex `exec` refuses unannotated tools (see docs/CONFORMANCE.md C-8). The launcher sets readOnlyHint on the 4 reviewed tools and exits if the tool set changes (fail closed).
