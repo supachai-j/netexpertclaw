@@ -1,6 +1,6 @@
 import os, pathlib, subprocess, sys, tempfile, unittest
 R = pathlib.Path(__file__).resolve().parent.parent
-NXC = [sys.executable, str(R / "bin" / "nxc")]
+NXC = [sys.executable, str(R / "bin" / "nxclaw")]
 
 def run(*a, home=None):
     env = dict(os.environ, HOME=home or os.environ["HOME"])
@@ -8,7 +8,7 @@ def run(*a, home=None):
 
 class Cli(unittest.TestCase):
     def test_version_list_lint(self):
-        self.assertIn("nxc 0.1.0", run("version").stdout)
+        self.assertIn("nxclaw 0.1.0", run("version").stdout)
         out = run("list").stdout; self.assertIn("subnet-calculator", out); self.assertIn("fwrule-analyzer", out)
         self.assertEqual(run("lint").returncode, 0)
     def test_install_dry_run_writes_nothing(self):
