@@ -4,21 +4,29 @@
 
 repo เป็น **private** (`supachai-j/netexpertclaw`) ต้องมีสิทธิ์ git เข้าถึงก่อน อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
 
-## คำสั่ง `netpaw` (codename ของแพ็กเกจ)
+## คำสั่ง `netpaw` (ตัวติดตั้ง)
 
-`bin/netpaw` เป็น CLI ตัวเดียวห่อสคริปต์ทั้งหมด (stdlib ล้วน):
+`bin/netpaw` เป็นตัวติดตั้งตัวเดียว (stdlib ล้วน) **ค่าเริ่มต้นคือ dry run** ไม่เขียนอะไรจนกว่าจะใส่ `--apply`
 
 ```bash
-bin/netpaw doctor                       # เช็กว่ามี uv, python3 และ runtime อะไรบ้าง
-bin/netpaw list                         # skill ที่มี พร้อม risk และ capability ของ server
-bin/netpaw install hermes --root "$PWD" # ดูแผนติดตั้ง (dry run ไม่เขียนอะไร)
-bin/netpaw install hermes --root "$PWD" --apply   # คัดลอกเฉพาะโฟลเดอร์ skill (ไม่แตะ config)
-bin/netpaw build | lint | test | smoke | site | import
+bin/netpaw doctor                          # เช็ก uv, python3 และ runtime ที่มี
+bin/netpaw agents                          # runtime ที่รองรับ (tested / NOT TESTED)
+bin/netpaw profiles                        # minimal | standard | full
+bin/netpaw list                            # skill ที่มี + สิ่งที่ติดตั้งไว้ (manifest)
+bin/netpaw install -a hermes codex -p standard --root "$PWD"                 # ดูแผน (dry run)
+bin/netpaw install -a hermes codex -p standard --root "$PWD" --apply         # คัดลอก skill
+bin/netpaw install -a codex -p standard --root "$PWD" --with-mcp --apply     # + ใส่ config MCP
+bin/netpaw install -a thclaws -p standard --project --with-mcp --apply       # thClaws: ต่อโปรเจกต์
+bin/netpaw uninstall --apply               # ถอนเฉพาะไฟล์ที่ยังไม่ถูกแก้ + ถอน config MCP ที่เราใส่
 ```
 
-`install --apply` คัดลอก skill ให้เฉพาะ Codex และ Hermes ส่วน config ของ MCP **พิมพ์ให้แล้วคุณ merge เอง** เสมอ ไม่มีการอ่านหรือเขียน credential ทั้ง Claude Code, OpenClaw และ thClaws ให้ทำตามขั้นตอนด้านล่าง
+- **profile:** `minimal` = subnet-calculator, `standard` = + fwrule-analyzer, `full` = ทุกตัว ; เพิ่มเฉพาะตัวด้วย `-s <skill>`
+- **`--with-mcp`** แก้ไฟล์ config ให้เฉพาะ Codex (`config.toml`), Hermes (`config.yaml`) และ thClaws (`.thclaws/mcp.json` เฉพาะ `--project`) โดย: สำรองไฟล์ (`*.bak-netpaw-<เวลา>`), ใส่ในบล็อกที่มีเครื่องหมาย `# >>> netpaw >>>`, และ **ปฏิเสธ** ถ้ามี server ชื่อซ้ำหรือ Hermes มี `mcp_servers:` อยู่แล้ว (ให้ merge เอง) Claude Code ใช้ plugin และ OpenClaw ใช้ `openclaw mcp set` ตามขั้นตอนด้านล่าง
+- **manifest** ที่ `~/.netpaw/manifest.json` เก็บ sha256 ของไฟล์ที่ติดตั้ง `uninstall` จึงไม่ลบไฟล์ที่คุณแก้เอง
+- runtime ที่ยังไม่ได้ทดสอบ (opencode, cursor, gemini) ต้องใส่ `--allow-untested` และ path ของมันคัดมาจากโปรเจกต์อื่น ไม่ได้ผ่านการทดสอบของเรา
+- ไม่มีการอ่านหรือเขียน credential `bin/netpaw` ไม่ถูกใส่ลง PATH ให้อัตโนมัติ (สร้าง alias เอง: `alias netpaw=~/netexpertclaw/bin/netpaw`)
 
-> `bin/netpaw` ไม่ถูกใส่ลง PATH ให้อัตโนมัติ เรียกด้วย path เต็มหรือสร้าง alias เอง (เช่น `alias netpaw=~/netexpertclaw/bin/netpaw`)
+> **ห้ามติดตั้งด้วย `pip install netpaw` หรือ `npx netpaw`** เราไม่ได้ publish แพ็กเกจชื่อนี้ที่ PyPI หรือ npm ใครจองชื่อนี้ทีหลังจะได้โค้ดของคนอื่น ให้ติดตั้งจาก git tag ที่ pin หรือ wheel ที่ตรวจ sha256 เท่านั้น (agent ที่เดาคำสั่งติดตั้งเองก็ต้องไม่ใช้ชื่อนี้)
 
 ## ขั้นตอนทั่วไป (ทุก runtime ยกเว้น Claude Code plugin)
 
