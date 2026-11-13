@@ -1,9 +1,9 @@
 {
  "serverInfo": {
   "name": "FWRule MCP \u2014 Firewall Rule Analyzer",
-  "version": "3.1.0"
+  "version": "4.1.8"
  },
- "sha256": "30b551a91ce7528b521790594c4d378ecc022a82c004a22ac6755d64d96ea0ea",
+ "sha256": "9480395a45c60828a99e0a787bf2c2ded1166abf91a2be01955db0b4fb19ed28",
  "tools": [
   {
    "_meta": {
@@ -128,7 +128,8 @@
    "outputSchema": {
     "additionalProperties": true,
     "type": "object"
-   }
+   },
+   "title": "Analyze Firewall Rule Overlap"
   },
   {
    "_meta": {
@@ -183,7 +184,8 @@
    "outputSchema": {
     "additionalProperties": true,
     "type": "object"
-   }
+   },
+   "title": "Batch Analyze Overlap"
   },
   {
    "_meta": {
@@ -215,7 +217,8 @@
     ],
     "type": "object",
     "x-fastmcp-wrap-result": true
-   }
+   },
+   "title": "List Supported Vendors"
   },
   {
    "_meta": {
@@ -284,7 +287,8 @@
     ],
     "type": "object",
     "x-fastmcp-wrap-result": true
-   }
+   },
+   "title": "Parse Policy"
   }
  ]
 }

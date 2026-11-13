@@ -1,0 +1,10 @@
+# Changes here change what runs on users' machines or what CI trusts: require owner review.
+/.github/                    @supachai-j
+/mcp/                        @supachai-j
+/mcp/fwrule/tools.cache.json @supachai-j
+/mcp/servers.json            @supachai-j
+/scripts/lint.py             @supachai-j
+/profiles.json               @supachai-j
+/imports/                    @supachai-j
+/bin/netpaw                  @supachai-j
+/docs/SECURITY-REVIEW.md     @supachai-j
