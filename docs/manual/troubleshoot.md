@@ -15,3 +15,9 @@
 | `dist/` มี path ผิดเครื่อง | build ด้วย `--root` เดิม | build ใหม่ด้วย `--root` ของเครื่องนั้น |
 
 ยังแก้ไม่ได้: เปิด issue ใน repo (private) พร้อมคำสั่งและ output จริง ห้ามแนบข้อมูลลูกค้าหรือ credential
+
+## ถอน thClaws แล้ว allowlist ยังอยู่
+`netpaw uninstall` ถอน skill และรายการใน `.thclaws/mcp.json` แต่ไม่แตะ `~/.config/thclaws/mcp_allowlist.json` (เป็นไฟล์ของ thClaws เอง) ลบรายการ netpaw ออกเองถ้าต้องการ
+
+## ไฟล์ `*.bak-netpaw`
+`--with-mcp` สำรอง config เดิมไว้ 1 ไฟล์ต่อไฟล์ (สถานะก่อน netpaw แตะครั้งแรก, สิทธิ์ 0600) config ของ runtime อาจมีความลับ จึงลบไฟล์สำรองทิ้งเมื่อไม่ต้องใช้แล้ว

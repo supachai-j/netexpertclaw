@@ -30,3 +30,6 @@ Typosquatting review (Superapp-Dev-Agent, 2026-11-13, `netpaw-name-check-v1`): n
 
 ## D-6 FINAL (owner, 2026-11-13): "สรุป ใช้ netpaw ได้เลย"
 Name stays `netpaw`. Considered and not chosen: `hermitclaw`/`shellswap`/`clawshell` (Hermes), `netsetu` and `netyant` (Neo; both free on PyPI/npm/crates/Homebrew/GitHub/RubyGems/Docker Hub per his check, netyant with 0 near-miss collisions). `netpaw` has no deeper story than net + paw (a play on "claw"); the owner accepted that. No further renames without a new owner decision.
+
+## Proxy review follow-up (Superapp PX-1..PX-8, Neo B-1..B-6)
+Fixed: PX-1 env allow-list without UV_PUBLISH/INDEX/INSECURE (docstring says "hygiene, not a sandbox"), PX-2 -32600 for batches/scalars, PX-3 child timeout+kill and server requests answered -32601, PX-4 only cached tool names and only tools/call forwarded, PX-5 protocol version fallback, PX-8 live test behind NETPAW_LIVE_TESTS=1; B-1 byte-exact uninstall, B-2 one 0600 backup per file, B-4 dry run builds nothing, B-6 kept files stay in manifest. Documented: B-5. Open: PX-6 (requirements --hash), PX-7 (--sha256 pin of cache + CODEOWNERS), B-3 (config points at checkout; needs a permanent install dir).

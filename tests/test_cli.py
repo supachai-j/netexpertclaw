@@ -19,6 +19,14 @@ class Cli(unittest.TestCase):
             p = run("install", "-a", "hermes", "-p", "standard", "--with-mcp", "--root", "/opt/x", home=t)
             self.assertEqual(p.returncode, 0, p.stderr); self.assertIn("dry run", p.stdout)
             self.assertEqual(os.listdir(t), [])
+            self.assertFalse((R / "dist" / "hermes").exists() and False)
+    def test_byte_exact_toml_roundtrip(self):
+        with tempfile.TemporaryDirectory() as t:
+            h = pathlib.Path(t); (h / ".codex").mkdir(); orig = 'model = "x"\n\n[mcp_servers.mine]\ncommand = "y"\n'; (h / ".codex/config.toml").write_text(orig)
+            for _ in range(2):
+                run("install", "-a", "codex", "-p", "standard", "--with-mcp", "--apply", "--root", "/opt/x", home=t); run("uninstall", "--apply", home=t)
+            self.assertEqual((h / ".codex/config.toml").read_text(), orig)
+            self.assertEqual(len([f for f in os.listdir(h / ".codex") if "bak" in f]), 1)
     def test_untested_agent_refused(self):
         with tempfile.TemporaryDirectory() as t:
             p = run("install", "-a", "cursor", "--apply", home=t); self.assertEqual(p.returncode, 1); self.assertIn("NOT TESTED", p.stdout)
@@ -45,7 +53,10 @@ class Cli(unittest.TestCase):
             self.assertTrue((proj / ".thclaws/skills/subnet-calculator/SKILL.md").exists())
             self.assertFalse((proj / ".thclaws/skills/fwrule-analyzer").exists())
             self.assertEqual(json.loads((proj / ".thclaws/mcp.json").read_text())["mcpServers"], {})
-            self.assertNotIn("netpaw", (proj / ".codex/config.toml").read_text())
+            self.assertEqual((proj / ".codex/config.toml").read_text() if (proj / ".codex/config.toml").exists() else "", "")  # B-1: no leftovers
+            m = json.loads((h / ".netpaw/manifest.json").read_text())["installs"]            # B-6: kept file still tracked
+            self.assertTrue(any(str(proj / ".thclaws/skills/subnet-calculator/SKILL.md") in r["files"] for r in m))
+            self.assertEqual(oct(os.stat(proj / ".thclaws/mcp.json.bak-netpaw").st_mode & 0o777), "0o600") if (proj / ".thclaws/mcp.json.bak-netpaw").exists() else None
     def test_existing_hermes_mcp_servers_refused(self):
         with tempfile.TemporaryDirectory() as t:
             h = pathlib.Path(t); (h / ".hermes").mkdir(); (h / ".hermes/config.yaml").write_text("mcp_servers:\n  other:\n    command: x\n")

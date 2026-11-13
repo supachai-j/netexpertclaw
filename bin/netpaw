@@ -92,7 +92,12 @@ def needed_servers(names):
 
 
 def backup(p):
-    b = p.with_name(p.name + ".bak-netpaw-" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")); shutil.copy2(p, b); return b
+    """One backup per file (the state before netpaw first touched it), mode 0600 because runtime configs may hold secrets."""
+    b = p.with_name(p.name + ".bak-netpaw")
+    if not b.exists():
+        fd = os.open(b, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as f: f.write(p.read_bytes())
+    return b
 
 
 def merge_mcp(kind, cfg_path, servers, apply):
@@ -139,15 +144,15 @@ def cmd_install(a):
         else:
             dest = ag["user"]()
         if agent == "hermes": dest = dest / "netexpertclaw"
-        src = render(agent, root)
+        src = render(agent, root) if a.apply else None   # dry run must not build/write dist/
         out(f"[{agent}] profile={a.profile} skills={names} -> {dest}" + ("" if a.apply else "   (dry run)"))
         rec_files = {}
         for n in names:
-            s, t = src / n, dest / n
+            t = dest / n
             if t.exists(): out(f"  skip (exists): {t}"); continue
             out(f"  {'copy' if a.apply else 'would copy'}: {n}")
             if a.apply:
-                shutil.copytree(s, t, symlinks=True)
+                shutil.copytree(src / n, t, symlinks=True)
                 for f in t.rglob("*"):
                     if f.is_file(): rec_files[str(f)] = sha(f)
         mcp_rec = None
@@ -206,8 +211,11 @@ def cmd_uninstall(a):
                     if BEGIN in t and END in t:
                         out(f"  {'remove' if a.apply else 'would remove'} netpaw marker block from {cfg}")
                         if a.apply:
-                            backup(cfg); cfg.write_text(re.sub(rf"\n?{re.escape(BEGIN)}.*?{re.escape(END)}\n?", "\n", t, flags=re.S))
-        if not a.apply: keep.append(rec)
+                            backup(cfg); cfg.write_text(re.sub(rf"\n?{re.escape(BEGIN)}.*?{re.escape(END)}\n?", "", t, count=1, flags=re.S))
+        if a.apply:
+            left = {f: h for f, h in rec["files"].items() if pathlib.Path(f).exists()}
+            if left: rec["files"] = left; rec["mcp"] = None; keep.append(rec)   # modified files stay tracked
+        else: keep.append(rec)
     if a.apply:
         mf["installs"] = keep; save_manifest(mf)
     out(f"{n_rm} file(s) {'removed' if a.apply else 'would be removed'}, {n_keep} kept (modified)." + ("" if a.apply else " Dry run; add --apply."))
