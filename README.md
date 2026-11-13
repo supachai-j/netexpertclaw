@@ -11,7 +11,7 @@ Codename / CLI: **netpaw** (`bin/netpaw`; run `bin/netpaw doctor`, `bin/netpaw l
 Status: P0 done (runtime research). See [docs/PLAN.md](docs/PLAN.md), [docs/RUNTIME-MATRIX.md](docs/RUNTIME-MATRIX.md).
 
 ## Install
-Claude Code: `/plugin marketplace add supachai-j/netexpertclaw` then `/plugin install netexpertclaw --marketplace supachai-j/netexpertclaw` (private repo: needs git credentials).
+Claude Code: `/plugin marketplace add supachai-j/netexpertclaw` then `/plugin install netexpertclaw --marketplace supachai-j/netexpertclaw` (public repo; not yet tested via the marketplace path).
 Other runtimes: `python3 scripts/build.py --root <clone path>` then copy `dist/<runtime>/` (see docs/RUNTIME-MATRIX.md). Requires `uv`.
 
 ## Dev

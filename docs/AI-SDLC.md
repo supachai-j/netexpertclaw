@@ -15,7 +15,7 @@ Status: PLAN. S1 CI implemented in `.github/workflows/security.yml` (jobs secret
 - the build agent: core code, imports, installer, merge, docs.
 - the runtime-test agent (the runtime-test agent): runtime conformance on workers, exploratory testing.
 - the security-review agent: security review, threat model, supply-chain checks.
-- Handoff rule: files + sha256 + line count under a shared handoff folder claims via claim script; log in a shared state file.
+- Handoff rule: files + sha256 + line count via a shared handoff folder with a claim step; progress is logged in a shared state file.
 
 ## 3. Lifecycle stages
 | Stage | What happens | Output / gate |

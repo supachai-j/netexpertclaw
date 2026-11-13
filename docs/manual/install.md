@@ -2,7 +2,7 @@
 
 ต้องมี **`uv`** (https://docs.astral.sh/uv/) และ Python 3 ในเครื่อง MCP server ถูกเรียกผ่าน `uv run --no-project --isolated` ครั้งแรกที่รันต้องต่ออินเทอร์เน็ตเพื่อดึง package (ตรึงเวอร์ชันไว้แล้ว)
 
-repo เป็น **private** (`supachai-j/netexpertclaw`) ต้องมีสิทธิ์ git เข้าถึงก่อน อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
+repo เป็น **public** (`supachai-j/netexpertclaw`) clone ได้โดยไม่ต้อง login อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
 
 ## คำสั่ง `netpaw` (ตัวติดตั้ง)
 
@@ -49,7 +49,7 @@ claude --plugin-dir ~/netexpertclaw
 
 ผลที่ควรเห็น: skill `netexpertclaw:subnet-calculator`, `netexpertclaw:fwrule-analyzer` และ MCP `plugin:netexpertclaw:subnet-calc`, `plugin:netexpertclaw:fwrule` สถานะ `connected`
 
-แบบ marketplace (ยังไม่ได้ทดสอบกับ repo private):
+แบบ marketplace (ยังไม่ได้ทดสอบเส้นทาง marketplace):
 
 ```
 /plugin marketplace add supachai-j/netexpertclaw

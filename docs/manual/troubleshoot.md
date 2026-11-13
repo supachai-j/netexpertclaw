@@ -14,7 +14,7 @@
 | lint: `uv run needs --no-project --isolated …` | server entry ไม่ตรงกฎ | ใช้รูปแบบใน [พัฒนา](develop.html) |
 | `dist/` มี path ผิดเครื่อง | build ด้วย `--root` เดิม | build ใหม่ด้วย `--root` ของเครื่องนั้น |
 
-ยังแก้ไม่ได้: เปิด issue ใน repo (private) พร้อมคำสั่งและ output จริง ห้ามแนบข้อมูลลูกค้าหรือ credential
+ยังแก้ไม่ได้: เปิด issue ใน repo พร้อมคำสั่งและ output จริง ห้ามแนบข้อมูลลูกค้าหรือ credential
 
 ## ถอน thClaws แล้ว allowlist ยังอยู่
 `netpaw uninstall` ถอน skill และรายการใน `.thclaws/mcp.json` แต่ไม่แตะ `~/.config/thclaws/mcp_allowlist.json` (เป็นไฟล์ของ thClaws เอง) ลบรายการ netpaw ออกเองถ้าต้องการ
