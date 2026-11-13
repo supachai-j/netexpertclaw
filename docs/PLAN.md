@@ -40,8 +40,8 @@ P4 Write-change workflow (baseline -> approval -> push -> verify -> rollback), a
 P5 Thai-language docs, vendor packs (Cisco/Fortinet/Palo Alto/F5…), RAG over runbooks, release v0.1.
 
 ## 6. Open questions
-1. thclaw: repo/docs link? 
-2. GitHub account: user said `supachai-ja` (not found); repo created under `supachai-j` — confirm.
+1. thClaws: https://thclaws.ai (resolved, see RUNTIME-MATRIX)
+2. GitHub account: supachai-j (confirmed).
 3. Initial vendor focus (Cisco IOS-XE? FortiGate? multi-vendor)?
-4. Reuse NetClaw code (Apache-2.0, needs attribution) or clean-room?
+4. Reuse NetClaw code: DECIDED — reuse + extend (Apache-2.0, attribution kept). See RUNTIME-MATRIX.
 5. Customer data: never in repo (PDPA); lab/synthetic only.
