@@ -1,0 +1,58 @@
+== F-1 core.py classification / input handling
+  CGNAT 100.64.0.0/10: classification=global same_subnet=None
+  Class E 240.0.0.0/4: classification=private same_subnet=None
+  default 0.0.0.0/0: classification=global same_subnet=None
+  netmask form 10.0.0.0/255.0.0.0 (docs say canonical CIDR): classification=private same_subnet=None
+  same_subnet with IPv6 zone: classification=None same_subnet=True
+  subnet_v6 with IPv6 zone: ValueError IPv6 zones are not supported
+
+== F-2 lint SECRET regex coverage (CAUGHT = regex matches)
+  MISSED password: hunter2 (short)
+  MISSED password with symbols
+  CAUGHT password 12 alnum
+  MISSED Authorization: Bearer <jwt>
+  MISSED PEM private key header
+  MISSED AWS access key id
+  MISSED GitHub PAT shape
+  MISSED SNMP community
+  MISSED Cisco 'enable secret 5'
+  MISSED Cisco 'username .. secret 9'
+  MISSED Cisco 'password 7' (reversible)
+  MISSED URL with credentials
+  MISSED token with dots
+  CAUGHT env style DEVICE_PASSWORD=
+
+== F-3 lint scan scope (file contains `password: abcdefghij12`)
+  NOT SCANNED x.yml
+  NOT SCANNED x.sh
+  NOT SCANNED x.txt
+  NOT SCANNED x.ini
+  NOT SCANNED x.cfg
+  NOT SCANNED x.env
+  NOT SCANNED .env.example
+  NOT SCANNED Dockerfile
+  NOT SCANNED x.js
+  flagged     x.toml
+  flagged     tests/x.py
+  NOT SCANNED skills/a/dist/x.md
+  NOT SCANNED skills/a/lint.py
+  NOT SCANNED tests/lint.py
+  (exempt by source: `p.name != "lint.py"` at lint.py:29)
+
+== F-4 write skill whose body says 'No approval needed' passes the approval check
+  lint: (0, 'lint ok (2 skill(s), 1 server(s))')
+
+== F-5 unlinted frontmatter keys (allowed-tools etc.) pass lint and survive build
+  lint: (0, 'lint ok (2 skill(s), 1 server(s))')
+  allowed-tools present in dist copy: True
+  servers.json has any per-server read/write capability field: False
+
+== F-6 symlink in a skill dir is dereferenced into dist/ (file outside the repo is copied)
+  lint: (0, 'lint ok (2 skill(s), 1 server(s))')
+  dist file exists: True | is symlink: False | content: CONTENT-FROM-OUTSIDE-THE-REPO
+
+== F-7 non-SKILL.md payload (shell script) next to SKILL.md is copied; lint is silent
+  lint: (0, 'lint ok (2 skill(s), 1 server(s))')
+  copied into dist/codex: True
+
+snapshot untouched; temp dir removed

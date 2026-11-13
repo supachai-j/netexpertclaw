@@ -1,13 +1,23 @@
 """Pure-stdlib subnet maths (no network, no device access). Read-only."""
 from __future__ import annotations
 import ipaddress
+import re
 
 
 _DOC = [ipaddress.ip_network(x) for x in ("192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24", "2001:db8::/32")]
 
 
+_V4 = [(ipaddress.ip_network(a), l) for a, l in (
+    ("100.64.0.0/10", "shared address space / CGNAT (RFC 6598)"), ("240.0.0.0/4", "reserved (class E)"),
+    ("0.0.0.0/8", "this-network (RFC 1122)"), ("169.254.0.0/16", "link-local"), ("224.0.0.0/4", "multicast"),
+    ("127.0.0.0/8", "loopback"), ("10.0.0.0/8", "private"), ("172.16.0.0/12", "private"), ("192.168.0.0/16", "private"))]
+
+
 def _classify(net) -> str:
     if any(net.version == d.version and net.subnet_of(d) for d in _DOC): return "documentation (RFC 5737/3849)"
+    if net.version == 4:
+        for rng, label in _V4:
+            if net.subnet_of(rng): return label
     if net.is_loopback: return "loopback"
     if net.is_link_local: return "link-local"
     if net.is_multicast: return "multicast"
@@ -21,6 +31,8 @@ def _parse(cidr: str, version: int):
         raise ValueError("cidr must look like 10.0.0.0/24")
     if "%" in cidr:
         raise ValueError("IPv6 zones are not supported")
+    if not re.fullmatch(r"[0-9a-fA-F:.]+/\d{1,3}", cidr.strip()):
+        raise ValueError("cidr must be address/prefix-length (no netmask form)")
     net = ipaddress.ip_network(cidr.strip(), strict=True)  # host bits -> ValueError
     if net.version != version:
         raise ValueError(f"expected IPv{version} CIDR")
@@ -75,6 +87,8 @@ def subnet_auto(cidr: str) -> dict:
 
 
 def same_subnet(ip_a: str, ip_b: str, prefix: int) -> dict:
+    if "%" in ip_a + ip_b:
+        raise ValueError("IPv6 zones are not supported")
     a, b = ipaddress.ip_address(ip_a), ipaddress.ip_address(ip_b)
     if a.version != b.version:
         raise ValueError("address families differ")

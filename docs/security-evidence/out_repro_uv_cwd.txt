@@ -1,0 +1,6 @@
+uv 0.11.1 (x86_64-unknown-linux-gnu)
+--- without --no-project
+RESULT: project build backend EXECUTED
+--- with --no-project
+server stand-in ran
+RESULT: backend not executed
