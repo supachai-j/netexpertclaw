@@ -4,6 +4,22 @@
 
 repo เป็น **private** (`supachai-j/netexpertclaw`) ต้องมีสิทธิ์ git เข้าถึงก่อน อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
 
+## คำสั่ง `nxc` (codename ของแพ็กเกจ)
+
+`bin/nxc` เป็น CLI ตัวเดียวห่อสคริปต์ทั้งหมด (stdlib ล้วน):
+
+```bash
+bin/nxc doctor                       # เช็กว่ามี uv, python3 และ runtime อะไรบ้าง
+bin/nxc list                         # skill ที่มี พร้อม risk และ capability ของ server
+bin/nxc install hermes --root "$PWD" # ดูแผนติดตั้ง (dry run ไม่เขียนอะไร)
+bin/nxc install hermes --root "$PWD" --apply   # คัดลอกเฉพาะโฟลเดอร์ skill (ไม่แตะ config)
+bin/nxc build | lint | test | smoke | site | import
+```
+
+`install --apply` คัดลอก skill ให้เฉพาะ Codex และ Hermes ส่วน config ของ MCP **พิมพ์ให้แล้วคุณ merge เอง** เสมอ ไม่มีการอ่านหรือเขียน credential ทั้ง Claude Code, OpenClaw และ thClaws ให้ทำตามขั้นตอนด้านล่าง
+
+> ระวังชื่อซ้ำ: **NetExec** (เครื่องมือ pentest) ก็ติดตั้งคำสั่งชื่อ `nxc` เหมือนกัน เราจึงไม่ใส่ `bin/nxc` ลง PATH ให้อัตโนมัติ เรียกด้วย path เต็มหรือสร้าง alias เองในเครื่องที่ไม่มี NetExec
+
 ## ขั้นตอนทั่วไป (ทุก runtime ยกเว้น Claude Code plugin)
 
 ```bash
