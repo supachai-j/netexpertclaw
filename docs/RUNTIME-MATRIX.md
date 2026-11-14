@@ -4,7 +4,7 @@ Sources: official docs of each runtime (links at bottom). Hermes row from local 
 
 | | Skill format | Skill path | MCP config | Bundle/Distribute |
 |---|---|---|---|---|
-| Claude Code | `skills/<n>/SKILL.md` (name, description frontmatter) | `~/.claude/skills/`, `.claude/skills/` | `.mcp.json` (in plugin root or project) | Plugin: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`; `/plugin marketplace add supachai-j/netexpertclaw` |
+| Claude Code | `skills/<n>/SKILL.md` (name, description frontmatter) | `~/.claude/skills/`, `.claude/skills/` | `.mcp.json` (in plugin root or project) | Plugin: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`; `/plugin marketplace add supachai-j/netpaw` |
 | Codex | `SKILL.md` + optional `agents/openai.yaml` (policy.allow_implicit_invocation, dependencies.tools[mcp]) | skills dirs (CLI/IDE/app) ; `$skill` to invoke | `~/.codex/config.toml` or `.codex/config.toml` -> `[mcp_servers.<n>]` (command/args/env_vars, url/bearer_token_env_var); `codex mcp add` | Codex plugins (preferred for distribution) |
 | Hermes | `SKILL.md` frontmatter (name, description, version, metadata.hermes) | `~/.hermes/skills/<category>/<n>/` | `config.yaml` -> `mcp_servers:` (command/args/env or url/headers) | copy/`hermes skills` |
 | OpenClaw | `SKILL.md` + `metadata: {"openclaw": {requires:{bins,env,config}, primaryEnv, install}}` (single-line JSON) | workspace/skills, `~/.openclaw` ; ClawHub | `openclaw.json` | ClawHub |

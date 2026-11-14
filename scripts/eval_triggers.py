@@ -29,7 +29,7 @@ def triggered(events, skill, servers):
 
 
 def run_one(query, skill, servers, timeout):
-    allowed = "Skill ToolSearch " + " ".join(f"mcp__plugin_netexpertclaw_{s}" for s in servers)
+    allowed = "Skill ToolSearch " + " ".join(f"mcp__plugin_netpaw_{s}" for s in servers)
     with tempfile.TemporaryDirectory() as t:
         try:
             p = subprocess.run(["claude", "-p", query, "--plugin-dir", str(ROOT), "--output-format", "stream-json", "--verbose", "--max-turns", "4",

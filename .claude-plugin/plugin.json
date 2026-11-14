@@ -1,5 +1,5 @@
 {
-  "name": "netexpertclaw",
+  "name": "netpaw",
   "version": "0.1.0",
   "description": "Network-engineer skills and read-only MCP tools, portable across agent runtimes",
   "license": "Apache-2.0",
@@ -17,6 +17,6 @@
     "name": "supachai-j",
     "url": "https://github.com/supachai-j"
   },
-  "homepage": "https://supachai-j.github.io/netexpertclaw-docs/",
-  "repository": "https://github.com/supachai-j/netexpertclaw"
+  "homepage": "https://supachai-j.github.io/netpaw-docs/",
+  "repository": "https://github.com/supachai-j/netpaw"
 }

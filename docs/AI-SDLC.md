@@ -1,4 +1,4 @@
-# AI SDLC plan (netexpertclaw / netpaw)
+# AI SDLC plan (netpaw / netpaw)
 
 Status: PLAN. S1 CI implemented in `.github/workflows/security.yml` (jobs secrets, sast, deps, workflows, policy, sbom) + dependabot + CODEOWNERS + SECURITY.md; PX-6 done (hash-locked fwrule requirements). Release workflow added (`release.yml`, tag-triggered). Branch protection DONE (repo public). Not yet: PX-7, B-3. Standards referenced: NIST SSDF (SP 800-218), OWASP Top 10 for LLM Apps, OWASP ASVS, ISO/IEC 27001, PDPA. security-by-design rule (security by design) applies.
 

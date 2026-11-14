@@ -1,4 +1,4 @@
-"""netexpertclaw rfc-lookup MCP server (stdio). Read-only. Only egress: HTTPS to www.rfc-editor.org (see rfc_core.py)."""
+"""netpaw rfc-lookup MCP server (stdio). Read-only. Only egress: HTTPS to www.rfc-editor.org (see rfc_core.py)."""
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
