@@ -19,3 +19,6 @@ Findings
 - The earlier all-zero baseline is discarded.
 
 - Subnet-calculator and rfc-lookup trigger numbers vary by about 2 queries between identical runs (rfc-lookup train/validation 11/12 and 8/8 in one run, 12/12 and 6/8 in the next); read them as ranges.
+| eve-lab-topology-design | "Use this skill when" description | 10/12 | 8/8 |
+
+The 2 train misses are queries that mention a .unl file but contain no actual content, so the model asked for the file instead of calling the tool; they are weak queries, not necessarily a description problem. 1 run per query.
