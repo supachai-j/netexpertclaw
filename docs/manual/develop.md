@@ -1,65 +1,74 @@
-# พัฒนา / เพิ่ม skill
+# Develop
 
-## โครงสร้าง repo
+## Layout
 
 ```
-skills/<name>/SKILL.md     # ต้นฉบับ (runtime-neutral)
-mcp/servers.json           # registry ของ MCP server  ({root} = path ติดตั้ง)
-mcp/<server>/              # โค้ด server ของเรา หรือ launcher + requirements ที่ pin
-imports/netclaw.json       # รายการ import จาก NetClaw (pin commit)
-scripts/                   # build.py, lint.py, import-netclaw.py, common.py
-tests/                     # unit, security regression, smoke MCP, runtimes/
-docs/                      # แผน, รีวิวความปลอดภัย, conformance, manual
-dist/                      # ผลลัพธ์ build (ไม่ commit)
+skills/<name>/SKILL.md      source skill (agent-neutral), evals/ with trigger and output cases
+mcp/servers.json            server registry ({root} = install path); egress and capability per server
+mcp/<server>/               our server code, or launcher + hash-locked requirements for an upstream one
+mcp/_shared/                shared helpers (strict input, hidden-character stripper)
+profiles.json               minimal | standard | online | full
+imports/netclaw.json        pinned imports from NetClaw
+scripts/                    build, lint, import, eval and cache tools
+tests/                      unit, security regression, smoke MCP, runtime scripts
+docs/                       plan, decisions (ADR style), reviews, conformance, manual
 ```
 
-## Frontmatter ของ skill
+## Skill frontmatter
 
 ```yaml
 ---
-name: my-skill              # = ชื่อโฟลเดอร์ ตัวพิมพ์เล็ก/ขีด
-description: ประโยคเดียว บอกว่าทำอะไรและควรใช้เมื่อไร (≤ 1024 ตัวอักษร)
+name: my-skill            # equals the folder name, lowercase and dashes, max 64
+description: "Use this skill when ... because ..."   # when to use, what it does; no ': ' or ' #' in plain scalars
 license: Apache-2.0
+compatibility: Requires uv. Network egress to example.org only.
 metadata:
   version: "0.1.0"
-  risk: read                # read | write
-  mcp_servers: "subnet-calc"   # ชื่อใน mcp/servers.json
+  risk: read              # read | write
+  maturity: experimental  # experimental | tested | recommended
+  mcp_servers: "my-server"
   requires_bins: "uv"
 ---
 ```
 
-Key ระดับบนที่อนุญาต: `name, description, license, metadata, compatibility` เท่านั้น (ห้าม `allowed-tools`) ไฟล์ที่อยู่กับ skill ได้เฉพาะ `SKILL.md`, `references/*.md`, `agents/*.yaml`
+Only `name, description, license, compatibility, metadata` are allowed at top level; no `allowed-tools`. Files next to `SKILL.md` are limited to `references/*.md`, `agents/*.yaml` and `evals/*.json`. Write tool names plainly, without agent prefixes. A `risk: write` skill needs `metadata.approval: required` and an `## Approval` section, but the real gate must be in the server.
 
-skill แบบ `risk: write` ต้องมี `metadata.approval: required` และหัวข้อ `## Approval` ที่ระบุขั้นตอนจริง แต่อย่าเข้าใจผิดว่าพอแล้ว ด่านจริงต้องอยู่ใน server
+## Add an MCP server
 
-เขียนชื่อ tool ตรง ๆ ใน SKILL.md **อย่าใส่ prefix ของ runtime** (`mcp__…`, `server__tool`) เพราะแต่ละ runtime ตั้งชื่อต่างกัน
+1. Prefer stdlib Python. Use FastMCP only for the wrapper; call `harden` so unknown fields are rejected. Read tools: `ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)`. Write tools must not set `readOnlyHint`.
+2. Register it in `mcp/servers.json` with `capability`, an explicit `egress` list (`[]` if none) and `uv run --quiet --no-project --isolated --with mcp==<pin> python {root}/mcp/<name>/server.py`.
+3. Generate the tool-definition lock: `python3 scripts/gen_tools_cache.py <name>`.
+4. Add tests, including hostile input (oversize, malformed, hidden characters, injection text in fetched data).
 
-## เพิ่ม MCP server ของเราเอง
-
-1. เขียน server (FastMCP) ใส่ annotation: tool อ่าน → `ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)`; tool เขียน → **ห้าม** `readOnlyHint`
-2. ลงทะเบียนใน `mcp/servers.json` พร้อม `capability` และ args แบบ `uv run --quiet --no-project --isolated --with mcp==<เวอร์ชันตรึง> python {root}/mcp/<name>/server.py`
-3. `python3 scripts/lint.py` → `python3 -m unittest discover -s tests` → `uv run --with mcp==1.30.0 python tests/smoke_mcp.py`
-4. `python3 scripts/build.py` แล้วทดสอบกับ runtime จริงตาม [ติดตั้ง](install.html)
-
-## Import skill จาก NetClaw
+## Dev loop
 
 ```bash
-python3 scripts/import-netclaw.py --upstream <checkout ของ netclaw ที่ commit cfafa46c>
+bin/netpaw lint && bin/netpaw test && bin/netpaw smoke
+NETPAW_LIVE_TESTS=1 python3 -m unittest discover -s tests   # also live checks against public hosts
+python3 scripts/gen_tools_cache.py --all --check             # tool definitions unchanged
+claude plugin validate .
 ```
 
-สคริปต์ตรวจ commit, เอาเฉพาะ `SKILL.md`, แก้ข้อความแบบ exact-match (ถ้าต้นทางเปลี่ยนจะ fail), เขียน frontmatter ใหม่, บันทึก hash และรายการใน `NOTICE`, ตรวจ hash ของ requirements ทุก import ต้องมีเอกสารรีวิวใน `docs/imports/<skill>.md` และผ่านการตรวจความปลอดภัยก่อน merge ห้าม import server ทั้งตัวโดยไม่ตรวจรายชื่อ tool (ดู `docs/DECISIONS.md` D-1)
+Security tools used in CI: gitleaks, bandit, semgrep, pip-audit, zizmor, `skills-ref`. Run them locally with the pinned versions in `.github/workflows/security.yml`.
 
-## การทดสอบ
+## Evaluate a skill
 
-| ชั้น | ทำอะไร |
-|---|---|
-| lint | schema, ชื่อ, server ที่อ้างถึง, symlink/ไฟล์แปลก, secret, NOTICE, LICENSE |
-| unit | logic ของ tool + regression ของทุกข้อใน SECURITY-REVIEW |
-| smoke MCP | spawn server ตาม `.mcp.json` จริง เรียก tool ผ่าน stdio ตรวจ annotation |
-| runtime L1–L4 | skill เห็น → config รับ → runtime เปิด server → โมเดล (จำลอง) เรียก tool |
+- Trigger evaluation: `python3 scripts/eval_triggers.py --runs 3 --out <file> <skill>` (uses Claude Code and your model quota; tell reviewers how many calls you made).
+- Output evaluation: `scripts/eval_outputs.py` compares answers with and without the skill using deterministic checks.
+- Record what was run and the output in `docs/evals/`. Do not write a number you did not measure.
 
-รายงานแต่ละ runtime ต้องบอกระดับที่ผ่านจริง อย่าเรียก runtime ที่ไม่ได้ทดสอบว่า "รองรับ"
+## Import a skill from NetClaw
 
-## ถอดการติดตั้งบนเครื่องทดสอบ
+```bash
+python3 scripts/import-netclaw.py --upstream <checkout at the pinned commit>
+```
 
-ติดตั้งทุกอย่างของการทดสอบใน HOME แยกโฟลเดอร์เดียว (เช่น `~/nec-test`) จบงานแล้วลบโฟลเดอร์นั้น ห้ามคัดลอก credential ไปเครื่องทดสอบ
+The script verifies the commit, takes only `SKILL.md`, applies exact-match edits (fails if upstream changed), rewrites frontmatter, records hashes and updates `NOTICE`. Every import also needs a review note in `docs/imports/<skill>.md` (what upstream does, what we changed, what we did not check) and a licence check. The order of work is in `docs/imports/NETCLAW-PLAN.md`.
+
+## Reporting a runtime test
+
+State the agent and version, OS, exact commands, whether the model was real or mock, level reached (L1-L4) and raw output. Say what you did not test. Clean up test installs afterwards.
+
+## Process
+
+Roles, gates and the rule that an author must not be the only security reviewer: `docs/AI-SDLC.md`. Decisions are numbered in `docs/DECISIONS.md`. Contribution rules: `CONTRIBUTING.md`.

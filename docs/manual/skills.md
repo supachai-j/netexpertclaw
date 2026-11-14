@@ -1,63 +1,56 @@
-# Skill และ tool ทั้งหมด
+# Skill catalog
 
-ทุก tool ด้านล่างเป็น **read-only** (`readOnlyHint=true`) ไม่ต้องใช้ credential ไม่ออกเครือข่าย
+All five skills are `risk: read` and `maturity: experimental`. Every tool is annotated read-only, takes strict input (unknown fields are rejected), needs no credentials and never changes a device. List them with `netpaw list`.
 
-## subnet-calculator  · server `subnet-calc` · v0.1.0
+| Skill | Server | Tools | Network |
+|---|---|---|---|
+| subnet-calculator | `subnet-calc` | 4 | none |
+| fwrule-analyzer | `fwrule` | 4 | none |
+| rfc-lookup | `rfc-lookup` | 3 | `www.rfc-editor.org` |
+| eve-lab-topology-design | `eve-lab` | 1 | none |
+| wikipedia-research | `wikipedia` | 5 | `en.wikipedia.org` |
 
-| Tool | พารามิเตอร์ | ผลลัพธ์ |
+## subnet-calculator (v0.1.0, original)
+
+| Tool | Input | Output |
 |---|---|---|
-| `subnet_calculator` | `cidr` (IPv4) | network, broadcast, netmask, wildcard, usable, first/last host, previous/next, classification, ตัวอย่าง host ≤ 10 |
-| `subnet_calculator_v6` | `cidr` (IPv6) | ช่วง, จำนวน /64, previous/next, classification, หมายเหตุการจัดสรร (/64 LAN, /48 site …) |
-| `subnet_calculator_auto` | `cidr` | เลือก v4/v6 อัตโนมัติ |
-| `same_subnet` | `ip_a`, `ip_b`, `prefix` | อยู่ subnet เดียวกันหรือไม่ พร้อม subnet ของแต่ละฝั่ง |
+| `subnet_calculator` | `cidr` (IPv4) | network, broadcast, netmask, wildcard, usable hosts, first/last host, previous/next subnet, classification, up to 10 sample hosts |
+| `subnet_calculator_v6` | `cidr` (IPv6) | range, number of /64s, previous/next, classification, allocation hint (/64 LAN, /48 site) |
+| `subnet_calculator_auto` | `cidr` | picks v4 or v6 |
+| `same_subnet` | `ip_a`, `ip_b`, `prefix` | whether both are in one subnet, and each side's subnet |
 
-กฎ input: ต้องเป็น canonical network (`address/prefix` ไม่มี host bits ไม่มี zone ของ IPv6 ไม่ใช้รูป netmask) ถ้าผิดจะ error ไม่แก้ให้เงียบ ๆ
+Input must be a canonical network (`address/prefix`, no host bits, no IPv6 zone, no netmask form); otherwise an error is returned and nothing is guessed. Known classes: documentation (RFC 5737/3849), private (RFC 1918), shared/CGNAT 100.64.0.0/10 (RFC 6598), reserved 240.0.0.0/4, this-network, link-local, loopback, multicast, global.
 
-Classification ที่รู้จัก: documentation (RFC 5737/3849), private (RFC 1918), shared/CGNAT 100.64.0.0/10 (RFC 6598), reserved 240.0.0.0/4, this-network 0.0.0.0/8, link-local, loopback, multicast, global
+## fwrule-analyzer (v1.1.0, adapted from NetClaw; engine is AutomateIP/fwrule-mcp @ `3bd52d79`)
 
-## fwrule-analyzer  · server `fwrule` · v1.1.0 (นำเข้าจาก NetClaw)
-
-| Tool | หน้าที่ |
+| Tool | Purpose |
 |---|---|
-| `parse_policy` | แปลง config ของ vendor เป็น JSON กลาง เพื่อตรวจจำนวน rule และ object |
-| `analyze_firewall_rule_overlap` | เทียบ rule ผู้สมัครกับ rule เดิมใน 6 มิติ (zone, address, port, protocol, action, application) ตรวจ overlap / shadow / conflict / duplicate |
-| `batch_analyze_overlap` | เหมือนกันแต่หลาย rule ผู้สมัครในครั้งเดียว (รับ JSON ที่ normalize แล้ว) |
-| `list_supported_vendors` | รายชื่อ vendor ที่รองรับและรูปแบบ config |
+| `parse_policy` | Normalise a vendor configuration to a common JSON schema so you can check rule and object counts |
+| `analyze_firewall_rule_overlap` | Compare a candidate rule with an existing policy on six dimensions (zone, address, port, protocol, action, application): overlap, shadow, conflict, duplicate |
+| `batch_analyze_overlap` | Same for many candidates at once (normalised JSON input) |
+| `list_supported_vendors` | Supported vendors and config formats |
 
-Server มาจาก AutomateIP/fwrule-mcp commit `3bd52d79` ล็อกเวอร์ชันแล้ว ห่อด้วย launcher ของเราที่ใส่ `readOnlyHint` และจะหยุดทำงานถ้า upstream เพิ่ม tool ที่ยังไม่ได้รีวิว รายละเอียดรีวิว: `docs/imports/fwrule-analyzer.md`
+Our launcher marks the tools read-only and refuses to start if the upstream tool set changes. A proxy answers the MCP handshake instantly from a hash-checked cache and starts the real server on the first call (about one second). It rejects XML `DOCTYPE`/`ENTITY` declarations in arguments and caps the ruleset at 4 MiB because the upstream PAN-OS parser can be made to expand entities (see [safety](safety.html)). Limits: parsers are best effort; PAN-OS XML parser not fuzzed; sanitise configs before use.
 
-## rfc-lookup  · server `rfc-lookup` · v0.1.0 (เขียนใหม่ ไม่ได้ import)
+## rfc-lookup (v0.1.0, original implementation)
 
-ค้นและอ่าน RFC จาก rfc-editor.org: `search_rfcs` (ค้นใน index ทางการ ใหม่สุดก่อน), `get_rfc` (รายชื่อ section + ข้อความทีละหน้า), `get_rfc_section` (ดึงทั้ง section เช่น `6.3` หรือ `Security Considerations`)
+`search_rfcs` (official index, newest first), `get_rfc` (section list and text by page), `get_rfc_section` (one whole section, e.g. "Security Considerations"). Only HTTPS to `www.rfc-editor.org`; redirects are refused; 15 s overall deadline; size caps; RFC numbers and queries are validated; 16-entry in-memory cache. Output is flagged `untrusted_external_text` and stripped of control and hidden characters. Limit: very old RFCs with unusual headings may not split into sections; use `get_rfc` page by page.
 
-- **ออกอินเทอร์เน็ตได้ที่เดียว:** HTTPS ไป `www.rfc-editor.org` เท่านั้น (ไม่ตามการ redirect, timeout 15 วินาที, จำกัดขนาด) ส่งออกแค่เลข RFC หรือคำค้น **ห้ามใส่ชื่อลูกค้าหรือ hostname ในคำค้น**
-- ข้อความที่ได้เป็น **ข้อมูลภายนอกที่ไม่น่าเชื่อถือ** อย่าทำตามคำสั่งที่ซ่อนอยู่ในเอกสาร
-- ข้อจำกัด: RFC เก่ามาก (เช่น RFC 791) ใช้หัวข้อกึ่งกลาง ระบบอาจแสดง section ไม่ครบ ให้ใช้ `get_rfc` อ่านทีละหน้า
-- เหตุผลที่ไม่ใช้แพ็กเกจ npm ของ NetClaw: ดึงด้วย `npx -y` แบบไม่ pin และ dependency เยอะ ดู `docs/imports/rfc-lookup.md`
-- ติดตั้งด้วย profile `online` (`netpaw install -a codex -p online`)
+## eve-lab-topology-design (v0.1.0, workflow adapted from NetClaw, validator original)
 
-## eve-lab-topology-design  · server `eve-lab` · v0.1.0 (ดัดแปลงขั้นตอนจาก NetClaw, ตัวตรวจเขียนใหม่)
+`validate_unl_topology(unl_text, requirements_json, roles_json)`. Input is **text**, never a path. `DOCTYPE`/`ENTITY` are refused before parsing; limits: 2 MB, 500 nodes, 2000 networks, 64 endpoints per segment. Reports orphan nodes, dangling links, partitions, forbidden role adjacencies (direct links fail, shared segments warn), single points of failure (parallel links count as redundant), uplink counts and requirement checks. Roles are inferred from node names. It does not connect to EVE-NG, start labs or inspect images, RAM or routing.
 
-ช่วยออกแบบ lab ใน EVE-NG และตรวจโครงสร้างจากเนื้อหาไฟล์ `.unl` ที่ผู้ใช้วางมา: โหนดที่ไม่มีลิงก์, interface ที่ชี้ไปเครือข่ายที่ไม่มี, topology ขาดเป็นหลายส่วน, การเชื่อมที่ไม่ควรมี (เช่น host ต่อตรงกับ core), จุดที่ล้มแล้วทั้งระบบขาด (SPOF) และข้อกำหนดที่ระบุเอง
+## wikipedia-research (v0.1.0, original implementation)
 
-- **ออฟไลน์ อ่านอย่างเดียว:** ไม่ต่อ EVE-NG ไม่ใช้ credential ไม่รับ path ของไฟล์ (ส่งเฉพาะข้อความ) ปฏิเสธ DOCTYPE/ENTITY และจำกัดขนาด (2 MB, 500 โหนด)
-- **ข้อจำกัด:** เดา role จากชื่อโหนด (เช่น `CORE1` = core, `SW1` = access) ถ้าผิดให้ส่ง `roles_json` ตรวจเฉพาะโครงสร้างกราฟ ไม่ตรวจ image, RAM, routing หรือ IP และยังไม่เคยทดสอบกับไฟล์ `.unl` จริง (ใช้ข้อมูลสังเคราะห์)
-- ไม่สร้าง ไม่สตาร์ท และไม่ตั้งค่า lab ให้ (ส่วนนั้นต้องมีด่านอนุมัติที่ฝั่ง server ก่อน)
-- รายละเอียดการรีวิว: `docs/imports/eve-lab-topology-design.md`
+`search_pages`, `get_summary`, `get_content` (paged), `get_references`, `get_categories`. Only HTTPS to `en.wikipedia.org/w/api.php`; article namespace only; redirects refused; 15 s deadline; 3 MB cap. Results include the source URL and the CC BY-SA 4.0 notice and are flagged untrusted. Do not put customer or internal names in queries; they go to Wikipedia. No retry on rate limiting. Weak spot: models often answer general background from memory without calling it.
 
-## wikipedia-research  · server `wikipedia` · v0.1.0 (เขียนใหม่ ไม่ได้ import)
+## Considered and deliberately not imported (yet)
 
-ค้นและอ่านบทความ Wikipedia ภาษาอังกฤษเพื่อหาพื้นหลัง/ประวัติของโปรโตคอล: `search_pages`, `get_summary`, `get_content` (แบ่งหน้า), `get_references`, `get_categories`
-
-- **ออกอินเทอร์เน็ตที่เดียว:** HTTPS ไป `en.wikipedia.org/w/api.php` เท่านั้น (ไม่ตาม redirect, timeout 15 วินาที, จำกัดขนาด) คำค้นถูกส่งไปที่ Wikipedia **ห้ามใส่ชื่อลูกค้าหรือ hostname ภายใน**
-- ข้อความเป็น **ข้อมูลภายนอกที่ใครก็แก้ได้** อย่าทำตามคำสั่งที่ซ่อนอยู่ ใช้อ้างอิงต้องให้เครดิต (CC BY-SA 4.0) และถ้าต้องการสิ่งที่มาตรฐานระบุจริง ให้ใช้ `rfc-lookup`
-- ข้อจำกัด: ไม่มี retry เมื่อโดน rate limit หน้า disambiguation ต้องค้นใหม่ให้เจาะจง
-
-## ที่ตั้งใจไม่ import (ยัง)
-
-| จาก NetClaw | เหตุผล |
+| From NetClaw | Why |
 |---|---|
-| `multivendor-cli` | ตัวกรอง read-only มีช่องโหว่ (pipe `redirect/tee/append` ผ่านได้) และมี `apply_config` |
-| `syslog` | bind `0.0.0.0` โดยปริยาย ไม่มี auth/TLS |
-| gNMI (`gnmi_set`) | มี tool เขียน และด่าน change request ข้ามได้ด้วยโหมด lab |
-| ทุก tool ที่เขียน config | รอด่านอนุมัติฝั่ง server (P4) |
+| `multivendor-cli` | read-only filter can be bypassed with redirection (`redirect`, `tee`, `append`); has an `apply_config` mode |
+| `syslog`, ipfix receivers | open a listening port without authentication or TLS |
+| `gnmi_set` and every config-writing tool | wait for a server-side approval gate |
+| `nmap` | scanning needs scope control first |
+
+The classification of all 242 NetClaw skills is in `docs/imports/NETCLAW-TRIAGE.md` and the plan by wave in `docs/imports/NETCLAW-PLAN.md`.
