@@ -13,7 +13,7 @@ import argparse, hashlib, json, pathlib, re, subprocess, sys, tempfile
 from common import ROOT, split, parse_fm
 
 MANIFEST = ROOT / "imports" / "netclaw.json"
-MARK = "<!-- netexpertclaw:imported-from-netclaw -->"
+MARK = "<!-- netpaw:imported-from-netclaw -->"
 
 
 def sha(b: bytes) -> str: return hashlib.sha256(b).hexdigest()

@@ -1,11 +1,11 @@
 {
-  "name": "netexpertclaw",
+  "name": "netpaw",
   "owner": {
     "name": "supachai-j"
   },
   "plugins": [
     {
-      "name": "netexpertclaw",
+      "name": "netpaw",
       "source": "./",
       "description": "Network-engineer skills + MCP tools",
       "author": {

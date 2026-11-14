@@ -3,7 +3,7 @@
 # Usage: HOME=<iso> HERMES_HOME=$HOME/.hermes tests/runtimes/hermes.sh   (from repo root)
 set -euo pipefail
 python3 scripts/build.py --runtime hermes --root "$PWD"
-mkdir -p "$HERMES_HOME/skills" && cp -r dist/hermes/skills/netexpertclaw "$HERMES_HOME/skills/"
+mkdir -p "$HERMES_HOME/skills" && cp -r dist/hermes/skills/netpaw "$HERMES_HOME/skills/"
 python3 - <<PY
 import pathlib,re
 p=pathlib.Path("$HERMES_HOME/config.yaml"); t=p.read_text() if p.exists() else ""

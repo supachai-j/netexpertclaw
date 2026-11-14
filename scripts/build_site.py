@@ -36,8 +36,8 @@ def main():
         nav = "".join(f'<a class="{"on" if s == slug else ""}" href="{s}.html">{html.escape(t)}</a>' for s, t in PAGES)
         (out / f"{slug}.html").write_text(
             f'<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<meta name="robots" content="noindex"><title>{html.escape(title)} · NetExpertClaw</title><link rel="stylesheet" href="style.css"></head>'
-            f'<body><div class="wrap"><nav><b>NetExpertClaw</b>{nav}</nav><main>{body}<footer>NetExpertClaw manual · เนื้อหาจาก docs/manual ใน repo (private) · ตัวอย่างใช้ IP ช่วง documentation</footer></main></div></body></html>')
+            f'<meta name="robots" content="noindex"><title>{html.escape(title)} · netpaw</title><link rel="stylesheet" href="style.css"></head>'
+            f'<body><div class="wrap"><nav><b>netpaw</b>{nav}</nav><main>{body}<footer>netpaw manual · เนื้อหาจาก docs/manual ใน repo (private) · ตัวอย่างใช้ IP ช่วง documentation</footer></main></div></body></html>')
     print("built", len(PAGES), "pages ->", out)
 
 if __name__ == "__main__":

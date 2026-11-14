@@ -10,7 +10,7 @@ metadata:
   mcp_servers: "fwrule"
   requires_bins: "uv"
 ---
-<!-- netexpertclaw:imported-from-netclaw -->
+<!-- netpaw:imported-from-netclaw -->
 # Firewall Rule Analyzer
 
 ## MCP Server

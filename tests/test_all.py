@@ -38,7 +38,7 @@ class Build(unittest.TestCase):
         self.assertIn("[mcp_servers.subnet-calc]", (R/"dist/codex/config.toml.snippet").read_text())
         self.assertIn("/x/mcp/subnet-calc/server.py", (R/"dist/thclaws/.thclaws/mcp.json").read_text())
         self.assertIn("CLAUDE_PLUGIN_ROOT", (R/".mcp.json").read_text())
-        self.assertTrue((R/"dist/hermes/skills/netexpertclaw/subnet-calculator/SKILL.md").exists())
+        self.assertTrue((R/"dist/hermes/skills/netpaw/subnet-calculator/SKILL.md").exists())
 
 if __name__ == "__main__":
     unittest.main()

@@ -53,7 +53,7 @@ def codex(root):
 
 def hermes(root):
     out = DIST / "hermes"
-    for s in skills(): copy_skill(s, out / "skills" / "netexpertclaw" / s["dir"].name)
+    for s in skills(): copy_skill(s, out / "skills" / "netpaw" / s["dir"].name)
     y = ["mcp_servers:"]
     for k, v in servers().items():
         e = mcp_entry(v, root)
@@ -80,7 +80,7 @@ def openclaw(root):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runtime", default="all")
-    ap.add_argument("--root", default="/opt/netexpertclaw", help="install path of this repo on the target machine")
+    ap.add_argument("--root", default="/opt/netpaw", help="install path of this repo on the target machine")
     a = ap.parse_args()
     targets = {"claude-code": lambda: claude_code(), "codex": lambda: codex(a.root), "hermes": lambda: hermes(a.root),
                "openclaw": lambda: openclaw(a.root), "thclaws": lambda: thclaws(a.root)}

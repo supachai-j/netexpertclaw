@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""netpaw - NetExpertClaw installer/CLI (stdlib only). Working name; the program name is the PROG constant below.
+"""netpaw - installer/CLI (stdlib only). Working name; the program name is the PROG constant below.
 
   netpaw agents | profiles | list | doctor | version
   netpaw install -a AGENT [AGENT..] [-p minimal|standard|full] [-s SKILL..] [--project] [--with-mcp] [--root P] [--apply]
@@ -73,7 +73,7 @@ def render(agent, root):
     if a["src"] == "canonical": return ROOT / "skills"
     if run(PY, "scripts/build.py", "--runtime", a["src"], "--root", root) != 0: sys.exit("build failed")
     d = ROOT / "dist" / a["src"]
-    return {"codex": d / "skills", "hermes": d / "skills" / "netexpertclaw", "openclaw": d / "skills", "thclaws": d / ".thclaws" / "skills"}[a["src"]]
+    return {"codex": d / "skills", "hermes": d / "skills" / "netpaw", "openclaw": d / "skills", "thclaws": d / ".thclaws" / "skills"}[a["src"]]
 
 
 def server_snippets(root):
@@ -144,7 +144,7 @@ def cmd_install(a):
             dest = pathlib.Path.cwd() / ag["proj"]
         else:
             dest = ag["user"]()
-        if agent == "hermes": dest = dest / "netexpertclaw"
+        if agent == "hermes": dest = dest / "netpaw"
         src = render(agent, root) if a.apply else None   # dry run must not build/write dist/
         out(f"[{agent}] profile={a.profile} skills={names} -> {dest}" + ("" if a.apply else "   (dry run)"))
         rec_files = {}
@@ -193,7 +193,7 @@ def cmd_uninstall(a):
             if a.apply: p.unlink()
         if a.apply:
             dirs = {pathlib.Path(f).parent for f in rec["files"]}
-            dirs |= {d.parent for d in dirs if d.parent.name == "netexpertclaw"}
+            dirs |= {d.parent for d in dirs if d.parent.name in ("netpaw", "netexpertclaw")}
             for d in sorted(dirs, key=lambda x: -len(x.parts)):
                 try: d.rmdir()
                 except OSError: pass
@@ -245,7 +245,7 @@ def cmd_doctor(_):
 
 
 def main():
-    ap = argparse.ArgumentParser(prog=PROG, description="NetExpertClaw installer")
+    ap = argparse.ArgumentParser(prog=PROG, description="netpaw installer")
     sub = ap.add_subparsers(dest="c", required=True)
     for n in ("version", "list", "doctor", "agents", "profiles", "lint", "test", "smoke", "site"): sub.add_parser(n)
     b = sub.add_parser("build"); b.add_argument("--runtime", default="all"); b.add_argument("--root", default=str(ROOT))

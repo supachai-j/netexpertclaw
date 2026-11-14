@@ -1,4 +1,4 @@
-"""netexpertclaw subnet-calc MCP server (stdio). Read-only; no network or device access."""
+"""netpaw subnet-calc MCP server (stdio). Read-only; no network or device access."""
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))

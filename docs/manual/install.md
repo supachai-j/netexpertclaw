@@ -2,7 +2,7 @@
 
 ต้องมี **`uv`** (https://docs.astral.sh/uv/) และ Python 3 ในเครื่อง MCP server ถูกเรียกผ่าน `uv run --no-project --isolated` ครั้งแรกที่รันต้องต่ออินเทอร์เน็ตเพื่อดึง package (ตรึงเวอร์ชันไว้แล้ว)
 
-repo เป็น **public** (`supachai-j/netexpertclaw`) clone ได้โดยไม่ต้อง login อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
+repo เป็น **public** (`supachai-j/netpaw`) clone ได้โดยไม่ต้อง login อย่าคัดลอก token ไปวางบนเครื่อง worker ให้ส่ง tarball ของ commit ที่ต้องการแทน
 
 ## คำสั่ง `netpaw` (ตัวติดตั้ง)
 
@@ -24,15 +24,15 @@ bin/netpaw uninstall --apply               # ถอนเฉพาะไฟล�
 - **`--with-mcp`** แก้ไฟล์ config ให้เฉพาะ Codex (`config.toml`), Hermes (`config.yaml`) และ thClaws (`.thclaws/mcp.json` เฉพาะ `--project`) โดย: สำรองไฟล์ (`*.bak-netpaw-<เวลา>`), ใส่ในบล็อกที่มีเครื่องหมาย `# >>> netpaw >>>`, และ **ปฏิเสธ** ถ้ามี server ชื่อซ้ำหรือ Hermes มี `mcp_servers:` อยู่แล้ว (ให้ merge เอง) Claude Code ใช้ plugin และ OpenClaw ใช้ `openclaw mcp set` ตามขั้นตอนด้านล่าง
 - **manifest** ที่ `~/.netpaw/manifest.json` เก็บ sha256 ของไฟล์ที่ติดตั้ง `uninstall` จึงไม่ลบไฟล์ที่คุณแก้เอง
 - runtime ที่ยังไม่ได้ทดสอบ (opencode, cursor, gemini) ต้องใส่ `--allow-untested` และ path ของมันคัดมาจากโปรเจกต์อื่น ไม่ได้ผ่านการทดสอบของเรา
-- ไม่มีการอ่านหรือเขียน credential `bin/netpaw` ไม่ถูกใส่ลง PATH ให้อัตโนมัติ (สร้าง alias เอง: `alias netpaw=~/netexpertclaw/bin/netpaw`)
+- ไม่มีการอ่านหรือเขียน credential `bin/netpaw` ไม่ถูกใส่ลง PATH ให้อัตโนมัติ (สร้าง alias เอง: `alias netpaw=~/netpaw/bin/netpaw`)
 
 > **ห้ามติดตั้งด้วย `pip install netpaw` หรือ `npx netpaw`** เราไม่ได้ publish แพ็กเกจชื่อนี้ที่ PyPI หรือ npm ใครจองชื่อนี้ทีหลังจะได้โค้ดของคนอื่น ให้ติดตั้งจาก git tag ที่ pin หรือ wheel ที่ตรวจ sha256 เท่านั้น (agent ที่เดาคำสั่งติดตั้งเองก็ต้องไม่ใช้ชื่อนี้)
 
 ## ขั้นตอนทั่วไป (ทุก runtime ยกเว้น Claude Code plugin)
 
 ```bash
-git clone https://github.com/supachai-j/netexpertclaw.git ~/netexpertclaw
-cd ~/netexpertclaw
+git clone https://github.com/supachai-j/netpaw.git ~/netpaw
+cd ~/netpaw
 python3 scripts/build.py --root "$PWD"      # สร้างไฟล์ของแต่ละ runtime ลง dist/
 python3 scripts/lint.py                     # ตรวจ skill + MCP registry
 ```
@@ -44,16 +44,16 @@ python3 scripts/lint.py                     # ตรวจ skill + MCP registry
 ทดสอบแล้ว: โหลดจากโฟลเดอร์
 
 ```bash
-claude --plugin-dir ~/netexpertclaw
+claude --plugin-dir ~/netpaw
 ```
 
-ผลที่ควรเห็น: skill `netexpertclaw:subnet-calculator`, `netexpertclaw:fwrule-analyzer` และ MCP `plugin:netexpertclaw:subnet-calc`, `plugin:netexpertclaw:fwrule` สถานะ `connected`
+ผลที่ควรเห็น: skill `netpaw:subnet-calculator`, `netpaw:fwrule-analyzer` และ MCP `plugin:netpaw:subnet-calc`, `plugin:netpaw:fwrule` สถานะ `connected`
 
 แบบ marketplace (ยังไม่ได้ทดสอบเส้นทาง marketplace):
 
 ```
-/plugin marketplace add supachai-j/netexpertclaw
-/plugin install netexpertclaw --marketplace supachai-j/netexpertclaw
+/plugin marketplace add supachai-j/netpaw
+/plugin install netpaw --marketplace supachai-j/netpaw
 ```
 
 > ถ้าเปิด Claude Code *ในโฟลเดอร์ repo นี้เอง* จะเห็น server ตัวหนึ่งขึ้น `failed` เพราะอ่าน `.mcp.json` ที่ root เป็น project server (`${CLAUDE_PLUGIN_ROOT}` ยังไม่ถูกแทนค่า) ตัว plugin ปกติ ไม่กระทบ
@@ -64,7 +64,7 @@ claude --plugin-dir ~/netexpertclaw
 
 ```bash
 mkdir -p ~/.hermes/skills
-cp -r dist/hermes/skills/netexpertclaw ~/.hermes/skills/
+cp -r dist/hermes/skills/netpaw ~/.hermes/skills/
 cat dist/hermes/mcp_servers.yaml.snippet     # นำไป merge ใน ~/.hermes/config.yaml
 ```
 

@@ -57,7 +57,7 @@ def run_one(prompt, cond, servers, timeout, env):
     with tempfile.TemporaryDirectory() as d:
         cmd = ["claude", "-p", prompt, "--output-format", "stream-json", "--verbose", "--max-turns", "6", "--disallowedTools", DENY]
         if cond == "with_skill":
-            cmd += ["--plugin-dir", str(ROOT), "--allowedTools", "Skill ToolSearch " + " ".join(f"mcp__plugin_netexpertclaw_{s}" for s in servers)]
+            cmd += ["--plugin-dir", str(ROOT), "--allowedTools", "Skill ToolSearch " + " ".join(f"mcp__plugin_netpaw_{s}" for s in servers)]
         try: p = subprocess.run(cmd, cwd=d, capture_output=True, text=True, timeout=timeout, env=env)
         except subprocess.TimeoutExpired: return {"invalid": "timeout"}
     ev = []

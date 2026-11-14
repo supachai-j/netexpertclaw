@@ -1,4 +1,6 @@
-# netexpertclaw
+# netpaw
+
+> Renamed from `netexpertclaw` (repo, plugin and manual). GitHub redirects the old repo and docs URLs; the plugin name is now `netpaw` (`/plugin install netpaw`, tools `mcp__plugin_netpaw_*`). See docs/DECISIONS.md D-12.
 
 Network-engineering skills + MCP tool packs that run on multiple agent runtimes from **one source of truth**.
 
@@ -11,7 +13,7 @@ Codename / CLI: **netpaw** (`bin/netpaw`; run `bin/netpaw doctor`, `bin/netpaw l
 Status: P0 done (runtime research). See [docs/PLAN.md](docs/PLAN.md), [docs/RUNTIME-MATRIX.md](docs/RUNTIME-MATRIX.md).
 
 ## Install
-Claude Code: `/plugin marketplace add supachai-j/netexpertclaw` then `/plugin install netexpertclaw --marketplace supachai-j/netexpertclaw` (public repo; not yet tested via the marketplace path).
+Claude Code: `/plugin marketplace add supachai-j/netpaw` then `/plugin install netpaw --marketplace supachai-j/netpaw` (public repo; not yet tested via the marketplace path).
 Other runtimes: `python3 scripts/build.py --root <clone path>` then copy `dist/<runtime>/` (see docs/RUNTIME-MATRIX.md). Requires `uv`.
 
 ## Dev
@@ -26,4 +28,4 @@ Known quirk: opening Claude Code *inside* this repo also reads the root `.mcp.js
 Source: `docs/manual/*.md` (Thai). Build: `pip install markdown && python3 scripts/build_site.py` -> `site/` (static). Pages: overview, install per runtime, usage, skills/tools, safety, develop, compatibility, troubleshooting.
 
 ## Manual (public)
-https://supachai-j.github.io/netexpertclaw-docs/ (source: public repo supachai-j/netexpertclaw-docs; this repo keeps docs/manual as the source of truth - copy changes over, see docs/DECISIONS.md D-5).
+https://supachai-j.github.io/netpaw-docs/ (source: public repo supachai-j/netpaw-docs; this repo keeps docs/manual as the source of truth - copy changes over, see docs/DECISIONS.md D-5).

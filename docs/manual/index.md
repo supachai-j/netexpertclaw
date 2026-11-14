@@ -1,6 +1,6 @@
-# NetExpertClaw — คู่มือใช้งาน
+# netpaw — คู่มือใช้งาน
 
-**NetExpertClaw** คือชุด skill และ MCP tool สำหรับวิศวกรเครือข่าย เขียนครั้งเดียวแล้วใช้ได้กับ 5 agent runtime: **Claude Code, Codex, Hermes Agent, OpenClaw, thClaws**
+**netpaw** คือชุด skill และ MCP tool สำหรับวิศวกรเครือข่าย เขียนครั้งเดียวแล้วใช้ได้กับ 5 agent runtime: **Claude Code, Codex, Hermes Agent, OpenClaw, thClaws**
 
 แนวคิดมาจาก [NetClaw](https://github.com/automateyournetwork/netclaw) (Apache-2.0) แต่เราไม่ fork ทั้งก้อน เลือก import ทีละ skill ผ่านสคริปต์ที่ pin commit และผ่านการรีวิวความปลอดภัยก่อน
 

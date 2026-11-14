@@ -12,7 +12,7 @@ HOST = "www.rfc-editor.org"
 TIMEOUT = 15
 MAX_RFC_BYTES = 5_000_000
 MAX_INDEX_BYTES = 4_000_000
-UA = "netexpertclaw-rfc-lookup/0.1 (+https://github.com/supachai-j/netexpertclaw)"
+UA = "netpaw-rfc-lookup/0.1 (+https://github.com/supachai-j/netpaw)"
 _cache: dict[str, str] = {}   # in-memory only; nothing is written to disk
 CACHE_MAX = 16                # entries (each up to 5 MB); oldest dropped first
 
