@@ -14,6 +14,8 @@ mcp = FastMCP("wikipedia")
 def _run(fn, *a):
     try: return fn(*a)
     except core.WikiError as e: raise ValueError(str(e)) from None
+    except (RecursionError, MemoryError, UnicodeError, TypeError, AttributeError, KeyError, IndexError):
+        raise ValueError("internal error while processing this request") from None
 
 
 @mcp.tool(annotations=RO)

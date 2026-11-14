@@ -17,10 +17,19 @@ What it does and does NOT do (reviewed: docs/imports/fwrule-analyzer.md, PROXY-R
 
 Usage: proxy.py --cache tools.cache.json -- <child command...>
 """
-import hashlib, json, os, queue, subprocess, sys, threading
+import hashlib, json, os, queue, re, subprocess, sys, threading
 
 ALLOWED_ENV = ("PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "XDG_CACHE_HOME", "XDG_DATA_HOME", "SSL_CERT_FILE", "SSL_CERT_DIR",
-               "USER", "LOGNAME", "UV_CACHE_DIR", "UV_PYTHON_INSTALL_DIR", "UV_PYTHON", "UV_NO_PROGRESS", "UV_OFFLINE")
+               "USER", "LOGNAME", "UV_CACHE_DIR", "UV_PYTHON_INSTALL_DIR", "UV_PYTHON", "UV_NO_PROGRESS", "UV_OFFLINE", "FOMC_MAX_RULESET_BYTES")
+DEFAULT_RULESET_CAP = "4194304"   # 4 MiB; upstream default is 64 MiB. A user may set FOMC_MAX_RULESET_BYTES in the environment (never above upstream).
+_XML_DECL = re.compile(r"<!\s*(doctype|entity|element|attlist|notation)", re.I)   # upstream strips DOCTYPE with one regex pass that can be bypassed by nesting (security review H2-1)
+
+
+def has_xml_decl(o) -> bool:
+    if isinstance(o, str): return bool(_XML_DECL.search(o))
+    if isinstance(o, dict): return any(has_xml_decl(k) or has_xml_decl(v) for k, v in o.items())
+    if isinstance(o, (list, tuple)): return any(has_xml_decl(v) for v in o)
+    return False
 SUPPORTED_PROTOCOLS = ("2024-11-05", "2025-03-26", "2025-06-18", "2025-11-25")
 START_TIMEOUT = float(os.environ.get("NETPAW_PROXY_START_TIMEOUT", "300"))   # first start may build a cold uv env
 CALL_TIMEOUT = float(os.environ.get("NETPAW_PROXY_CALL_TIMEOUT", "120"))
@@ -40,6 +49,7 @@ def err(i, code, msg): return {"jsonrpc": "2.0", "id": i, "error": {"code": code
 class Child:
     def __init__(self, argv, init_params):
         env = {k: v for k, v in os.environ.items() if k in ALLOWED_ENV}
+        env.setdefault("FOMC_MAX_RULESET_BYTES", DEFAULT_RULESET_CAP)
         self.p = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=sys.stderr, env=env, text=True, bufsize=1)
         self.q = queue.Queue(); self.n = 0
         threading.Thread(target=self._reader, daemon=True).start()
@@ -113,6 +123,7 @@ def main():
             if not isinstance(params, dict) or params.get("name") not in names:
                 send(err(i, -32602, "unknown tool")); continue
             if st["init"] is None: send(err(i, -32002, "initialize first")); continue
+            if has_xml_decl(params.get("arguments")): send(err(i, -32602, "XML DOCTYPE/ENTITY declarations are not accepted in tool arguments")); continue
             try:
                 c = ensure()
                 if not st["ok"]: send(err(i, -32001, "tool list changed upstream; regenerate tools cache and re-review")); continue

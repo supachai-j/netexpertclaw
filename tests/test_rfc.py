@@ -131,6 +131,7 @@ class Network(unittest.TestCase):
             def __init__(s): s.headers = headers; s.pos = 0
             def read(s, n):
                 chunk = body[s.pos:s.pos + n]; s.pos += len(chunk); return chunk
+            read1 = read
             def __enter__(s): return s
             def __exit__(s, *a): return False
         class O:

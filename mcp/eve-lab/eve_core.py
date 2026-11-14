@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from collections import defaultdict
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
-from textclean import strip_hidden
+from textclean import strip_hidden, flatten
 
 MAX_BYTES = 2_000_000
 MAX_NODES = 500
@@ -27,7 +27,7 @@ class UnlError(ValueError):
 
 
 def _s(v, n=64) -> str:
-    return strip_hidden(v)[:n]
+    return flatten(v)[:n]
 
 
 ROLE_TOKENS = [  # (tokens, role); first match wins; matched on name TOKENS, not substrings
@@ -59,7 +59,7 @@ def parse(unl_text: str):
     try: root = ET.fromstring(unl_text)  # nosec B314
     except ET.ParseError as e: raise UnlError(f"not valid XML: {_s(e, 120)}") from None
     nodes, nets = {}, {}
-    for el in root.iter("node"):
+    for el in (root.findall("./topology/nodes/node") or list(root.iter("node"))):   # real labs keep nodes under topology/nodes; <objects> etc. are not nodes
         nid = el.attrib.get("id")
         if not nid: continue
         if len(nodes) >= MAX_NODES: raise UnlError(f"more than {MAX_NODES} nodes")
@@ -67,7 +67,7 @@ def parse(unl_text: str):
         nodes[_s(nid, 16)] = {"name": _s(el.attrib.get("name", f"node{nid}")), "template": _s(el.attrib.get("template", "")),
                               "ifaces": [(_s(i.attrib.get("name", f"iface{i.attrib.get('id', '')}")), _s(i.attrib.get("network_id", ""), 16))
                                          for i in el.findall("interface")][:256]}
-    for el in root.iter("network"):
+    for el in (root.findall("./topology/networks/network") or list(root.iter("network"))):
         nid = el.attrib.get("id")
         if not nid: continue
         if len(nets) >= MAX_NETS: raise UnlError(f"more than {MAX_NETS} networks")
@@ -138,7 +138,7 @@ def _load(text, what):
     if not text: return {}
     if len(text) > MAX_JSON: raise UnlError(f"{what} larger than {MAX_JSON} bytes")
     try: v = json.loads(text)
-    except ValueError: raise UnlError(f"{what} is not valid JSON") from None
+    except (ValueError, RecursionError): raise UnlError(f"{what} is not valid JSON or is nested too deeply") from None
     if not isinstance(v, dict): raise UnlError(f"{what} must be a JSON object")
     return v
 
@@ -181,6 +181,7 @@ def validate(unl_text: str, requirements_json: str = "", roles_json: str = "") -
         deg = {name[i]: len(adj.get(i, ())) for i in g}
         (W.append(f"Asymmetric link count in role '{r}': " + ", ".join(f"{k}={v}" for k, v in sorted(deg.items()))) if len(set(deg.values())) > 1 else P.append(f"Role '{r}' ({len(g)} nodes) has symmetric link count {next(iter(deg.values()))}"))
     for key in ("required_links", "forbidden_links", "redundancy_groups"):
+        if not isinstance(reqs.get(key, []), list): raise UnlError(f"{key} must be a list")
         if len(reqs.get(key, [])) > MAX_REQ: raise UnlError(f"{key} has more than {MAX_REQ} entries")
     def pair(r):
         if not (isinstance(r, dict) and isinstance(r.get("from"), str) and isinstance(r.get("to"), str)): raise UnlError("link requirements need string 'from' and 'to'")

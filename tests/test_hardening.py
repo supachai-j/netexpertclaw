@@ -51,7 +51,7 @@ class EveFindings(unittest.TestCase):
 class Slow(unittest.TestCase):
     class Drip:
         headers = {"Content-Type": "application/json"}
-        def read(self, n): time.sleep(0); return b"x"
+        def read1(self, n): time.sleep(0.01); return b"x"
     def test_wk1_overall_deadline_wiki_and_rfc(self):
         for core, err in ((wiki, wiki.WikiError), (rfc, rfc.RfcError)):
             old = core.TIMEOUT; core.TIMEOUT = 0.05
@@ -79,3 +79,52 @@ class WikiShapes(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RealDrip(unittest.TestCase):
+    """H2-2 / WK-1b with a real socket: a server that sends one byte at a time must be cut at the overall deadline."""
+    def test_real_http_drip_is_cut_off(self):
+        import http.server, threading, urllib.request
+        class H(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(200); self.send_header("Content-Length", "100000"); self.end_headers()
+                try:
+                    for _ in range(40):
+                        self.wfile.write(b"x"); self.wfile.flush(); time.sleep(0.2)
+                except OSError: pass
+            def log_message(self, *a): pass
+        srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), H); threading.Thread(target=srv.serve_forever, daemon=True).start()
+        try:
+            for core, err in ((wiki, wiki.WikiError), (rfc, rfc.RfcError)):
+                old = core.TIMEOUT; core.TIMEOUT = 1.0
+                try:
+                    r = urllib.request.urlopen(f"http://127.0.0.1:{srv.server_port}/", timeout=5); t = time.monotonic()
+                    with self.assertRaises(err): core._read(r, 10**6)
+                    self.assertLess(time.monotonic() - t, 2.5)
+                finally: core.TIMEOUT = old
+        finally: srv.shutdown(); srv.server_close()
+
+
+class Review2(unittest.TestCase):
+    def test_h2_3_head_regex_is_not_superlinear(self):
+        line = "RFC 1" + " " * 4000 + "x" * 50
+        t = time.monotonic(); rfc.clean(line + "\n" + "RFC 1" + " " * 2000 + "A" + " " * 2000 + "B"); self.assertLess(time.monotonic() - t, 0.5)
+    def test_h2_3_real_page_header_still_removed(self):
+        self.assertEqual(rfc.clean("RFC 4271              BGP-4              January 2006\nkeep"), ["keep"])
+    def test_h2_4_search_strips_hidden(self):
+        orig = rfc._cached; rfc._cached = lambda url, cap: "0001 A\u202ebad\U000e0041 title. (Format: TXT)\n\n"
+        try:
+            out = json.dumps(rfc.search("bad"), ensure_ascii=True)
+            self.assertNotIn("202e", out.lower()); self.assertNotIn("udb40", out.lower())
+        finally: rfc._cached = orig
+    def test_h2_6_surrogates_and_newlines(self):
+        self.assertNotIn("\ud800", textclean.strip_hidden("a\ud800b")); self.assertEqual(eve._s("A\nFAIL: x"), "A FAIL: x")
+    def test_h2_5_deep_json_is_a_clean_error(self):
+        with self.assertRaises(eve.UnlError): eve.validate(unl(["A", "B"], [("A", "B")]), "[" * 100000)
+    def test_h2_1_xml_declarations_blocked_in_proxy(self):
+        sys.path.insert(0, str(R / "mcp" / "fwrule")); import proxy
+        for x in ('<!DOC<!DOCTYPE x>TYPE r [<!ENTITY a "b">]>', "<!doctype a>", "<! ENTITY x 'y'>", "<!Element e>"):
+            self.assertTrue(proxy.has_xml_decl({"ruleset_payload": x}), x)
+        self.assertTrue(proxy.has_xml_decl({"a": [{"b": "<!DOCTYPE z>"}]}))
+        self.assertFalse(proxy.has_xml_decl({"ruleset_payload": "<config><rule/></config>", "vendor": "paloalto"}))
+        self.assertIn("FOMC_MAX_RULESET_BYTES", proxy.ALLOWED_ENV); self.assertLessEqual(int(proxy.DEFAULT_RULESET_CAP), 64 * 1024 * 1024)

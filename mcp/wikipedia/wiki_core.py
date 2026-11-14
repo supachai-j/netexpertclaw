@@ -7,7 +7,7 @@ Queries are sent to Wikipedia: do not put customer names or internal hostnames i
 from __future__ import annotations
 import html, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
-from textclean import strip_hidden
+from textclean import strip_hidden, flatten
 
 HOST = "en.wikipedia.org"
 API = f"https://{HOST}/w/api.php"
@@ -34,7 +34,7 @@ def _read(r, limit: int) -> bytes:
     end, buf = time.monotonic() + TIMEOUT, bytearray()
     while len(buf) < limit:
         if time.monotonic() > end: raise WikiError("response too slow (overall timeout)")
-        chunk = r.read(min(65536, limit - len(buf)))
+        chunk = r.read1(min(65536, limit - len(buf)))   # read1: one recv, so the deadline is checked between packets
         if not chunk: break
         buf += chunk
     return bytes(buf)
@@ -64,7 +64,7 @@ def _api(**params) -> dict:
         while len(_cache) >= CACHE_MAX: _cache.pop(next(iter(_cache)))
         _cache[url] = text
     try: d = json.loads(_cache[url])
-    except ValueError: raise WikiError("response was not valid JSON") from None
+    except (ValueError, RecursionError): raise WikiError("response was not valid JSON") from None
     if not isinstance(d, dict): raise WikiError("unexpected response shape")
     if "error" in d: raise WikiError("API error: " + clean(str((d["error"] or {}).get("code", "unknown")), 60))
     return d
@@ -75,7 +75,7 @@ def clean(text, n=100000) -> str:
 
 
 def title(value) -> str:
-    t = clean(value, 300).strip().replace("_", " ")
+    t = flatten(str(value)[:300]).strip().replace("_", " ")
     if not t or len(t) > 255 or re.search(r"[|#<>\[\]{}]", t) or t.startswith(":"):
         raise WikiError("page title must be 1-255 characters without | # < > [ ] { }")
     return t
@@ -105,7 +105,7 @@ def _wrap(p: dict, **extra) -> dict:
 def _safe(fn):
     def wrapper(*a, **k):
         try: return fn(*a, **k)
-        except (AttributeError, TypeError, KeyError, IndexError, ValueError) as e:
+        except (AttributeError, TypeError, KeyError, IndexError, ValueError, RecursionError, UnicodeError) as e:
             if isinstance(e, WikiError): raise
             raise WikiError("unexpected response shape from the API") from None
     wrapper.__name__ = fn.__name__; wrapper.__doc__ = fn.__doc__
