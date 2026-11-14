@@ -70,11 +70,18 @@ _FOOT = re.compile(r".*\[Page \d+\]\s*$")
 _HEAD = re.compile(r"^RFC \d+\s{2,}.+\s{2,}\w+ \d{4}\s*$")
 
 
+_INVISIBLE = re.compile("[\x00-\x08\x0b-\x1f\x7f-\x9f\u00ad\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]")
+
+
+def strip_invisible(text: str) -> str:
+    """Remove control and invisible format characters (ESC, bidi overrides, zero-width) that could hide or spoof text; keep \\n and \\t."""
+    return _INVISIBLE.sub("", text)
+
+
 def clean(text: str) -> list[str]:
     """Drop page-break furniture (form feeds, page footers/headers); keep the text."""
     out = []
-    for line in text.replace("\r", "").split("\n"):
-        line = line.replace("\f", "")
+    for line in strip_invisible(text.replace("\r", "")).split("\n"):
         if _FOOT.match(line) or _HEAD.match(line):
             continue
         out.append(line.rstrip())
@@ -160,8 +167,8 @@ def _index() -> list[tuple[int, str]]:
 
 
 def search(query: str, limit: int = 10) -> dict:
-    terms = [t for t in re.findall(r"[a-z0-9][a-z0-9+\-./]*", query.lower())][:8]
-    if not terms or len(query) > 200 or not (1 <= limit <= 50):
+    terms = [t for t in re.findall(r"[a-z0-9][a-z0-9+\-./]*", query.lower())]
+    if not 1 <= len(terms) <= 8 or len(query) > 200 or not (1 <= limit <= 50):
         raise RfcError("query must contain 1-8 words (max 200 chars); limit 1..50")
     hits = []
     for n, t in _index():
