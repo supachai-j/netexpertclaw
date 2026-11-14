@@ -18,8 +18,8 @@ Status 2026-11-14: 3 skills, all `experimental`. PR #6 (rfc-lookup) and #7 (best
 - [ ] `.agents/skills` target: test or remove
 
 ## R4 - next skills (each: own review note, egress declared, offline fixtures, evals, scan, cross-review)
-1. bgp-registry-intel (public APIs; multi-host egress allow-list needed in lint)
-2. eve-lab-topology / drawio-diagram (offline, no creds)
+1. eve-lab-topology-design + offline .unl validator (chosen, D-10; docs/imports/eve-lab-topology-design.md)
+2. bgp-registry-intel (public APIs; multi-host egress allow-list needed in lint)
 3. network-data-analysis (PDPA risk: synthetic data only)
 Not before a server-side write gate exists: anything with `risk: write`, pyATS, vendor controllers, chat integrations.
 
