@@ -1,0 +1,102 @@
+[
+ {
+  "query": "I'm planning a leaf-spine lab in EVE-NG with 2 spines and 4 leaves, can you design it and tell me what could go wrong?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "Here is my .unl file content, can you check it for orphan nodes or single points of failure?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "design a branch WAN lab with two routers and a firewall, dual ISP, give me the physical and logical topology",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "Review my campus lab design: 2 core, 2 distribution, 4 access switches. Is the redundancy real?",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "I need a build plan for an MPLS provider lab with PE, P and RR nodes",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "which nodes in this lab topology are a SPOF? <lab name='x'><node id='1' name='R1'>...",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "plan a CCNP ENARSI practice lab with OSPF and BGP on 6 routers",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "can you validate this exported EVE-NG lab so I know no link is dangling",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "Help me decide how many nodes and what RAM my EVE-NG server needs for a data center lab",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "check that no host is directly connected to a core router in my lab file",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "What's the wildcard mask for 10.0.0.0/22?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "start all nodes in my EVE-NG lab and open the consoles",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "push this OSPF config to R1 and R2",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "explain how spanning tree elects a root bridge",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "Which RFC defines BGP route reflection?",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "write a Python script to parse a CSV of switch ports",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "audit this firewall ruleset for shadowed rules",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "how do I install EVE-NG on VMware",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "compare OSPF and IS-IS convergence",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "draw an org chart for the networking team",
+  "should_trigger": false,
+  "split": "validation"
+ }
+]

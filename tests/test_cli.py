@@ -40,7 +40,7 @@ class Cli(unittest.TestCase):
             self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
             self.assertTrue((proj / ".codex/skills/subnet-calculator/SKILL.md").exists())
             self.assertTrue((proj / ".thclaws/skills/fwrule-analyzer/SKILL.md").exists())
-            cfg = json.loads((proj / ".thclaws/mcp.json").read_text())["mcpServers"]; self.assertEqual(sorted(cfg), ["fwrule", "subnet-calc"])
+            cfg = json.loads((proj / ".thclaws/mcp.json").read_text())["mcpServers"]; self.assertEqual(sorted(cfg), ["eve-lab", "fwrule", "subnet-calc"])
             self.assertNotIn("capability", cfg["fwrule"]); self.assertIn("/opt/x/mcp/fwrule/launch.py", cfg["fwrule"]["args"])
             self.assertIn("[mcp_servers.subnet-calc]", (proj / ".codex/config.toml").read_text())
             # idempotent: second run refuses mcp, skips files

@@ -36,6 +36,15 @@ Server มาจาก AutomateIP/fwrule-mcp commit `3bd52d79` ล็อกเ�
 - เหตุผลที่ไม่ใช้แพ็กเกจ npm ของ NetClaw: ดึงด้วย `npx -y` แบบไม่ pin และ dependency เยอะ ดู `docs/imports/rfc-lookup.md`
 - ติดตั้งด้วย profile `online` (`netpaw install -a codex -p online`)
 
+## eve-lab-topology-design  · server `eve-lab` · v0.1.0 (ดัดแปลงขั้นตอนจาก NetClaw, ตัวตรวจเขียนใหม่)
+
+ช่วยออกแบบ lab ใน EVE-NG และตรวจโครงสร้างจากเนื้อหาไฟล์ `.unl` ที่ผู้ใช้วางมา: โหนดที่ไม่มีลิงก์, interface ที่ชี้ไปเครือข่ายที่ไม่มี, topology ขาดเป็นหลายส่วน, การเชื่อมที่ไม่ควรมี (เช่น host ต่อตรงกับ core), จุดที่ล้มแล้วทั้งระบบขาด (SPOF) และข้อกำหนดที่ระบุเอง
+
+- **ออฟไลน์ อ่านอย่างเดียว:** ไม่ต่อ EVE-NG ไม่ใช้ credential ไม่รับ path ของไฟล์ (ส่งเฉพาะข้อความ) ปฏิเสธ DOCTYPE/ENTITY และจำกัดขนาด (2 MB, 500 โหนด)
+- **ข้อจำกัด:** เดา role จากชื่อโหนด (เช่น `CORE1` = core, `SW1` = access) ถ้าผิดให้ส่ง `roles_json` ตรวจเฉพาะโครงสร้างกราฟ ไม่ตรวจ image, RAM, routing หรือ IP และยังไม่เคยทดสอบกับไฟล์ `.unl` จริง (ใช้ข้อมูลสังเคราะห์)
+- ไม่สร้าง ไม่สตาร์ท และไม่ตั้งค่า lab ให้ (ส่วนนั้นต้องมีด่านอนุมัติที่ฝั่ง server ก่อน)
+- รายละเอียดการรีวิว: `docs/imports/eve-lab-topology-design.md`
+
 ## ที่ตั้งใจไม่ import (ยัง)
 
 | จาก NetClaw | เหตุผล |

@@ -53,5 +53,21 @@
     "egress": [
       "www.rfc-editor.org"
     ]
+  },
+  "eve-lab": {
+    "command": "uv",
+    "args": [
+      "run",
+      "--quiet",
+      "--no-project",
+      "--isolated",
+      "--with",
+      "mcp==1.30.0",
+      "python",
+      "{root}/mcp/eve-lab/server.py"
+    ],
+    "env": {},
+    "capability": "read",
+    "egress": []
   }
 }

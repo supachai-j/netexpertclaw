@@ -4,12 +4,14 @@
   ],
   "standard": [
     "subnet-calculator",
-    "fwrule-analyzer"
+    "fwrule-analyzer",
+    "eve-lab-topology-design"
   ],
   "full": "*",
   "online": [
     "subnet-calculator",
     "fwrule-analyzer",
-    "rfc-lookup"
+    "rfc-lookup",
+    "eve-lab-topology-design"
   ]
 }
