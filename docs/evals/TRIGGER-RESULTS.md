@@ -22,3 +22,7 @@ Findings
 | eve-lab-topology-design | "Use this skill when" description | 10/12 | 8/8 |
 
 The 2 train misses are queries that mention a .unl file but contain no actual content, so the model asked for the file instead of calling the tool; they are weak queries, not necessarily a description problem. 1 run per query.
+| wikipedia-research | "Use this skill when" description | 8/12 | 4/8 |
+| wikipedia-research | + "always when they name Wikipedia or ask for sources" | 7/12 | 6/8 |
+
+wikipedia-research stays weak: general background questions are answered from memory (0 false positives). Even some prompts that name Wikipedia did not call the tool in a single run; not investigated further. The skill may add little for well-known protocols; its value is citable, fetched sources, which the output eval must show before any claim beyond "experimental".
