@@ -13,9 +13,9 @@ def fake(url):
         return json.dumps({"query": {"search": [{"title": "Open Shortest Path First", "snippet": "<span class=\"searchmatch\">OSPF</span> is &amp; a protocol"}]}})
     t = q.get("titles", [""])[0]
     if t == "Missing page": return json.dumps({"query": {"pages": [{"title": t, "missing": True}]}})
-    if t == "Mercury": return json.dumps({"query": {"pages": [{"title": t, "extract": "Mercury may refer to:", "pageprops": {"disambiguation": ""}}]}})
+    if t == "Mercury": return json.dumps({"query": {"pages": [{"title": t, "ns": 0, "extract": "Mercury may refer to:", "pageprops": {"disambiguation": ""}}]}})
     if t == "Err": return json.dumps({"error": {"code": "badtitle", "info": "x"}})
-    page = {"title": t, "extract": HOSTILE + " " + "x" * 30000}
+    page = {"title": t, "ns": 0, "extract": HOSTILE + " " + "x" * 30000}
     if "extlinks" in q.get("prop", [""])[0]: page["extlinks"] = [{"url": "https://www.rfc-editor.org/rfc/rfc2328"}, {"url": "javascript:alert(1)"}, {"url": "ftp://x/y"}]
     if "categories" in q.get("prop", [""])[0]: page["categories"] = [{"title": "Category:Internet protocols"}]
     return json.dumps({"query": {"pages": [page]}})
@@ -64,7 +64,7 @@ class Network(unittest.TestCase):
         for u in ("https://evil.invalid/w/api.php?x=1", "http://en.wikipedia.org/w/api.php?x=1", "https://en.wikipedia.org.evil.invalid/w/api.php?x=1", "https://en.wikipedia.org/other?x=1", "https://en.wikipedia.org@evil.invalid/w/api.php?x=1"):
             with self.assertRaises(core.WikiError, msg=u): core._fetch(u)
     def test_title_cannot_change_host_or_path(self):
-        core._cache.clear(); seen = []; f = core._fetch; core._fetch = lambda u: (seen.append(u), json.dumps({"query": {"pages": [{"title": "t", "extract": ""}]}}))[1]
+        core._cache.clear(); seen = []; f = core._fetch; core._fetch = lambda u: (seen.append(u), json.dumps({"query": {"pages": [{"title": "t", "ns": 0, "extract": ""}]}}))[1]
         try: core.summary("../../evil/x?y=1&action=raw")
         finally: core._fetch = f
         self.assertTrue(seen[0].startswith("https://en.wikipedia.org/w/api.php?")); self.assertEqual(urllib.parse.urlparse(seen[0]).netloc, "en.wikipedia.org")
