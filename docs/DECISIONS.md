@@ -45,3 +45,7 @@ NetClaw's rfc-lookup runs `npx -y @mjpitz/mcp-rfc` (unpinned, caret-range deps i
 
 ## D-10 Next skill: eve-lab-topology-design (owner delegated the choice, 2026-11-14)
 Candidates compared: eve-lab-topology-* (design part), bgp-registry-intel, topology-diagram-mcp, drawio-diagram. Chosen: eve-lab-topology-design + offline `.unl` validator as a read-only MCP tool. Why: no credentials, no egress, matches the owner's lab teaching, small, and the XML-parsing risk is one we already know how to guard. Rejected for now: the other eve-lab-topology skills (live EVE-NG credentials; build can create/delete networks, needs a server-side write gate), drawio-diagram (`npx -y @drawio/mcp` unpinned, same supply-chain issue as rfc-lookup), topology-diagram-mcp (pulls fastmcp 4/mcp 2/Pillow/networkx for image output; a text-based Mermaid/draw.io generator would be lighter), bgp-registry-intel (multi-host egress needs lint support first). Plan and risks: docs/imports/eve-lab-topology-design.md.
+
+## D-11 wikipedia-research: reimplement; result-analysis deferred (2026-11-14)
+wikipedia-research: upstream depends on the PyPI `wikipedia` scraper (sdist with setup.py, long-stale). Reimplemented on the MediaWiki Action API, single host. See docs/imports/wikipedia-research.md.
+result-analysis: deferred to wave 3. It only reads result "handles" produced by NetClaw's own device tools (`result-analysis-mcp` plus a handle store); this repo has no producer, so it would have nothing to analyse. It will be reconsidered when device-reading skills exist.

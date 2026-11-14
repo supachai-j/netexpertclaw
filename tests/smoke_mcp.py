@@ -46,7 +46,22 @@ async def eve():
             assert bad.isError and "DOCTYPE" in bad.content[0].text, bad
             print("eve-lab ok")
 
+async def wiki():
+    e = json.loads((R/".mcp.json").read_text())["mcpServers"]["wikipedia"]
+    assert "egress" not in e and "capability" not in e
+    args = [a.replace("${CLAUDE_PLUGIN_ROOT}", str(R)) for a in e["args"]]
+    async with stdio_client(StdioServerParameters(command=e["command"], args=args)) as (r, w):
+        async with ClientSession(r, w) as s:
+            await s.initialize()
+            tl = (await s.list_tools()).tools
+            assert {t.name for t in tl} == {"search_pages", "get_summary", "get_content", "get_references", "get_categories"}, tl
+            assert all(t.annotations.readOnlyHint for t in tl)
+            bad = await s.call_tool("get_summary", {"page": "A|B"})        # rejected before any network access
+            assert bad.isError and "page title" in bad.content[0].text, bad
+            print("wikipedia ok")
+
 async def main():
+    await wiki()
     await eve()
     await rfc()
     await other("fwrule", "list_supported_vendors", {"parse_policy", "analyze_firewall_rule_overlap", "list_supported_vendors", "batch_analyze_overlap"})

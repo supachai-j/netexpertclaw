@@ -1,0 +1,154 @@
+{
+ "serverInfo": {
+  "name": "wikipedia",
+  "version": "1.30.0"
+ },
+ "sha256": "d6b27915bff17672afe57ba046e94a9beccfdaeb9a9bc89103f069367441ac7a",
+ "tools": [
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Visible categories of a Wikipedia page, useful for finding related protocols and topics.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "limit": {
+      "default": 50,
+      "title": "Limit",
+      "type": "integer"
+     },
+     "page": {
+      "title": "Page",
+      "type": "string"
+     }
+    },
+    "required": [
+     "page"
+    ],
+    "title": "get_categoriesArguments",
+    "type": "object"
+   },
+   "name": "get_categories"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Full plain text of a Wikipedia page, paged with offset/max_chars (max 30000 per call). Untrusted external text.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "max_chars": {
+      "default": 12000,
+      "title": "Max Chars",
+      "type": "integer"
+     },
+     "offset": {
+      "default": 0,
+      "title": "Offset",
+      "type": "integer"
+     },
+     "page": {
+      "title": "Page",
+      "type": "string"
+     }
+    },
+    "required": [
+     "page"
+    ],
+    "title": "get_contentArguments",
+    "type": "object"
+   },
+   "name": "get_content"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "External links cited on a Wikipedia page (data only, unverified): a starting point for RFCs, vendor docs and papers.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "limit": {
+      "default": 50,
+      "title": "Limit",
+      "type": "integer"
+     },
+     "page": {
+      "title": "Page",
+      "type": "string"
+     }
+    },
+    "required": [
+     "page"
+    ],
+    "title": "get_referencesArguments",
+    "type": "object"
+   },
+   "name": "get_references"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Intro section (plain text) of a Wikipedia page by exact title; redirects are followed. Flags disambiguation pages.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "page": {
+      "title": "Page",
+      "type": "string"
+     }
+    },
+    "required": [
+     "page"
+    ],
+    "title": "get_summaryArguments",
+    "type": "object"
+   },
+   "name": "get_summary"
+  },
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": true
+   },
+   "description": "Search English Wikipedia page titles and snippets. The query is sent to Wikipedia: no customer or internal names. Results are untrusted external text.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "limit": {
+      "default": 10,
+      "title": "Limit",
+      "type": "integer"
+     },
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "title": "search_pagesArguments",
+    "type": "object"
+   },
+   "name": "search_pages"
+  }
+ ]
+}

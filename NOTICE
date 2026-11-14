@@ -14,3 +14,5 @@ Imported by scripts/import-netclaw.py from commit cfafa46c3227356ca6ef38261fa9c1
 - workspace/skills/fwrule-analyzer/SKILL.md (sha256 61db7901b65b8c10...) -> skills/fwrule-analyzer/SKILL.md | modified: yes (frontmatter rewritten, 6 text replacement(s))
 
 eve-lab-topology-design: workflow and check list adapted from NetClaw's skill of the same name (Apache-2.0, https://github.com/automateyournetwork/netclaw @cfafa46c); the validator in mcp/eve-lab is an independent implementation.
+
+wikipedia-research: tool names and skill idea from NetClaw's skill of the same name (Apache-2.0, cfafa46c); the server in mcp/wikipedia is an independent implementation, not the PyPI 'wikipedia' package.
