@@ -2,6 +2,7 @@
 """Lint canonical skills + MCP registry. Exit 1 on any problem. Findings F-2..F-11 of docs/SECURITY-REVIEW.md."""
 import json, pathlib, re, sys
 from common import ROOT, REQUIRED, META_REQUIRED, RISKS, skills, servers, parse_fm
+import langpolicy
 
 ALLOWED_TOP = {"name", "description", "license", "metadata", "compatibility"}
 ALLOWED_FILES = re.compile(r"^(SKILL\.md|references/[^/]+\.md|agents/[^/]+\.yaml|evals/(evals|trigger_queries)\.json)$")
@@ -47,10 +48,11 @@ def main() -> int:
         if e.get("capability") not in ("read", "write"): errs.append(f"server {n}: capability must be read|write")
         if "egress" not in e: errs.append(f"server {n}: declare egress explicitly (use [] for none)")
         eg = e.get("egress", [])
-        net = [f.name for f in (ROOT / "mcp" / n).glob("*.py") if re.search(r"^\s*(import|from)\s+(socket|ssl|urllib|http|ftplib|smtplib|requests|httpx|aiohttp|websockets)\b", f.read_text(), re.M)]
+        net = [] if e.get("language", "python") != "python" else [f.name for f in (ROOT / "mcp" / n).glob("*.py") if re.search(r"^\s*(import|from)\s+(socket|ssl|urllib|http|ftplib|smtplib|requests|httpx|aiohttp|websockets)\b", f.read_text(), re.M)]
         if net and not eg: errs.append(f"server {n}: {', '.join(net)} import network modules but egress is []: declare the hosts or remove the import (review H2-7)")
         if not isinstance(eg, list) or not all(isinstance(h, str) and re.fullmatch(r"[a-z0-9.-]+\.[a-z]{2,}", h) for h in eg):
             errs.append(f"server {n}: egress must be a list of hostnames")
+        errs.extend(langpolicy.check(n, e, ROOT / "mcp"))
         a = e.get("args", [])
         cmd, ca = e.get("command"), a
         if cmd == "python3" and a and a[0].endswith("/mcp/" + n + "/proxy.py") and "--" in a:

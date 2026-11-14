@@ -40,6 +40,12 @@ Only `name, description, license, compatibility, metadata` are allowed at top le
 3. Generate the tool-definition lock: `python3 scripts/gen_tools_cache.py <name>`.
 4. Add tests, including hostile input (oversize, malformed, hidden characters, injection text in fetched data).
 
+## Languages
+
+Python is the default for new servers. Go is the second language, to be used when Python is a poor fit (for example gNMI, or a single binary without `uv`). TypeScript and Rust are not open yet. Decision and conditions: `docs/DECISIONS.md` D-13.
+
+A server in another language must declare `language` in `mcp/servers.json` and pass `scripts/langpolicy.py` (checked by `scripts/lint.py`): committed lockfile (`go.sum`, `Cargo.lock`, `package-lock.json`); a built artefact as the command (`{root}/mcp/<name>/bin/<name>`, or `node` with a file under `{root}/mcp/<name>/dist/`), never `go run`, `cargo run`, `npx` or `npm exec`; explicit `egress`; no process spawning; and `release_checks` naming the CI jobs that build, hash and scan it. These checks are static tripwires. The first such server also needs an independent security review and a runtime test on each agent. No non-Python server exists today.
+
 ## Dev loop
 
 ```bash
