@@ -7,3 +7,6 @@ Decision (D-11): reimplement with the official MediaWiki Action API using stdlib
 Verified live 2026-11-14: summary (OSPF -> "Open Shortest Path First" redirect), search, paged content, references, categories, disambiguation flag (Mercury), not-found error. Offline tests use synthetic API responses (tests/test_wiki.py); live checks need NETPAW_LIVE_TESTS=1.
 NOT checked: behaviour under Wikipedia rate limiting (no retry logic; a 429 is reported as an error), non-English titles, very large pages near the cap, other MediaWiki hosts (not supported on purpose).
 Privacy: search words and titles are sent to Wikipedia; the skill tells the model not to include customer or internal names.
+
+## Cross-review fixes (tester role, 2026-11-14)
+WK-1 overall 15 s read deadline (not per read; same in rfc-lookup); WK-2 hidden-character stripper broadened (shared); WK-3 malformed API shapes become a normal error; WK-4 only article namespace (ns 0) pages are returned, User:/Talk: etc. refused. Tests: tests/test_hardening.py.

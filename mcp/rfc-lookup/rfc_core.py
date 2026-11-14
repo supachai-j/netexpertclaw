@@ -4,7 +4,9 @@ Fetched text is untrusted external content: it is returned as data with its sour
 Limits: 15 s timeout, 5 MB (RFC) / 4 MB (index) body cap, redirects refused, content-type must be text/plain.
 """
 from __future__ import annotations
-import re, urllib.error, urllib.request
+import os, re, sys, time, urllib.error, urllib.request
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
+from textclean import strip_hidden
 
 HOST = "www.rfc-editor.org"
 TIMEOUT = 15
@@ -32,6 +34,17 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None   # refuse every redirect: a fixed host must answer directly
 
 
+def _read(r, limit: int) -> bytes:
+    """Read at most `limit` bytes within an overall TIMEOUT-second budget (the socket timeout alone applies per read, so a slow drip could hold the call)."""
+    end, buf = time.monotonic() + TIMEOUT, bytearray()
+    while len(buf) < limit:
+        if time.monotonic() > end: raise RfcError("response too slow (overall timeout)")
+        chunk = r.read(min(65536, limit - len(buf)))
+        if not chunk: break
+        buf += chunk
+    return bytes(buf)
+
+
 def _fetch(url: str, cap: int) -> str:
     if not url.startswith(f"https://{HOST}/"):
         raise RfcError("refused: URL outside allow-list")
@@ -42,7 +55,7 @@ def _fetch(url: str, cap: int) -> str:
             ctype = (r.headers.get("Content-Type") or "").split(";")[0].strip().lower()
             if ctype != "text/plain":
                 raise RfcError(f"unexpected content-type {ctype!r}")
-            data = r.read(cap + 1)
+            data = _read(r, cap + 1)
     except urllib.error.HTTPError as e:
         e.close()
         raise RfcError(f"HTTP {e.code} from {HOST}") from None
@@ -70,12 +83,9 @@ _FOOT = re.compile(r".*\[Page \d+\]\s*$")
 _HEAD = re.compile(r"^RFC \d+\s{2,}.+\s{2,}\w+ \d{4}\s*$")
 
 
-_INVISIBLE = re.compile("[\x00-\x08\x0b-\x1f\x7f-\x9f\u00ad\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]")
-
-
 def strip_invisible(text: str) -> str:
-    """Remove control and invisible format characters (ESC, bidi overrides, zero-width) that could hide or spoof text; keep \\n and \\t."""
-    return _INVISIBLE.sub("", text)
+    """Remove control and invisible/format characters (see mcp/_shared/textclean.py); tab and newline are kept."""
+    return strip_hidden(text)
 
 
 def clean(text: str) -> list[str]:

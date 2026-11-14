@@ -6,9 +6,12 @@ The input is untrusted XML supplied as TEXT (never a path): DOCTYPE/ENTITY decla
 count limits apply, graph walks are iterative, and node/network names from the file are sanitised and flagged as untrusted data.
 """
 from __future__ import annotations
-import json, re
+import json, os, re, sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
+from textclean import strip_hidden
 
 MAX_BYTES = 2_000_000
 MAX_NODES = 500
@@ -17,7 +20,6 @@ MAX_NET_MEMBERS = 64        # pairwise adjacency per segment grows with members^
 MAX_JSON = 100_000
 MAX_REQ = 200
 _DECL = re.compile(r"<!\s*(DOCTYPE|ENTITY|ELEMENT|ATTLIST|NOTATION)", re.I)
-_BAD = re.compile("[\x00-\x08\x0b-\x1f\x7f-\x9f\u00ad\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]")
 
 
 class UnlError(ValueError):
@@ -25,7 +27,7 @@ class UnlError(ValueError):
 
 
 def _s(v, n=64) -> str:
-    return _BAD.sub("", str(v))[:n]
+    return strip_hidden(v)[:n]
 
 
 ROLE_TOKENS = [  # (tokens, role); first match wins; matched on name TOKENS, not substrings
@@ -61,6 +63,7 @@ def parse(unl_text: str):
         nid = el.attrib.get("id")
         if not nid: continue
         if len(nodes) >= MAX_NODES: raise UnlError(f"more than {MAX_NODES} nodes")
+        if _s(nid, 16) in nodes: raise UnlError("duplicate node id (ids that differ only by hidden characters count as equal)")
         nodes[_s(nid, 16)] = {"name": _s(el.attrib.get("name", f"node{nid}")), "template": _s(el.attrib.get("template", "")),
                               "ifaces": [(_s(i.attrib.get("name", f"iface{i.attrib.get('id', '')}")), _s(i.attrib.get("network_id", ""), 16))
                                          for i in el.findall("interface")][:256]}
@@ -68,6 +71,7 @@ def parse(unl_text: str):
         nid = el.attrib.get("id")
         if not nid: continue
         if len(nets) >= MAX_NETS: raise UnlError(f"more than {MAX_NETS} networks")
+        if _s(nid, 16) in nets: raise UnlError("duplicate network id")
         nets[_s(nid, 16)] = {"name": _s(el.attrib.get("name", f"net{nid}")), "type": _s(el.attrib.get("type", "bridge"), 24)}
     if not nodes: raise UnlError("no <node> elements found; is this an EVE-NG .unl lab?")
     return _s(root.attrib.get("name", "lab")), nodes, nets
@@ -80,13 +84,15 @@ def connectivity(nodes, nets):
             if not netid: continue
             node_nets[nid].add(netid); members[netid].append((nid, iname))
             if netid not in nets: dangling.append((n["name"], iname, netid))
-    adj = defaultdict(set)
+    adj, multi, p2p = defaultdict(set), defaultdict(int), set()
     for netid, m in members.items():
-        if len(m) > MAX_NET_MEMBERS: raise UnlError(f"network {netid} has more than {MAX_NET_MEMBERS} endpoints")
-        for i, (a, _) in enumerate(m):
-            for b, _ in m[i + 1:]:
-                if a != b: adj[a].add(b); adj[b].add(a)
-    return members, node_nets, adj, dangling
+        if len(m) > MAX_NET_MEMBERS: raise UnlError(f"network {netid} has {len(m)} endpoints (limit {MAX_NET_MEMBERS}); split the segment or validate a reduced lab")
+        who = sorted({n for n, _ in m})
+        for i, a in enumerate(who):
+            for b in who[i + 1:]:
+                adj[a].add(b); adj[b].add(a); multi[(a, b)] += 1
+                if len(who) == 2: p2p.add((a, b))
+    return members, node_nets, adj, dangling, multi, p2p
 
 
 def components(ids, adj):
@@ -99,7 +105,7 @@ def components(ids, adj):
             if u in seen: continue
             seen.add(u); comp.add(u); st.extend(v for v in adj.get(u, ()) if v in ids and v not in seen)
         out.append(comp)
-    return out
+    return sorted(out, key=lambda c: sorted(c))
 
 
 def spofs(ids, adj):
@@ -141,7 +147,7 @@ def validate(unl_text: str, requirements_json: str = "", roles_json: str = "") -
     reqs, roles = _load(requirements_json, "requirements_json"), _load(roles_json, "roles_json")
     roles = {_s(k): _s(v, 24) for k, v in roles.items() if isinstance(k, str) and isinstance(v, str)}
     lab, nodes, nets = parse(unl_text)
-    members, node_nets, adj, dangling = connectivity(nodes, nets)
+    members, node_nets, adj, dangling, multi, p2p = connectivity(nodes, nets)
     ids = set(nodes); name = {i: n["name"] for i, n in nodes.items()}; by_name = {}
     for i, n in name.items(): by_name.setdefault(n, i)
     P, W, F = [], [], []
@@ -157,10 +163,15 @@ def validate(unl_text: str, requirements_json: str = "", roles_json: str = "") -
     if len(comps) > 1: F.append(f"Topology is partitioned into {len(comps)} components: " + "; ".join("{" + ", ".join(sorted(name[i] for i in c)[:5]) + (", ..." if len(c) > 5 else "") + "}" for c in comps[:5]))
     else: P.append(f"All {len(ids)} nodes are in one connected component")
     role = {i: infer_role(name[i], roles) for i in ids}
-    bad = sorted({tuple(sorted((name[a], name[b]))) for a in ids for b in adj.get(a, ()) if frozenset((role[a], role[b])) in FORBIDDEN})
-    if bad: F.extend(f"Forbidden adjacency: {a} <-> {b}" for a, b in bad)
-    else: P.append("Role-based adjacency rules respected")
+    pairs = {tuple(sorted((a, b))) for a in ids for b in adj.get(a, ()) if frozenset((role[a], role[b])) in FORBIDDEN}
+    direct = sorted(tuple(sorted((name[a], name[b]))) for a, b in pairs if (a, b) in p2p)
+    shared = sorted(tuple(sorted((name[a], name[b]))) for a, b in pairs if (a, b) not in p2p)
+    F.extend(f"Forbidden adjacency (direct link): {a} <-> {b}" for a, b in direct)
+    W.extend(f"Forbidden role pair shares a multi-endpoint segment (not a direct link, check the design): {a} <-> {b}" for a, b in shared[:20])
+    if len(shared) > 20: W.append(f"... and {len(shared) - 20} more role pairs on shared segments")
+    if not direct and not shared: P.append("Role-based adjacency rules respected")
     ap, br = spofs(ids, adj)
+    br = [(a, b) for a, b in br if multi.get(tuple(sorted((a, b))), 1) < 2]   # two or more networks between the same pair = redundant link
     (W.append("SPOF nodes (removal splits topology): " + ", ".join(sorted(name[i] for i in ap))) if ap else P.append("No single-node SPOFs"))
     (W.append("SPOF links (loss splits topology): " + "; ".join(sorted(f"{name[a]} <-> {name[b]}" for a, b in br))) if br else P.append("No single-link SPOFs"))
     byrole = defaultdict(list)

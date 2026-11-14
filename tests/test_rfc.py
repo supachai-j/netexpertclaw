@@ -128,8 +128,9 @@ class Network(unittest.TestCase):
     """The real _fetch with a fake opener: allow-list, redirects, content type, size cap."""
     def _opener(self, headers, body, status=200):
         class R:
-            def __init__(s): s.headers = headers
-            def read(s, n): return body[:n]
+            def __init__(s): s.headers = headers; s.pos = 0
+            def read(s, n):
+                chunk = body[s.pos:s.pos + n]; s.pos += len(chunk); return chunk
             def __enter__(s): return s
             def __exit__(s, *a): return False
         class O:
