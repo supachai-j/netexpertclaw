@@ -1,0 +1,3524 @@
+{
+ "netclaw_commit": "cfafa46c3227356ca6ef38261fa9c1f4ba4711cb",
+ "counts": {
+  "blocked-write": 122,
+  "needs-creds": 107,
+  "offline-tool": 9,
+  "offline-doc": 2,
+  "egress-public": 2
+ },
+ "skills": [
+  {
+   "skill": "aap-automation",
+   "class": "blocked-write",
+   "lines": 170,
+   "env": [
+    "AAP_TOKEN",
+    "AAP_URL"
+   ],
+   "write_tools": [
+    "add_host_to_group",
+    "add_host_to_inventory",
+    "create_group",
+    "create_inventory",
+    "create_inventory_source",
+    "create_job_template"
+   ],
+   "hosts": [
+    "aap.example.com",
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Red Hat Ansible Automation Platform \u2014 inventory management, job template execution, project SCM sync, ad-hoc commands, host management, Gala"
+  },
+  {
+   "skill": "aap-eda",
+   "class": "blocked-write",
+   "lines": 100,
+   "env": [
+    "EDA_TOKEN",
+    "EDA_URL"
+   ],
+   "write_tools": [
+    "create_activation",
+    "create_decision_environment",
+    "delete_activation",
+    "disable_activation",
+    "enable_activation",
+    "restart_activation"
+   ],
+   "hosts": [
+    "aap.example.com",
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Event-Driven Ansible (EDA) \u2014 activation lifecycle, rulebook management, decision environments, event stream monitoring. Use when managing ev"
+  },
+  {
+   "skill": "aap-lint",
+   "class": "needs-creds",
+   "lines": 77,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "ansible-lint playbook and role validation \u2014 syntax checking, best practice enforcement, project-wide analysis, rule filtering. Use when vali"
+  },
+  {
+   "skill": "aci-change-deploy",
+   "class": "blocked-write",
+   "lines": 363,
+   "env": [
+    "APIC_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Safe ACI policy change deployment - ServiceNow CR lifecycle, pre/post-change fault baselines, APIC policy application, automatic rollback on"
+  },
+  {
+   "skill": "aci-fabric-audit",
+   "class": "needs-creds",
+   "lines": 291,
+   "env": [
+    "APIC_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Comprehensive Cisco ACI fabric health audit - node status, tenant/VRF/BD/EPG policy review, contract analysis, fault triage, and endpoint le"
+  },
+  {
+   "skill": "anta-validation",
+   "class": "needs-creds",
+   "lines": 111,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Validate Arista EOS network state against ANTA's pre-built 208-test catalogue, with structured pass/fail verdicts. Use for \"is this switch h"
+  },
+  {
+   "skill": "arista-cvp",
+   "class": "blocked-write",
+   "lines": 190,
+   "env": [
+    "CVPTOKEN"
+   ],
+   "write_tools": [
+    "create_tag",
+    "execute_junos_command_batch"
+   ],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Arista CloudVision Portal (CVP) automation via REST API \u2014 device inventory, events, connectivity monitoring, tag management (4 tools). Use w"
+  },
+  {
+   "skill": "aruba-cx-config",
+   "class": "blocked-write",
+   "lines": 247,
+   "env": [],
+   "write_tools": [
+    "upload_firmware"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "View and manage Aruba CX switch configurations, perform ISSU upgrades, and firmware operations"
+  },
+  {
+   "skill": "aruba-cx-interfaces",
+   "class": "blocked-write",
+   "lines": 194,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Monitor Aruba CX switch interface status, LLDP neighbors, and optical transceiver health"
+  },
+  {
+   "skill": "aruba-cx-switching",
+   "class": "blocked-write",
+   "lines": 194,
+   "env": [],
+   "write_tools": [
+    "configure_vlan",
+    "create_vlan",
+    "delete_vlan"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "View and manage Aruba CX switch VLANs and MAC address tables for Layer 2 operations"
+  },
+  {
+   "skill": "aruba-cx-system",
+   "class": "blocked-write",
+   "lines": 168,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Discover Aruba CX switch system information, firmware versions, and VSF topology"
+  },
+  {
+   "skill": "atlassian-itsm",
+   "class": "blocked-write",
+   "lines": 424,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "IT Service Management workflows using Jira for issue tracking and Confluence for documentation"
+  },
+  {
+   "skill": "auvik-inventory",
+   "class": "blocked-write",
+   "lines": 100,
+   "env": [
+    "AUVIK_API_KEY",
+    "AUVIK_BASE_URL",
+    "AUVIK_USERNAME"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "auvikapi.us1.my.auvik.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Auvik device, network, interface, and component inventory across MSP tenants \u2014 including entity notes, audit logs, and billing usage. Use wh"
+  },
+  {
+   "skill": "auvik-lifecycle",
+   "class": "blocked-write",
+   "lines": 107,
+   "env": [
+    "AUVIK_API_KEY",
+    "AUVIK_BASE_URL",
+    "AUVIK_USERNAME"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "auvikapi.us1.my.auvik.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Auvik device end-of-life posture, warranty/service coverage, and configuration backup history for refresh and renewal planning. Use when ide"
+  },
+  {
+   "skill": "auvik-network-alerts",
+   "class": "blocked-write",
+   "lines": 103,
+   "env": [
+    "AUVIK_API_KEY",
+    "AUVIK_BASE_URL",
+    "AUVIK_USERNAME"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "auvikapi.us1.my.auvik.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Surface and triage Auvik network alerts by severity, status, dismissed state, or time window across MSP tenants. Use when reviewing active a"
+  },
+  {
+   "skill": "auvik-performance",
+   "class": "blocked-write",
+   "lines": 129,
+   "env": [
+    "AUVIK_API_KEY",
+    "AUVIK_BASE_URL",
+    "AUVIK_USERNAME"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "auvikapi.us1.my.auvik.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Auvik time-series performance stats for devices, interfaces, services, and hardware components \u2014 plus SNMP poller history for custom OID val"
+  },
+  {
+   "skill": "aws-architecture-diagram",
+   "class": "blocked-write",
+   "lines": 93,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "AWS architecture diagrams \u2014 generate visual network topology diagrams from live AWS infrastructure. Use when drawing AWS network diagrams, v"
+  },
+  {
+   "skill": "aws-cloud-monitoring",
+   "class": "needs-creds",
+   "lines": 96,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "AWS CloudWatch monitoring \u2014 metrics, alarms, log queries, VPC flow log analysis, network performance. Use when checking AWS alarms, analyzin"
+  },
+  {
+   "skill": "aws-cost-ops",
+   "class": "needs-creds",
+   "lines": 100,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "AWS Cost Explorer \u2014 spending analysis, service breakdowns, forecasts, cost anomalies. Use when analyzing AWS spending, investigating cost sp"
+  },
+  {
+   "skill": "aws-network-ops",
+   "class": "needs-creds",
+   "lines": 158,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "AWS cloud networking \u2014 VPC, Transit Gateway, Cloud WAN, VPN, Network Firewall, ENI, flow logs. Use when auditing AWS VPCs, troubleshooting c"
+  },
+  {
+   "skill": "aws-security-audit",
+   "class": "needs-creds",
+   "lines": 108,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "AWS security auditing \u2014 IAM users/roles/policies, CloudTrail API events, security posture analysis. Use when auditing IAM permissions, inves"
+  },
+  {
+   "skill": "azure-network-ops",
+   "class": "needs-creds",
+   "lines": 135,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Azure cloud networking -- VNets, NSGs, ExpressRoute, VPN Gateways, Azure Firewalls, Load Balancers, Application Gateways, Route Tables, Netw"
+  },
+  {
+   "skill": "azure-security-audit",
+   "class": "needs-creds",
+   "lines": 93,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Azure NSG compliance auditing and security posture assessment. CIS Azure Foundations Benchmark rules, effective security rule analysis, orph"
+  },
+  {
+   "skill": "batfish-config-analysis",
+   "class": "needs-creds",
+   "lines": 109,
+   "env": [
+    "BATFISH_HOST"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Batfish network configuration analysis -- pre-deployment validation, reachability testing, ACL/firewall tracing, differential analysis, comp"
+  },
+  {
+   "skill": "bgp-registry-intel",
+   "class": "needs-creds",
+   "lines": 134,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "BGP and registry intelligence \u2014 RPKI origin validation (is this announcement authorised?), RDAP registry ownership and abuse contacts, Peeri"
+  },
+  {
+   "skill": "blender-3d-viz",
+   "class": "blocked-write",
+   "lines": 141,
+   "env": [],
+   "write_tools": [
+    "create_object",
+    "execute_blender_code",
+    "set_material"
+   ],
+   "hosts": [
+    "github.com",
+    "www.blender.org"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Create 3D network topology visualizations in Blender from CDP/LLDP neighbor data"
+  },
+  {
+   "skill": "browser-gui-inspect",
+   "class": "blocked-write",
+   "lines": 214,
+   "env": [],
+   "write_tools": [
+    "upload_file"
+   ],
+   "hosts": [
+    "demo.netbox.dev"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Controller-agnostic browser automation and inspection \u2014 navigate, read, click, fill, and capture network traffic on any web GUI using a pers"
+  },
+  {
+   "skill": "browser-viz-verify",
+   "class": "blocked-write",
+   "lines": 130,
+   "env": [],
+   "write_tools": [
+    "run_audit"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Verifies that a NetClaw-generated visualization HTML file (three.js, canvas, drawio, UML, markmap) actually renders correctly \u2014 screenshot, "
+  },
+  {
+   "skill": "canvas-network-viz",
+   "class": "blocked-write",
+   "lines": 86,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [
+    "filter-engine.js",
+    "data-fetcher.js",
+    "a2ui-renderer.js",
+    "color-scale.js",
+    "gait-logger.js",
+    "graph-layout.js",
+    "alert-card.js",
+    "change-timeline.js",
+    "diff-view.js",
+    "dashboard-panel.js",
+    "health-scorecard.js",
+    "path-trace.js",
+    "topology-map.js"
+   ],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Canvas/A2UI inline network visualizations \u2014 topology maps, health dashboards, alert cards, change timelines, config diffs, path traces, and "
+  },
+  {
+   "skill": "catalyst-center-readonly",
+   "class": "needs-creds",
+   "lines": 103,
+   "env": [
+    "CATALYST_CENTER_HOST",
+    "CATALYST_CENTER_PASSWORD",
+    "CATALYST_CENTER_USERNAME"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Query Cisco Catalyst Center read-only \u2014 device inventory, site hierarchy, wireless, assurance health, compliance, software images, events. A"
+  },
+  {
+   "skill": "catc-client-ops",
+   "class": "needs-creds",
+   "lines": 482,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Catalyst Center client operations and monitoring - list/filter wired and wireless clients, detailed client lookup by MAC, client count analy"
+  },
+  {
+   "skill": "catc-inventory",
+   "class": "needs-creds",
+   "lines": 414,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Catalyst Center device inventory and site management - list/filter devices by hostname, IP, platform, family, role, reachability; view site "
+  },
+  {
+   "skill": "catc-troubleshoot",
+   "class": "needs-creds",
+   "lines": 611,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Catalyst Center troubleshooting workflows - device unreachable investigation, client connectivity issues, interface down analysis, site-wide"
+  },
+  {
+   "skill": "checkpoint",
+   "class": "needs-creds",
+   "lines": 294,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "api.us1.sase.checkpoint.com",
+    "mcp.checkpoint.com",
+    "tenant.maas.checkpoint.com",
+    "tenant.sase.checkpoint.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Inspect Check Point security policies, threat intelligence, gateways, and SASE through its MCP integrations. Use for Check Point platform qu"
+  },
+  {
+   "skill": "cisco-iq",
+   "class": "needs-creds",
+   "lines": 62,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "ap-southeast-2.iq.cisco.com",
+    "eu-central-1.iq.cisco.com",
+    "iq.cisco.com",
+    "us-west-2.iq.cisco.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco IQ (official remote MCP, read-only) for support investigations \u2014 asset and product information, lifecycle and coverage, Cisco bug info"
+  },
+  {
+   "skill": "cisco-psirt-advisories",
+   "class": "needs-creds",
+   "lines": 206,
+   "env": [
+    "CISCO_CLIENT_ID",
+    "CISCO_CLIENT_SECRET"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Check whether a running Cisco software version is affected by a published PSIRT security advisory - by OS version, CVE, or advisory ID, with"
+  },
+  {
+   "skill": "clab-lab-management",
+   "class": "blocked-write",
+   "lines": 168,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "containerlab.dev",
+    "localhost:8080"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "ContainerLab network lab lifecycle management \u2014 authenticate, list, deploy, inspect, execute commands on, and destroy containerized network "
+  },
+  {
+   "skill": "claroty-asset-inventory",
+   "class": "blocked-write",
+   "lines": 107,
+   "env": [],
+   "write_tools": [
+    "set_device_custom_attribute",
+    "set_device_purdue_level"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Discover and classify OT / IoT / IoMT assets via Claroty xDome. List devices by site, Purdue level, and device purpose; assign Purdue layers"
+  },
+  {
+   "skill": "claroty-ot-topology",
+   "class": "needs-creds",
+   "lines": 99,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Render Claroty xDome OT / IoT communication maps and zone segmentation as inline Canvas/A2UI topology, draw.io diagrams, and timeline summar"
+  },
+  {
+   "skill": "claroty-risk-triage",
+   "class": "blocked-write",
+   "lines": 117,
+   "env": [],
+   "write_tools": [
+    "assign_alerts",
+    "set_vulnerability_relevance"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Triage Claroty xDome alerts and vulnerabilities, compute blast radius, correlate with NVD CVE data, and drive ITSM-gated workflow actions (a"
+  },
+  {
+   "skill": "cloudflare-analytics",
+   "class": "needs-creds",
+   "lines": 52,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "suspicious-site.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Access Cloudflare traffic analytics, logs, and Radar global Internet insights."
+  },
+  {
+   "skill": "cloudflare-dns",
+   "class": "needs-creds",
+   "lines": 51,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage Cloudflare DNS zones and records with analytics insights."
+  },
+  {
+   "skill": "cloudflare-security",
+   "class": "needs-creds",
+   "lines": 53,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Monitor Cloudflare WAF, firewall events, audit logs, and threat intelligence."
+  },
+  {
+   "skill": "cloudflare-workers",
+   "class": "needs-creds",
+   "lines": 53,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Monitor Cloudflare Workers deployments, bindings, and build insights."
+  },
+  {
+   "skill": "cloudflare-zerotrust",
+   "class": "needs-creds",
+   "lines": 54,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Inspect Cloudflare Zero Trust access applications, policies, tunnels, and CASB findings."
+  },
+  {
+   "skill": "cml-admin",
+   "class": "blocked-write",
+   "lines": 131,
+   "env": [],
+   "write_tools": [
+    "create_group",
+    "create_user",
+    "delete_group",
+    "delete_user",
+    "update_group",
+    "update_user"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "CML administration \u2014 user/group management, system info, licensing, resource monitoring. Use when creating CML users, checking license statu"
+  },
+  {
+   "skill": "cml-lab-lifecycle",
+   "class": "blocked-write",
+   "lines": 174,
+   "env": [],
+   "write_tools": [
+    "add_node_to_cml_lab",
+    "create_empty_lab",
+    "delete_lab",
+    "import_lab"
+   ],
+   "hosts": [
+    "cml.example.com",
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco CML lab lifecycle management \u2014 create, start, stop, wipe, delete, clone, import/export labs. Use when building a network lab, starting"
+  },
+  {
+   "skill": "cml-node-operations",
+   "class": "blocked-write",
+   "lines": 257,
+   "env": [],
+   "write_tools": [
+    "execute_command",
+    "set_node_config"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "CML node operations \u2014 start, stop, console access, CLI execution, config management, node details. Use when starting or stopping a CML node,"
+  },
+  {
+   "skill": "cml-packet-capture",
+   "class": "blocked-write",
+   "lines": 147,
+   "env": [],
+   "write_tools": [
+    "execute_command"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "CML packet capture \u2014 start, stop, download pcaps from CML lab links, integrate with Packet Buddy for analysis. Use when capturing packets in"
+  },
+  {
+   "skill": "cml-topology-builder",
+   "class": "blocked-write",
+   "lines": 166,
+   "env": [],
+   "write_tools": [
+    "add_interface_to_node",
+    "add_node_to_cml_lab",
+    "create_annotation",
+    "create_empty_lab",
+    "delete_annotation",
+    "send_cli_command"
+   ],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Build CML topologies \u2014 add nodes, create interfaces, wire links, set link conditioning, add annotations. Use when building a network topolog"
+  },
+  {
+   "skill": "comfyui-topology-viz",
+   "class": "blocked-write",
+   "lines": 221,
+   "env": [],
+   "write_tools": [
+    "run_workflow"
+   ],
+   "hosts": [
+    "127.0.0.1:8000",
+    "github.com"
+   ],
+   "scripts": [
+    "comfyui_client.py",
+    "output.py",
+    "generation.py",
+    "sources.py",
+    "topology_renderer.py",
+    "materials.py",
+    "topology_model.py",
+    "prompt_builder.py",
+    "generation_model.py",
+    "__init__.py",
+    "label_overlay.py",
+    "federated_generation.py"
+   ],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Turn a network topology into one stylized, AI-generated still image via a self-hosted ComfyUI instance \u2014 reuses the same topology model as t"
+  },
+  {
+   "skill": "convergence-observations",
+   "class": "needs-creds",
+   "lines": 117,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Inspect retained Convergence traffic rankings, same-window flow evidence and advisory VM Security findings for a configured site. Use for to"
+  },
+  {
+   "skill": "convergence-setup",
+   "class": "needs-creds",
+   "lines": 97,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Set up Convergence, the separately operated network observability service, on the user's own infrastructure. Asks only for what it cannot di"
+  },
+  {
+   "skill": "datadog-apm",
+   "class": "needs-creds",
+   "lines": 91,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Analyze distributed traces and service performance in Datadog APM."
+  },
+  {
+   "skill": "datadog-incidents",
+   "class": "blocked-write",
+   "lines": 80,
+   "env": [],
+   "write_tools": [
+    "create_incident",
+    "update_incident"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage incidents in Datadog Incident Management."
+  },
+  {
+   "skill": "datadog-logs",
+   "class": "needs-creds",
+   "lines": 73,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Search and analyze logs in Datadog Log Management."
+  },
+  {
+   "skill": "datadog-metrics",
+   "class": "needs-creds",
+   "lines": 74,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Query metrics and explore dashboards in Datadog."
+  },
+  {
+   "skill": "defenseclaw-ops",
+   "class": "blocked-write",
+   "lines": 226,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "otel-collector.example.com:4318",
+    "splunk.example.com:8088"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage DefenseClaw enterprise security - scan components, manage tool permissions, view alerts, configure guardrails"
+  },
+  {
+   "skill": "desktop-gui-inspect",
+   "class": "blocked-write",
+   "lines": 154,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "localhost:6080"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Full-desktop automation for targets that have no browser and no API at all \u2014 a legacy Java-based NMS client, a vendor's Windows-only configu"
+  },
+  {
+   "skill": "devnet-catalyst-search",
+   "class": "needs-creds",
+   "lines": 146,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "devnet.cisco.com"
+   ],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Search Cisco Catalyst Center API documentation for device management and policy automation"
+  },
+  {
+   "skill": "devnet-meraki-search",
+   "class": "blocked-write",
+   "lines": 151,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "devnet.cisco.com"
+   ],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Search Cisco Meraki API documentation and lookup specific operations"
+  },
+  {
+   "skill": "document-generation",
+   "class": "blocked-write",
+   "lines": 136,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Generate Word (.docx), Excel (.xlsx) and PowerPoint (.pptx) documents and fill existing PDF forms, from real NetClaw data, with per-element "
+  },
+  {
+   "skill": "drawio-diagram",
+   "class": "needs-creds",
+   "lines": 256,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Generate draw.io network diagrams \u2014 native .drawio files with CLI export (PNG/SVG/PDF), plus browser-based Mermaid/XML/CSV via MCP server. U"
+  },
+  {
+   "skill": "elasticsearch-logs",
+   "class": "needs-creds",
+   "lines": 136,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "host.docker.internal:9200"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Search and analyse logs in an existing Elasticsearch cluster (8.x/9.x) \u2014 syslog, application logs, Zeek/Suricata exports, or any indexed eve"
+  },
+  {
+   "skill": "equinix-fabric-operations",
+   "class": "blocked-write",
+   "lines": 65,
+   "env": [
+    "EQUINIX_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "mcp.equinix.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Inspect and operate Equinix Fabric connections, ports, Cloud Routers, routing, filters, service profiles and telemetry through the official "
+  },
+  {
+   "skill": "equinix-network-edge",
+   "class": "needs-creds",
+   "lines": 37,
+   "env": [
+    "EQUINIX_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Search Equinix Network Edge virtual devices, available device types and metros, account/project scope and device ACL associations. Use for h"
+  },
+  {
+   "skill": "eve-lab-topology-build",
+   "class": "needs-creds",
+   "lines": 40,
+   "env": [
+    "EVE_PASSWORD",
+    "EVE_URL",
+    "EVE_USER"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Build or rewire EVE-NG lab topology. Use when creating or deleting virtual networks, connecting node interfaces to networks, inspecting topo"
+  },
+  {
+   "skill": "eve-lab-topology-design",
+   "class": "offline-tool",
+   "lines": 38,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [
+    "validate_unl_topology.py"
+   ],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Design EVE-NG lab topology and coordinate the design workflow. Use when the user asks for lab design, architecture advice, topology planning"
+  },
+  {
+   "skill": "eve-lab-topology-discovery",
+   "class": "offline-doc",
+   "lines": 29,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Gather missing requirements for EVE-NG topology design. Use when the request is vague or incomplete, when you need discovery questions, defa"
+  },
+  {
+   "skill": "eve-lab-topology-validation",
+   "class": "offline-doc",
+   "lines": 27,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Validate EVE-NG topology designs and enforce final delivery structure. Use when reviewing a design, checking build readiness, producing the "
+  },
+  {
+   "skill": "eve-ng-config-ops",
+   "class": "needs-creds",
+   "lines": 35,
+   "env": [
+    "EVE_PASSWORD",
+    "EVE_URL",
+    "EVE_USER"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Manage EVE-NG startup configurations stored in lab files. Use when exporting configs natively into the lab, reading embedded startup configs"
+  },
+  {
+   "skill": "eve-ng-console-ops",
+   "class": "needs-creds",
+   "lines": 34,
+   "env": [
+    "EVE_PASSWORD",
+    "EVE_URL",
+    "EVE_USER"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Execute live CLI commands on running EVE-NG nodes over telnet console. Use when running show commands, making live config changes, verifying"
+  },
+  {
+   "skill": "eve-ng-lab-management",
+   "class": "needs-creds",
+   "lines": 43,
+   "env": [
+    "EVE_PASSWORD",
+    "EVE_URL",
+    "EVE_USER"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Manage EVE-NG labs and platform inventory. Use when listing labs, checking lab metadata, creating or deleting labs, importing or exporting l"
+  },
+  {
+   "skill": "eve-ng-node-operations",
+   "class": "needs-creds",
+   "lines": 36,
+   "env": [
+    "EVE_PASSWORD",
+    "EVE_URL",
+    "EVE_USER"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage EVE-NG node lifecycle. Use when listing nodes, checking runtime state, creating or deleting nodes, starting or stopping nodes or whol"
+  },
+  {
+   "skill": "evpn-vxlan-fabric",
+   "class": "needs-creds",
+   "lines": 70,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "EVPN/VXLAN fabric audit and troubleshooting \u2014 VTEPs, VNIs, route types, multihoming, underlay/overlay validation. Use when troubleshooting V"
+  },
+  {
+   "skill": "f5-config-mgmt",
+   "class": "blocked-write",
+   "lines": 501,
+   "env": [],
+   "write_tools": [
+    "create_tool",
+    "delete_tool",
+    "update_tool"
+   ],
+   "hosts": [
+    "[http::host][http::uri]\\n}"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "F5 BIG-IP configuration management - safe change workflow with baseline capture, planning, creation/update/deletion of virtual servers, pool"
+  },
+  {
+   "skill": "f5-health-check",
+   "class": "blocked-write",
+   "lines": 302,
+   "env": [],
+   "write_tools": [
+    "create_tool",
+    "delete_tool",
+    "update_tool"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "F5 BIG-IP health monitoring - virtual server status, pool member health, log analysis, performance statistics, and systematic health assessm"
+  },
+  {
+   "skill": "f5-troubleshoot",
+   "class": "blocked-write",
+   "lines": 624,
+   "env": [],
+   "write_tools": [
+    "create_tool",
+    "delete_tool",
+    "update_tool"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "F5 BIG-IP troubleshooting - virtual server failures, pool member health, connection issues, SSL/TLS problems, iRule errors, persistence issu"
+  },
+  {
+   "skill": "fmc-firewall-ops",
+   "class": "needs-creds",
+   "lines": 143,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "<host",
+    "fmc-east.example.com",
+    "fmc.example.com",
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco Secure Firewall FMC \u2014 access policy search, rule inspection, FTD device targeting, multi-FMC profile management. Use when searching fi"
+  },
+  {
+   "skill": "fortianalyzer-ops",
+   "class": "needs-creds",
+   "lines": 124,
+   "env": [
+    "FORTIANALYZER_API_TOKEN",
+    "FORTIANALYZER_HOST"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "FortiAnalyzer log operations \u2014 policy-filtered traffic log query within a bounded time window, offset pagination, per-policy activity checks"
+  },
+  {
+   "skill": "fortigate-ops",
+   "class": "needs-creds",
+   "lines": 123,
+   "env": [
+    "FORTIGATE_API_TOKEN",
+    "FORTIGATE_HOST"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "FortiGate device operations \u2014 system status, interfaces, routing, IPsec VPN tunnel state with phase 1 and phase 2 reported separately, HA me"
+  },
+  {
+   "skill": "fortimanager-ops",
+   "class": "blocked-write",
+   "lines": 127,
+   "env": [
+    "FORTIMANAGER_API_TOKEN",
+    "FORTIMANAGER_HOST"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "FortiManager policy operations \u2014 ADOM inventory, policy package review, recursive object resolution, revision history, install preview, and "
+  },
+  {
+   "skill": "forward",
+   "class": "needs-creds",
+   "lines": 158,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Read-only Forward Networks analysis through Forward's official MCP server: trace packet paths, look up devices, interfaces, VLANs, VRFs, hos"
+  },
+  {
+   "skill": "fwrule-analyzer",
+   "class": "needs-creds",
+   "lines": 120,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Multi-vendor firewall rule analysis \u2014 overlap detection, shadowing, conflict identification, duplication checking across PAN-OS, ASA, FTD, I"
+  },
+  {
+   "skill": "gait-session-tracking",
+   "class": "needs-creds",
+   "lines": 193,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "GAIT session lifecycle management - branch creation, turn recording, audit logging for every NetClaw operation. Use when starting a new NetC"
+  },
+  {
+   "skill": "gcp-cloud-logging",
+   "class": "needs-creds",
+   "lines": 136,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "logging.googleapis.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Google Cloud Logging \u2014 log search, VPC flow logs, firewall logs, audit logs, log buckets and views. Use when searching GCP logs, investigati"
+  },
+  {
+   "skill": "gcp-cloud-monitoring",
+   "class": "needs-creds",
+   "lines": 95,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "monitoring.googleapis.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Google Cloud Monitoring \u2014 time series metrics, alert policies, active alerts, metric discovery. Use when checking GCP network performance, i"
+  },
+  {
+   "skill": "gcp-compute-ops",
+   "class": "blocked-write",
+   "lines": 158,
+   "env": [],
+   "write_tools": [
+    "create_instance",
+    "delete_instance",
+    "reset_instance",
+    "set_instance_machine_type"
+   ],
+   "hosts": [
+    "cloudresourcemanager.googleapis.com",
+    "compute.googleapis.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Google Cloud Compute Engine \u2014 VM instances, disks, templates, instance groups, reservations, project discovery. Use when listing GCP VMs, tr"
+  },
+  {
+   "skill": "github-ops",
+   "class": "blocked-write",
+   "lines": 69,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "GitHub repository operations \u2014 issues, PRs, code search, and config-as-code workflows. Use when creating a GitHub issue for a network findin"
+  },
+  {
+   "skill": "gitlab-devops",
+   "class": "blocked-write",
+   "lines": 582,
+   "env": [
+    "GITLAB_PERSONAL_ACCESS_TOKEN"
+   ],
+   "write_tools": [
+    "add_issue_comment",
+    "add_merge_request_comment",
+    "create_issue",
+    "create_label",
+    "create_merge_request",
+    "create_milestone"
+   ],
+   "hosts": [
+    "gitlab.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "GitLab DevOps operations \u2014 issues, merge requests, CI/CD pipelines, repository browsing, labels, milestones, releases, and wiki management. "
+  },
+  {
+   "skill": "globalping-external-checks",
+   "class": "blocked-write",
+   "lines": 234,
+   "env": [
+    "GLOBALPING_TOKEN"
+   ],
+   "write_tools": [
+    "run_show_command"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Measure a public endpoint from thousands of probes worldwide - ping, traceroute, DNS, MTR and HTTP from real vantage points on the internet."
+  },
+  {
+   "skill": "gnmi-telemetry",
+   "class": "blocked-write",
+   "lines": 95,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "gNMI streaming telemetry operations for multi-vendor network devices. Query device state via structured YANG model paths, subscribe to real-"
+  },
+  {
+   "skill": "gns3-link-management",
+   "class": "needs-creds",
+   "lines": 117,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage GNS3 links - connect/disconnect node interfaces, isolate nodes"
+  },
+  {
+   "skill": "gns3-node-operations",
+   "class": "needs-creds",
+   "lines": 127,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage GNS3 nodes - add from templates, start/stop/suspend/reload, console access"
+  },
+  {
+   "skill": "gns3-packet-capture",
+   "class": "needs-creds",
+   "lines": 108,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Capture network traffic on GNS3 links - start/stop captures, retrieve PCAP data"
+  },
+  {
+   "skill": "gns3-project-lifecycle",
+   "class": "blocked-write",
+   "lines": 104,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage GNS3 network lab projects - create, open, close, delete, clone, export/import"
+  },
+  {
+   "skill": "gns3-snapshot-ops",
+   "class": "needs-creds",
+   "lines": 122,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage GNS3 project snapshots - create, restore, delete for safe experimentation"
+  },
+  {
+   "skill": "grafana-observability",
+   "class": "blocked-write",
+   "lines": 237,
+   "env": [
+    "GRAFANA_SERVICE_ACCOUNT_TOKEN",
+    "GRAFANA_URL"
+   ],
+   "write_tools": [
+    "add_activity_to_incident",
+    "create_alert_rule",
+    "create_annotation",
+    "create_incident",
+    "delete_alert_rule",
+    "patch_dashboard"
+   ],
+   "hosts": [
+    "github.com",
+    "grafana.example.com:3000"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Grafana observability platform \u2014 dashboards, Prometheus PromQL, Loki LogQL, alerting, incidents, OnCall schedules, annotations, datasource q"
+  },
+  {
+   "skill": "gtrace-ip-enrichment",
+   "class": "needs-creds",
+   "lines": 126,
+   "env": [
+    "GTRACE_MCP_BIN"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "IP address enrichment \u2014 ASN ownership lookup, geolocation (city/region/country/coordinates), and reverse DNS resolution. Use when identifyin"
+  },
+  {
+   "skill": "gtrace-path-analysis",
+   "class": "needs-creds",
+   "lines": 125,
+   "env": [
+    "GTRACE_MCP_BIN"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Network path tracing and monitoring \u2014 traceroute with MPLS/ECMP/NAT detection, continuous MTR monitoring, and distributed GlobalPing probes "
+  },
+  {
+   "skill": "halo-asset-context",
+   "class": "needs-creds",
+   "lines": 111,
+   "env": [
+    "HALO_BASE_URL",
+    "HALO_CLIENT_ID",
+    "HALO_CLIENT_SECRET"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "<tenant"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Review a HaloPSA / HaloITSM asset (Device) with its related tickets and CMDB/CI relationships \u2014 read-only. Use when investigating a Halo ass"
+  },
+  {
+   "skill": "halo-change-request",
+   "class": "needs-creds",
+   "lines": 177,
+   "env": [
+    "HALO_BASE_URL",
+    "HALO_CLIENT_ID",
+    "HALO_CLIENT_SECRET"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "<tenant"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Open a change request in HaloPSA / HaloITSM through a discover-preview-confirm-submit workflow, with the confirmed change ticket type cached"
+  },
+  {
+   "skill": "halo-ticket-context",
+   "class": "needs-creds",
+   "lines": 116,
+   "env": [
+    "HALO_BASE_URL",
+    "HALO_CLIENT_ID",
+    "HALO_CLIENT_SECRET"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "<tenant"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Review a HaloPSA / HaloITSM ticket for resolution context \u2014 its detail, action/note history, linked assets, and related KB runbooks \u2014 read-o"
+  },
+  {
+   "skill": "hardware-health-check",
+   "class": "needs-creds",
+   "lines": 102,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "10.0.0.5"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Out-of-band hardware health via Redfish BMC (read-only) \u2014 power state, component health, thermal and power readings, firmware inventory, SEL"
+  },
+  {
+   "skill": "hermes-hud-diagnostics",
+   "class": "needs-creds",
+   "lines": 20,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Diagnose selected Hermes HUD readiness and uncertainty without submitting agent work or registering recursive conversation tools."
+  },
+  {
+   "skill": "humanrail-escalation",
+   "class": "blocked-write",
+   "lines": 318,
+   "env": [
+    "HUMANRAIL_API_KEY",
+    "HUMANRAIL_MCP_URL"
+   ],
+   "write_tools": [
+    "create_task"
+   ],
+   "hosts": [
+    "127.0.0.1:8100",
+    "api.humanrail.dev",
+    "github.com",
+    "humanrail.dev"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Human-in-the-loop escalation via HumanRail \u2014 route low-confidence agent decisions, pre-destructive operation approvals, and ambiguous incide"
+  },
+  {
+   "skill": "infoblox-ddi",
+   "class": "blocked-write",
+   "lines": 77,
+   "env": [
+    "INFOBLOX_API_KEY",
+    "INFOBLOX_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Infoblox DDI operations \u2014 DNS zones/records, DHCP scopes and leases, IPAM networks and address utilization. Use when checking DNS records, v"
+  },
+  {
+   "skill": "infrahub-sot",
+   "class": "blocked-write",
+   "lines": 222,
+   "env": [],
+   "write_tools": [
+    "reset_session_branch"
+   ],
+   "hosts": [
+    "docs.infrahub.app",
+    "github.com",
+    "infrahub.example.com:8000"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "OpsMill Infrahub \u2014 infrastructure source of truth with schema-driven nodes, GraphQL queries, and branch-isolated changes. Use when querying "
+  },
+  {
+   "skill": "ipfabric",
+   "class": "blocked-write",
+   "lines": 288,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "docs.ipfabric.io",
+    "ipfabric.example.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Query IP Fabric network assurance, intent checks, inventory, paths, and diagrams. Use when IP Fabric is the requested source of network evid"
+  },
+  {
+   "skill": "ipfix-receiver",
+   "class": "offline-tool",
+   "lines": 119,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Receive and query IPFIX and NetFlow flow records from network devices via UDP."
+  },
+  {
+   "skill": "ise-incident-response",
+   "class": "blocked-write",
+   "lines": 277,
+   "env": [
+    "ISE_BASE"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Rapid ISE endpoint investigation and quarantine workflow - endpoint lookup, auth history, posture review, human-authorized quarantine, Servi"
+  },
+  {
+   "skill": "ise-posture-audit",
+   "class": "needs-creds",
+   "lines": 257,
+   "env": [
+    "ISE_BASE"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco ISE posture and policy audit - authorization rules, posture compliance, profiling gaps, TrustSec SGT matrix, active session health. Us"
+  },
+  {
+   "skill": "itential-automation",
+   "class": "blocked-write",
+   "lines": 349,
+   "env": [
+    "ITENTIAL_MCP_PLATFORM_HOST"
+   ],
+   "write_tools": [
+    "add_devices_to_group",
+    "add_golden_config_node",
+    "add_nodes_to_inventory",
+    "apply_device_configuration",
+    "create_command_template",
+    "create_device_group"
+   ],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Itential Automation Platform (IAP) \u2014 network automation orchestration, device configuration management, compliance enforcement, workflow exe"
+  },
+  {
+   "skill": "jenkins-cicd",
+   "class": "needs-creds",
+   "lines": 369,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Jenkins CI/CD pipeline management \u2014 monitor builds, trigger pipelines, analyze logs, and track SCM changes for network automation workflows."
+  },
+  {
+   "skill": "jev-answer-review",
+   "class": "blocked-write",
+   "lines": 33,
+   "env": [
+    "JEV_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Judge a proposed operational answer against the human request and retrieved evidence with freshly authored Jev questions. Use before Border "
+  },
+  {
+   "skill": "jev-change-review",
+   "class": "blocked-write",
+   "lines": 33,
+   "env": [
+    "JEV_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Review a proposed network change plan, its evidence and rollback completeness with dynamic advisory Jev questions. Use during change prepara"
+  },
+  {
+   "skill": "jev-diagnostic-advice",
+   "class": "blocked-write",
+   "lines": 33,
+   "env": [
+    "JEV_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Compare current diagnostic hypotheses and authorized read-only next observations with dynamic Jev questions. Use when troubleshooting has mu"
+  },
+  {
+   "skill": "jev-evidence-review",
+   "class": "blocked-write",
+   "lines": 33,
+   "env": [
+    "JEV_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Assess how well current member observations support a proposed network claim using dynamically authored Jev questions. Use before consequent"
+  },
+  {
+   "skill": "jev-incident-triage",
+   "class": "blocked-write",
+   "lines": 33,
+   "env": [
+    "JEV_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Advise on an observed incident\u2019s severity, competing interpretations and escalation need using dynamic Jev judgments. Use when triage needs "
+  },
+  {
+   "skill": "jev-specialist-advice",
+   "class": "blocked-write",
+   "lines": 33,
+   "env": [
+    "JEV_ENABLED"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Advise Border on a suitable eligible skill or RISK specialist for the current request using dynamic Jev comparisons. Use when multiple autho"
+  },
+  {
+   "skill": "junos-network",
+   "class": "blocked-write",
+   "lines": 235,
+   "env": [
+    "JUNOS_DEVICES_FILE"
+   ],
+   "write_tools": [
+    "add_device",
+    "commit_comment",
+    "execute_junos_command",
+    "execute_junos_command_batch",
+    "reload_devices"
+   ],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Juniper JunOS device automation via PyEZ/NETCONF \u2014 CLI execution, configuration management, Jinja2 template rendering, device facts, batch o"
+  },
+  {
+   "skill": "k8s-network-policy",
+   "class": "needs-creds",
+   "lines": 126,
+   "env": [
+    "K8S_KUBECONFIG"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Review Kubernetes NetworkPolicies \u2014 what is actually permitted to reach a workload, and whether the answer can be trusted. Use when asked wh"
+  },
+  {
+   "skill": "k8s-service-path",
+   "class": "needs-creds",
+   "lines": 82,
+   "env": [
+    "K8S_KUBECONFIG"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Trace the Kubernetes service path \u2014 Service to selector to pods to EndpointSlices to readiness, plus Ingress routing. Use when a service is "
+  },
+  {
+   "skill": "k8s-workload-inventory",
+   "class": "needs-creds",
+   "lines": 73,
+   "env": [
+    "K8S_KUBECONFIG"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "List Kubernetes workloads and namespaces \u2014 pods with their node, phase and readiness, plus events. Use when asked what is running, where it "
+  },
+  {
+   "skill": "kepner-tregoe-network-troubleshooting",
+   "class": "needs-creds",
+   "lines": 177,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": ">-"
+  },
+  {
+   "skill": "kubeshark-traffic",
+   "class": "blocked-write",
+   "lines": 173,
+   "env": [
+    "KUBESHARK_MCP_URL"
+   ],
+   "write_tools": [
+    "apply_filter",
+    "create_snapshot"
+   ],
+   "hosts": [
+    "docs.kubeshark.com",
+    "github.com",
+    "localhost:8898"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Kubeshark Kubernetes traffic analysis \u2014 L4/L7 deep packet inspection, TLS decryption, pcap export, flow analysis, service mapping (6 tools)."
+  },
+  {
+   "skill": "markmap-viz",
+   "class": "needs-creds",
+   "lines": 89,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Create interactive mind map visualizations from markdown - network inventory, OSPF areas, BGP topology, security audit results. Use when vis"
+  },
+  {
+   "skill": "memory",
+   "class": "blocked-write",
+   "lines": 130,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "NetClaw's native persistent memory (spec 033) \u2014 structured facts with temporal validity, semantic search across past sessions, decision logg"
+  },
+  {
+   "skill": "mempalace",
+   "class": "egress-public",
+   "lines": 261,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "MemPalace AI memory \u2014 an alternate, community memory tool (wing/room/drawer model plus its own knowledge graph) \u2014 persistent memory across s"
+  },
+  {
+   "skill": "meraki-monitoring",
+   "class": "blocked-write",
+   "lines": 126,
+   "env": [],
+   "write_tools": [
+    "execute_api"
+   ],
+   "hosts": [
+    "developer.cisco.com",
+    "github.com",
+    "mcp.meraki.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco Meraki monitoring and diagnostics (read-only) \u2014 device availability, loss and latency history, uplink status, live tool results, confi"
+  },
+  {
+   "skill": "meraki-network-ops",
+   "class": "blocked-write",
+   "lines": 133,
+   "env": [],
+   "write_tools": [
+    "execute_api"
+   ],
+   "hosts": [
+    "developer.cisco.com",
+    "github.com",
+    "mcp.meraki.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco Meraki organization and network operations (read-only) \u2014 org discovery, network inventory, device inventory, clients, group policies, "
+  },
+  {
+   "skill": "meraki-security-appliance",
+   "class": "blocked-write",
+   "lines": 119,
+   "env": [],
+   "write_tools": [
+    "execute_api"
+   ],
+   "hosts": [
+    "developer.cisco.com",
+    "github.com",
+    "mcp.meraki.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco Meraki MX security appliance (read-only) \u2014 L3/L7 firewall rules, content filtering, IDS/IPS and AMP settings, site-to-site VPN, traffi"
+  },
+  {
+   "skill": "meraki-switch-ops",
+   "class": "blocked-write",
+   "lines": 111,
+   "env": [],
+   "write_tools": [
+    "execute_api"
+   ],
+   "hosts": [
+    "developer.cisco.com",
+    "github.com",
+    "mcp.meraki.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco Meraki switching (read-only) \u2014 port configuration and status, VLANs, ACLs, QoS, STP, link aggregation, routing interfaces via Cisco's "
+  },
+  {
+   "skill": "meraki-wireless-ops",
+   "class": "blocked-write",
+   "lines": 116,
+   "env": [],
+   "write_tools": [
+    "execute_api"
+   ],
+   "hosts": [
+    "developer.cisco.com",
+    "github.com",
+    "mcp.meraki.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco Meraki wireless (read-only) \u2014 SSID configuration, RF profiles, Air Marshal, channel utilization, signal quality, client connectivity e"
+  },
+  {
+   "skill": "msgraph-files",
+   "class": "needs-creds",
+   "lines": 86,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "www.npmjs.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Read OneDrive and SharePoint files via the Microsoft 365 MCP server \u2014 list folder contents, fetch item metadata, inspect versions and sharin"
+  },
+  {
+   "skill": "msgraph-visio",
+   "class": "needs-creds",
+   "lines": 87,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "www.npmjs.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Upload and retrieve Visio (.vsdx) and other diagram files in OneDrive/SharePoint via the Microsoft 365 MCP server. Use when publishing a gen"
+  },
+  {
+   "skill": "multivendor-device-query",
+   "class": "blocked-write",
+   "lines": 110,
+   "env": [],
+   "write_tools": [
+    "apply_config"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Query normalized device facts across mixed vendors or platforms without a dedicated NetClaw server. Use pyATS or Junos skills for their plat"
+  },
+  {
+   "skill": "multivendor-fleet-ops",
+   "class": "blocked-write",
+   "lines": 71,
+   "env": [],
+   "write_tools": [
+    "apply_config",
+    "run_fleet"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Run read-only queries across multivendor device groups with explicit per-device outcomes. Use when the same operational question covers a fl"
+  },
+  {
+   "skill": "multivendor-raw-cli",
+   "class": "blocked-write",
+   "lines": 72,
+   "env": [],
+   "write_tools": [
+    "apply_config",
+    "run_command"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Check reachability and run operational CLI on platforms owned by multivendor-cli-mcp. Use after confirming device ownership; Cisco and Junip"
+  },
+  {
+   "skill": "n2n-federation",
+   "class": "blocked-write",
+   "lines": 475,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "127.0.0.1:8179"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Federate your NetClaw with other NetClaw operators over the BGP mesh \u2014 exchange capability inventories and ask your claw what a peer can do."
+  },
+  {
+   "skill": "nautobot-sot",
+   "class": "needs-creds",
+   "lines": 152,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com",
+    "nautobot.example.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Nautobot IPAM & source of truth \u2014 IP address queries, prefix lookups, VRF/tenant/site filtering, IPAM search, connection testing. Use when l"
+  },
+  {
+   "skill": "netbox-reconcile",
+   "class": "blocked-write",
+   "lines": 424,
+   "env": [
+    "PYATS_TESTBED_PATH"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Reconcile NetBox source of truth against live network state - detect IP drift, missing interfaces, undocumented links, cable mismatches, VLA"
+  },
+  {
+   "skill": "netconverter",
+   "class": "needs-creds",
+   "lines": 56,
+   "env": [
+    "NETCONVERTER_MODE"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "github.com",
+    "netconverter.ai"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Convert, validate and optimize supported network configuration files with NetConverter, then rehearse migration candidates on eligible virtu"
+  },
+  {
+   "skill": "network-data-analysis",
+   "class": "needs-creds",
+   "lines": 113,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Ad-hoc read-only SQL analysis over exported network data (Zeek logs, Suricata eve.json, generated reports) using DuckDB. Use when aggregatin"
+  },
+  {
+   "skill": "network-report-documents",
+   "class": "blocked-write",
+   "lines": 122,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "The four standard NetClaw document compositions \u2014 a change-record Word document from a real ServiceNow CR plus device state, an interface/co"
+  },
+  {
+   "skill": "nmap-network-scan",
+   "class": "needs-creds",
+   "lines": 138,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Host discovery and port scanning using nmap \u2014 ICMP/ARP host discovery, SYN/TCP/UDP port scanning with scope enforcement and audit logging. U"
+  },
+  {
+   "skill": "nmap-scan-management",
+   "class": "offline-tool",
+   "lines": 125,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Custom nmap scans with arbitrary flags, plus scan history retrieval and management. Use when running nmap with custom flags, reviewing past "
+  },
+  {
+   "skill": "nmap-service-detection",
+   "class": "needs-creds",
+   "lines": 158,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Service fingerprinting, OS detection, NSE script execution, and vulnerability scanning using nmap MCP. Use when identifying services on open"
+  },
+  {
+   "skill": "nsm-ids-triage",
+   "class": "offline-tool",
+   "lines": 81,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Triage Suricata IDS alerts from a packet capture (read-only) \u2014 signature alerts with detection posture, severity filtering, and corroboratio"
+  },
+  {
+   "skill": "nsm-session-pivot",
+   "class": "offline-tool",
+   "lines": 92,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Pivot through Zeek session and protocol metadata from a packet capture (read-only) \u2014 connection listing, service filtering, and following a "
+  },
+  {
+   "skill": "nso-device-ops",
+   "class": "needs-creds",
+   "lines": 128,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "resources.cisco-nso-mcp.io"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco NSO device operations \u2014 config retrieval, state inspection, sync, platform info, NED IDs, device groups. Use when retrieving device co"
+  },
+  {
+   "skill": "nso-service-mgmt",
+   "class": "blocked-write",
+   "lines": 135,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco NSO service management \u2014 discover service types, list service instances, orchestrate network services. Use when listing NSO services, "
+  },
+  {
+   "skill": "nvd-cve",
+   "class": "needs-creds",
+   "lines": 173,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Search the National Vulnerability Database for CVEs - find vulnerabilities by keyword or ID, get CVSS scores, weaknesses, affected configura"
+  },
+  {
+   "skill": "packet-analysis",
+   "class": "blocked-write",
+   "lines": 92,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Analyze network packet captures (.pcap/.pcapng) using Packet Buddy MCP. Use when opening a pcap file, inspecting packet captures, troublesho"
+  },
+  {
+   "skill": "pagerduty-incidents",
+   "class": "blocked-write",
+   "lines": 91,
+   "env": [],
+   "write_tools": [
+    "add_note_to_incident",
+    "add_responders",
+    "create_incident"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage and investigate incidents in PagerDuty."
+  },
+  {
+   "skill": "pagerduty-oncall",
+   "class": "blocked-write",
+   "lines": 92,
+   "env": [],
+   "write_tools": [
+    "create_schedule",
+    "create_schedule_override",
+    "update_schedule"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage on-call schedules and escalation policies in PagerDuty."
+  },
+  {
+   "skill": "pagerduty-orchestration",
+   "class": "blocked-write",
+   "lines": 88,
+   "env": [],
+   "write_tools": [
+    "update_event_orchestration_router"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage event orchestration and routing rules in PagerDuty."
+  },
+  {
+   "skill": "pagerduty-services",
+   "class": "blocked-write",
+   "lines": 85,
+   "env": [],
+   "write_tools": [
+    "create_service",
+    "update_service"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage service catalog and service health in PagerDuty."
+  },
+  {
+   "skill": "paloalto-panorama",
+   "class": "blocked-write",
+   "lines": 70,
+   "env": [
+    "PANOS_API_KEY",
+    "PANOS_HOSTNAME"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Palo Alto Panorama operations \u2014 device groups, templates, security policy search, NAT review, commit status, and audit workflows. Use when s"
+  },
+  {
+   "skill": "percepxion-oob",
+   "class": "blocked-write",
+   "lines": 1123,
+   "env": [
+    "PERCEPXION_PASSWORD",
+    "PERCEPXION_USERNAME"
+   ],
+   "write_tools": [
+    "apply_config_commands",
+    "import_and_assign_devices",
+    "remove_device_from_platform",
+    "send_direct_cli_command",
+    "update_device_config",
+    "update_firmware_by_smart_group"
+   ],
+   "hosts": [
+    "api.gopercepxion.ai",
+    "api.percepxion.ai",
+    "cdn.lantronix.com",
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage Lantronix out-of-band (OOB) infrastructure via Percepxion central management platform: device inventory, serial port inspection via S"
+  },
+  {
+   "skill": "prisma-sdwan-apps",
+   "class": "blocked-write",
+   "lines": 123,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "View Prisma SD-WAN application definitions for policy visibility"
+  },
+  {
+   "skill": "prisma-sdwan-config",
+   "class": "blocked-write",
+   "lines": 176,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Inspect Prisma SD-WAN interfaces, routing (BGP, static), policies, and security zones"
+  },
+  {
+   "skill": "prisma-sdwan-status",
+   "class": "blocked-write",
+   "lines": 157,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Monitor Prisma SD-WAN element health, software versions, events, and alarms"
+  },
+  {
+   "skill": "prisma-sdwan-topology",
+   "class": "blocked-write",
+   "lines": 157,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Discover Prisma SD-WAN sites, ION elements, machines, and network topology"
+  },
+  {
+   "skill": "prometheus-monitoring",
+   "class": "blocked-write",
+   "lines": 151,
+   "env": [
+    "PROMETHEUS_URL"
+   ],
+   "write_tools": [
+    "execute_query",
+    "execute_range_query"
+   ],
+   "hosts": [
+    "github.com",
+    "prom.example.com",
+    "prometheus:9090"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Prometheus monitoring \u2014 PromQL instant/range queries, metric discovery, metadata, scrape target health, system health checks (6 tools). Use "
+  },
+  {
+   "skill": "protocol-participation",
+   "class": "blocked-write",
+   "lines": 287,
+   "env": [
+    "NETCLAW_ROUTER_ID"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Live BGP and OSPF control-plane participation \u2014 NetClaw itself acts as a protocol speaker: peer with real routers, inject/withdraw routes, q"
+  },
+  {
+   "skill": "pyats-asa-firewall",
+   "class": "blocked-write",
+   "lines": 315,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco ASA firewall operations via pyATS \u2014 VPN sessions, failover state, interfaces, routing, service policies, resource usage, AnyConnect mo"
+  },
+  {
+   "skill": "pyats-config-mgmt",
+   "class": "blocked-write",
+   "lines": 349,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Direct, pyATS-based network change management - pre-change baselines, configuration deployment, post-change verification, rollback procedure"
+  },
+  {
+   "skill": "pyats-dynamic-test",
+   "class": "needs-creds",
+   "lines": 197,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Generate and execute deterministic pyATS aetest validation scripts - interface state, OSPF neighbors, BGP paths, ping matrices, and custom c"
+  },
+  {
+   "skill": "pyats-f5-ltm",
+   "class": "blocked-write",
+   "lines": 453,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "F5 BIG-IP LTM/GTM operations via pyATS iControl REST \u2014 virtual servers, pools, nodes, monitors, profiles, iRules, persistence, GTM wide IPs,"
+  },
+  {
+   "skill": "pyats-f5-platform",
+   "class": "blocked-write",
+   "lines": 588,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "F5 BIG-IP platform operations via pyATS iControl REST \u2014 system, networking, HA/CM, auth, analytics, security, APM, live-update, ADC certs, f"
+  },
+  {
+   "skill": "pyats-health-check",
+   "class": "needs-creds",
+   "lines": 289,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Comprehensive cross-platform network device health monitoring - CPU, memory, interfaces, hardware, NTP, logging, environment, and uptime ana"
+  },
+  {
+   "skill": "pyats-junos-interfaces",
+   "class": "needs-creds",
+   "lines": 217,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "JunOS interface operations via pyATS \u2014 physical/logical interfaces, LACP, CoS, LLDP, ARP, BFD, IPv6 neighbors, traffic monitoring, optics di"
+  },
+  {
+   "skill": "pyats-junos-routing",
+   "class": "needs-creds",
+   "lines": 344,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "JunOS routing operations via pyATS \u2014 OSPF/OSPFv3, BGP, route table, MPLS/LDP/RSVP, TED, PFE, ping, traceroute across Juniper devices. Use wh"
+  },
+  {
+   "skill": "pyats-junos-system",
+   "class": "needs-creds",
+   "lines": 324,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "JunOS system operations via pyATS \u2014 chassis health, hardware inventory, system info, NTP, SNMP, files/logs, firewall counters, DDoS protecti"
+  },
+  {
+   "skill": "pyats-linux-network",
+   "class": "blocked-write",
+   "lines": 220,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Linux host network operations via pyATS \u2014 interface configuration, routing tables, network connections, and multi-table route inspection acr"
+  },
+  {
+   "skill": "pyats-linux-system",
+   "class": "blocked-write",
+   "lines": 212,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Linux host system operations via pyATS \u2014 process monitoring, filesystem inspection, Docker container stats, package/tool verification across"
+  },
+  {
+   "skill": "pyats-linux-vmware",
+   "class": "blocked-write",
+   "lines": 201,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "VMware ESXi host operations via pyATS \u2014 VM inventory, snapshot management, hypervisor inspection across ESXi hosts in the testbed. Use when "
+  },
+  {
+   "skill": "pyats-network",
+   "class": "blocked-write",
+   "lines": 302,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Network device automation via pyATS - run show commands, ping, apply config, learn config/logging, list devices, run Linux commands on Cisco"
+  },
+  {
+   "skill": "pyats-parallel-ops",
+   "class": "blocked-write",
+   "lines": 122,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Fleet-wide parallel device operations: concurrent health checks, config audits, routing snapshots, severity-sorted reporting, and failure-is"
+  },
+  {
+   "skill": "pyats-routing",
+   "class": "needs-creds",
+   "lines": 263,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "CCIE-level routing protocol analysis for Cisco IOS/IOS-XE/NX-OS devices - OSPF, BGP, EIGRP, IS-IS, static routes, RIB/FIB verification, redi"
+  },
+  {
+   "skill": "pyats-security",
+   "class": "needs-creds",
+   "lines": 252,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": true,
+   "description": "Network security audit - ACLs, AAA, control plane policing, management plane hardening, encryption, port security, and CIS benchmark checks."
+  },
+  {
+   "skill": "pyats-topology",
+   "class": "blocked-write",
+   "lines": 222,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Network topology discovery via CDP/LLDP neighbors, ARP tables, routing peers, and interface mapping to build complete network maps. Use when"
+  },
+  {
+   "skill": "pyats-troubleshoot",
+   "class": "needs-creds",
+   "lines": 363,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Systematic network troubleshooting - connectivity, routing, interface, protocol, and performance issues using structured OSI-layer and divid"
+  },
+  {
+   "skill": "radkit-remote-access",
+   "class": "blocked-write",
+   "lines": 190,
+   "env": [],
+   "write_tools": [
+    "exec_cli_commands_in_device",
+    "exec_command"
+   ],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco RADKit \u2014 cloud-relayed remote device access, CLI execution, SNMP polling, device inventory discovery, attribute inspection. Use when a"
+  },
+  {
+   "skill": "rag",
+   "class": "blocked-write",
+   "lines": 179,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Ingest user-selected documents and retrieve cited procedures, standards, and design evidence from the local RAG knowledge base. Use for docu"
+  },
+  {
+   "skill": "result-analysis",
+   "class": "offline-tool",
+   "lines": 44,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Complete, read-only counting, filtering, paging and text search over a large diagnostic result that a tool returned as a handle envelope (in"
+  },
+  {
+   "skill": "rfc-lookup",
+   "class": "egress-public",
+   "lines": 69,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Search and retrieve IETF RFC documents - lookup by number, search by keyword, extract sections. Use when looking up an RFC, checking protoco"
+  },
+  {
+   "skill": "sdwan-ops",
+   "class": "needs-creds",
+   "lines": 138,
+   "env": [
+    "VMANAGE_IP",
+    "VMANAGE_PASSWORD",
+    "VMANAGE_USERNAME"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco SD-WAN vManage read-only operations \u2014 fabric devices, WAN Edge inventory, templates, policies, alarms, events, interface stats, BFD se"
+  },
+  {
+   "skill": "servicenow-change-workflow",
+   "class": "blocked-write",
+   "lines": 371,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Full ITSM-gated change lifecycle - CR creation, pre-change incident validation, approval gate, execution via pyats-config-mgmt, post-change "
+  },
+  {
+   "skill": "slack-incident-workflow",
+   "class": "blocked-write",
+   "lines": 229,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage network incident response workflows in Slack - incident channels, status updates, escalation, resolution tracking, and post-incident "
+  },
+  {
+   "skill": "slack-network-alerts",
+   "class": "blocked-write",
+   "lines": 208,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Format and deliver network alerts, health warnings, and critical notifications via Slack with rich formatting, reactions, and file attachmen"
+  },
+  {
+   "skill": "slack-report-delivery",
+   "class": "blocked-write",
+   "lines": 229,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Deliver formatted network reports, audit results, topology diagrams, and compliance documentation to Slack channels with rich Block Kit form"
+  },
+  {
+   "skill": "slack-user-context",
+   "class": "blocked-write",
+   "lines": 162,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Leverage Slack user profiles, presence, DND status, and workspace context to personalize responses, route escalations, and coordinate team o"
+  },
+  {
+   "skill": "slack-voice-interface",
+   "class": "blocked-write",
+   "lines": 112,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Respond to Slack voice clips with both text and an MP3 voice reply using edge-tts. Voice IN is already handled by OpenClaw transcription. Us"
+  },
+  {
+   "skill": "snmptrap-receiver",
+   "class": "needs-creds",
+   "lines": 108,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Receive and query SNMP traps from network devices via UDP."
+  },
+  {
+   "skill": "splunk-indexes",
+   "class": "needs-creds",
+   "lines": 46,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Discover and inspect Splunk indexes and configuration."
+  },
+  {
+   "skill": "splunk-saved",
+   "class": "blocked-write",
+   "lines": 46,
+   "env": [],
+   "write_tools": [
+    "run_saved_search"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage and run saved searches in Splunk."
+  },
+  {
+   "skill": "splunk-search",
+   "class": "needs-creds",
+   "lines": 57,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Execute and validate SPL (Search Processing Language) queries."
+  },
+  {
+   "skill": "subnet-calculator",
+   "class": "offline-tool",
+   "lines": 249,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "IPv4 and IPv6 subnet calculator - CIDR breakdown, usable hosts, previous/next subnets, address classification, VLSM planning, and dual-stack"
+  },
+  {
+   "skill": "suzieq-observability",
+   "class": "needs-creds",
+   "lines": 97,
+   "env": [
+    "SUZIEQ_API_KEY",
+    "SUZIEQ_API_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "SuzieQ network observability \u2014 query current and historical network state, run validation assertions, get summary statistics, trace forwardi"
+  },
+  {
+   "skill": "syslog-receiver",
+   "class": "offline-tool",
+   "lines": 108,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Receive and query syslog messages from network devices via UDP."
+  },
+  {
+   "skill": "tavus-pal",
+   "class": "needs-creds",
+   "lines": 29,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Set up or troubleshoot the optional Tavus voice companion in the NetClaw HUD, including stock faces, free allowance, local icon and interrup"
+  },
+  {
+   "skill": "te-network-monitoring",
+   "class": "needs-creds",
+   "lines": 180,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "api.thousandeyes.com",
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco ThousandEyes \u2014 test management, agent inventory, test results, dashboards, path visualization, user/account management. Use when check"
+  },
+  {
+   "skill": "te-path-analysis",
+   "class": "needs-creds",
+   "lines": 147,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "api.thousandeyes.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Cisco ThousandEyes \u2014 path visualization, BGP route analysis, outage investigation, instant tests, endpoint agent diagnostics. Requires Thous"
+  },
+  {
+   "skill": "telemetry-ops",
+   "class": "needs-creds",
+   "lines": 169,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Comprehensive network telemetry and event collection across multiple protocols."
+  },
+  {
+   "skill": "terraform-operations",
+   "class": "blocked-write",
+   "lines": 58,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Execute local Terraform operations with ServiceNow change control."
+  },
+  {
+   "skill": "terraform-registry",
+   "class": "needs-creds",
+   "lines": 50,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Discover providers and modules from the Terraform Registry."
+  },
+  {
+   "skill": "terraform-workspaces",
+   "class": "blocked-write",
+   "lines": 53,
+   "env": [],
+   "write_tools": [
+    "create_workspace",
+    "delete_workspace",
+    "update_workspace"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage HCP Terraform (Terraform Cloud/Enterprise) workspaces."
+  },
+  {
+   "skill": "threejs-network-viz",
+   "class": "needs-creds",
+   "lines": 101,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "sketchfab.com"
+   ],
+   "scripts": [
+    "output.py",
+    "scene_builder.py",
+    "layout.py",
+    "sources.py",
+    "materials.py",
+    "topology_model.py",
+    "__init__.py",
+    "assets.py",
+    "html_template.py",
+    "three.js",
+    "OrbitControls.js",
+    "GLTFLoader.js"
+   ],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Generate browser-based interactive 3D network topology visualizations from inventory or a topology description. Use when a portable HTML sce"
+  },
+  {
+   "skill": "token-tracker",
+   "class": "needs-creds",
+   "lines": 226,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Track token consumption, enforce session budgets, and display cost for every NetClaw interaction."
+  },
+  {
+   "skill": "topolograph-bgp-analysis",
+   "class": "needs-creds",
+   "lines": 99,
+   "env": [
+    "TOPOLOGRAPH_API_TOKEN"
+   ],
+   "write_tools": [],
+   "hosts": [
+    "topolograph.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Reason over BGP topology as a whole -- speakers, peering sessions, the route table, VRF/VPN membership, and whether a BGP epoch is bound to "
+  },
+  {
+   "skill": "topolograph-igp-analysis",
+   "class": "blocked-write",
+   "lines": 103,
+   "env": [
+    "TOPOLOGRAPH_API_TOKEN"
+   ],
+   "write_tools": [
+    "add_lsp",
+    "delete_lsp",
+    "update_lsp",
+    "upload_graph"
+   ],
+   "hosts": [
+    "topolograph.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Reason over the OSPF/IS-IS link-state topology as a whole \u2014 shortest and backup paths, per-area LSDB, edge and node failure simulation, MPLS"
+  },
+  {
+   "skill": "twilio-daily-briefing",
+   "class": "blocked-write",
+   "lines": 221,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Prepare and deliver configured daily network briefings by Twilio phone call. Use for an authorized briefing schedule or an explicit briefing"
+  },
+  {
+   "skill": "twilio-emergency-call",
+   "class": "blocked-write",
+   "lines": 208,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Deliver critical network incident alerts through Twilio under the configured escalation policy. Use for an authorized emergency-call workflo"
+  },
+  {
+   "skill": "twilio-inbound-voice",
+   "class": "needs-creds",
+   "lines": 254,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Handle inbound Twilio voice conversations for network status and operational requests. Use for the inbound voice channel and its caller chec"
+  },
+  {
+   "skill": "twilio-outbound-call",
+   "class": "blocked-write",
+   "lines": 215,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Place requested Twilio calls with network status or incident updates. Use for an explicit call request or an authorized recurring update sch"
+  },
+  {
+   "skill": "twitter-check",
+   "class": "needs-creds",
+   "lines": 57,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Check Twitter mentions and prepare the configured response workflow. Use for twitter-check requests; preview and posting follow the operator"
+  },
+  {
+   "skill": "twitter-heartbeat",
+   "class": "blocked-write",
+   "lines": 214,
+   "env": [],
+   "write_tools": [
+    "post_heartbeat"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage configured Twitter heartbeat posts and mention monitoring. Use for an enabled, authorized social schedule or heartbeat management req"
+  },
+  {
+   "skill": "twitter-respond",
+   "class": "needs-creds",
+   "lines": 148,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "twitter.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Review Twitter mentions and prepare technical replies with conversation context. Use for mention-response workflows; posting requires the do"
+  },
+  {
+   "skill": "twitter-share",
+   "class": "needs-creds",
+   "lines": 203,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Draft and publish user-requested Twitter content through content checks and approval. Use when the operator explicitly requests a tweet or t"
+  },
+  {
+   "skill": "ue5-network-viz",
+   "class": "blocked-write",
+   "lines": 623,
+   "env": [
+    "UE5_MCP_URL"
+   ],
+   "write_tools": [
+    "execute_tool_script",
+    "set_actor_label",
+    "set_actor_transform"
+   ],
+   "hosts": [
+    "127.0.0.1:8000",
+    "www.unrealengine.com"
+   ],
+   "scripts": [
+    "renderer.py",
+    "incidents.py",
+    "hierarchy.py",
+    "layout.py",
+    "diagnostics.py",
+    "scene.py",
+    "ue5_mcp_client.py",
+    "materials.py",
+    "camera.py",
+    "__init__.py",
+    "actors.py",
+    "telemetry.py",
+    "playback.py",
+    "panels.py",
+    "netclaw_actor_toolset.py"
+   ],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "3D network topology visualization and interactive digital twin in Unreal Engine 5.8 via the built-in UE5 MCP server."
+  },
+  {
+   "skill": "uml-diagram",
+   "class": "blocked-write",
+   "lines": 417,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "github.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "UML and diagram generation via Kroki \u2014 class, sequence, activity, state, component, deployment, network, ER, C4, Mermaid, D2, Graphviz, BPMN"
+  },
+  {
+   "skill": "vault-mounts",
+   "class": "blocked-write",
+   "lines": 51,
+   "env": [],
+   "write_tools": [
+    "create_mount",
+    "delete_mount"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Discover and manage HashiCorp Vault secret engine mounts."
+  },
+  {
+   "skill": "vault-pki",
+   "class": "blocked-write",
+   "lines": 55,
+   "env": [],
+   "write_tools": [
+    "create_pki_issuer",
+    "create_pki_role",
+    "enable_pki"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage HashiCorp Vault PKI certificate infrastructure."
+  },
+  {
+   "skill": "vault-secrets",
+   "class": "blocked-write",
+   "lines": 58,
+   "env": [],
+   "write_tools": [
+    "delete_secret",
+    "write_secret"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage HashiCorp Vault KV secrets with strict value protection."
+  },
+  {
+   "skill": "webex-incident-workflow",
+   "class": "blocked-write",
+   "lines": 302,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage network incident response workflows in Cisco WebEx - incident spaces, status updates, escalation, resolution tracking, and post-incid"
+  },
+  {
+   "skill": "webex-network-alerts",
+   "class": "blocked-write",
+   "lines": 261,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "adaptivecards.io",
+    "webexapis.com"
+   ],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Format and deliver network alerts, health warnings, and critical notifications via Cisco WebEx with Adaptive Cards, markdown formatting, and"
+  },
+  {
+   "skill": "webex-report-delivery",
+   "class": "blocked-write",
+   "lines": 282,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Deliver formatted network reports, audit results, topology diagrams, and compliance documentation to WebEx spaces with Adaptive Cards and ma"
+  },
+  {
+   "skill": "webex-user-context",
+   "class": "blocked-write",
+   "lines": 155,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": false,
+   "unpinned_runner": false,
+   "description": "Leverage WebEx user profiles, presence status, and workspace context to personalize responses, route escalations, and coordinate team operat"
+  },
+  {
+   "skill": "webex-voice-interface",
+   "class": "blocked-write",
+   "lines": 128,
+   "env": [],
+   "write_tools": [],
+   "hosts": [
+    "webexapis.com"
+   ],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Respond to WebEx voice clips with both text and an MP3 voice reply using edge-tts. Voice IN is already handled by OpenClaw transcription. Us"
+  },
+  {
+   "skill": "wikipedia-research",
+   "class": "offline-tool",
+   "lines": 247,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Research networking protocols, standards history, and technology context via Wikipedia - OSPF, BGP, MPLS, 802.1X, VXLAN, and more. Use when "
+  },
+  {
+   "skill": "worldlabs-topology-viz",
+   "class": "needs-creds",
+   "lines": 191,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [
+    "topology_model.py",
+    "fantastical_prompt_builder.py"
+   ],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Turn a real network topology into a free, no-cost themed prompt preview, and optionally (after explicit confirmation) generate an explorable"
+  },
+  {
+   "skill": "zabbix-availability",
+   "class": "needs-creds",
+   "lines": 109,
+   "env": [
+    "ZABBIX_TOKEN",
+    "ZABBIX_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Device availability and monitored inventory from Zabbix \u2014 is a device reachable, since when, how often has it flapped, and what is the NMS a"
+  },
+  {
+   "skill": "zabbix-metrics-history",
+   "class": "needs-creds",
+   "lines": 156,
+   "env": [
+    "ZABBIX_TOKEN",
+    "ZABBIX_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Retrieve polled metric history from Zabbix \u2014 interface utilization, counters and any collected item \u2014 over any time window, correctly routed"
+  },
+  {
+   "skill": "zabbix-problem-review",
+   "class": "needs-creds",
+   "lines": 99,
+   "env": [
+    "ZABBIX_TOKEN",
+    "ZABBIX_URL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Review current and historical problems from Zabbix \u2014 severity, which host, when it started, how long it has been active, and whether anyone "
+  },
+  {
+   "skill": "zoom-meeting-context",
+   "class": "needs-creds",
+   "lines": 66,
+   "env": [
+    "ZOOM_MEETING_MCP_CREDENTIAL"
+   ],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Zoom meeting intelligence \u2014 correlates a live or referenced Zoom meeting discussion against NetClaw's historical meeting record (via the off"
+  },
+  {
+   "skill": "zscaler-identity",
+   "class": "needs-creds",
+   "lines": 62,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage users, groups, departments, and identity provider configurations."
+  },
+  {
+   "skill": "zscaler-insights",
+   "class": "needs-creds",
+   "lines": 62,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Access analytics, threat intelligence, and security event data."
+  },
+  {
+   "skill": "zscaler-zdx",
+   "class": "needs-creds",
+   "lines": 62,
+   "env": [],
+   "write_tools": [],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Monitor digital experience scores, user performance, and application health."
+  },
+  {
+   "skill": "zscaler-zia",
+   "class": "blocked-write",
+   "lines": 65,
+   "env": [],
+   "write_tools": [
+    "create_firewall_rule",
+    "delete_firewall_rule",
+    "update_firewall_rule"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage Zscaler Internet Access firewall rules, URL filtering, DLP, and security policies."
+  },
+  {
+   "skill": "zscaler-zpa",
+   "class": "blocked-write",
+   "lines": 63,
+   "env": [],
+   "write_tools": [
+    "create_application_segment",
+    "delete_application_segment",
+    "update_application_segment"
+   ],
+   "hosts": [],
+   "scripts": [],
+   "mcp": true,
+   "unpinned_runner": false,
+   "description": "Manage Zscaler Private Access applications, segments, policies, and connectors."
+  }
+ ]
+}
