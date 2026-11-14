@@ -1,0 +1,43 @@
+{
+ "serverInfo": {
+  "name": "eve-lab",
+  "version": "1.30.0"
+ },
+ "sha256": "2cdff6191f2121405ae4620f6aa701ab59acc574d5422fb435def26d664ec9f7",
+ "tools": [
+  {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "description": "Validate the text of an EVE-NG .unl lab: orphan nodes, dangling interfaces, partitions, forbidden role adjacency, single points of failure, link symmetry, and optional requirements (required_links, forbidden_links, redundancy_groups as JSON). Returns PASS/WARN/FAIL lists and a resilience level. Pass the file CONTENT, not a path. Node names in the result come from the file (untrusted).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "requirements_json": {
+      "default": "",
+      "title": "Requirements Json",
+      "type": "string"
+     },
+     "roles_json": {
+      "default": "",
+      "title": "Roles Json",
+      "type": "string"
+     },
+     "unl_text": {
+      "title": "Unl Text",
+      "type": "string"
+     }
+    },
+    "required": [
+     "unl_text"
+    ],
+    "title": "validate_unl_topologyArguments",
+    "type": "object"
+   },
+   "name": "validate_unl_topology"
+  }
+ ]
+}

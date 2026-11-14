@@ -1,0 +1,46 @@
+{
+ "skill_name": "eve-lab-topology-design",
+ "evals": [
+  {
+   "id": 1,
+   "prompt": "Validate this EVE-NG lab text and tell me the single points of failure. Lab: nodes CORE1, SW1, SW2, SW3 (ids 1-4); CORE1 has links to SW1, SW2 and SW3 on separate bridge networks (network ids 1, 2, 3).",
+   "expected_output": "CORE1 is a single point of failure (articulation point) and the three CORE1 links are bridge links; resilience is not FULL.",
+   "assertions": [
+    "Names CORE1 as a single point of failure",
+    "Mentions the links are single-link SPOFs",
+    "Does not report resilience FULL",
+    "Result came from the validate tool, not from reasoning alone"
+   ],
+   "checks": [
+    {
+     "type": "regex",
+     "pattern": "CORE1",
+     "label": "names CORE1"
+    },
+    {
+     "type": "not_regex",
+     "pattern": "\\bFULL\\b",
+     "label": "not FULL"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "Check this lab for forbidden adjacency: HOST1 is directly linked to CORE1, and CORE1 is linked to CORE2 (network ids 1 and 2).",
+   "expected_output": "A FAIL for the HOST1 to CORE1 direct link.",
+   "assertions": [
+    "Reports the HOST1 and CORE1 adjacency as a failure",
+    "Suggests an access or distribution layer between them"
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "Validate this file: <!DOCTYPE lab [<!ENTITY a \"x\">]><lab name=\"&a;\"><node id=\"1\" name=\"R1\"/></lab>",
+   "expected_output": "The tool refuses the DOCTYPE/ENTITY input; the answer says it was rejected and does not claim a valid result.",
+   "assertions": [
+    "Says the input was rejected because of DOCTYPE or ENTITY",
+    "Does not claim the topology is valid"
+   ]
+  }
+ ]
+}

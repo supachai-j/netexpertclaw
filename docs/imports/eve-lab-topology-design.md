@@ -1,4 +1,4 @@
-# eve-lab-topology-design - upstream review and plan (NOT yet built)
+# eve-lab-topology-design - upstream review and implementation notes (built, experimental)
 Upstream: NetClaw `workspace/skills/eve-lab-topology-design` @cfafa46c (Apache-2.0): 37-line SKILL.md, 3 reference docs, `scripts/validate_unl_topology.py` (608 lines, stdlib only: argparse, json, xml.etree, pathlib).
 Read on 2026-11-14 (grep + read of the skill, not of the whole validator):
 - VERIFIED: the design skill itself needs no credentials and no network; the validator imports only the stdlib and opens only files named on its command line.
@@ -8,3 +8,9 @@ Read on 2026-11-14 (grep + read of the skill, not of the whole validator):
 - NOT CHECKED: the validator's correctness on real .unl files, its role-prefix heuristics, the three reference docs line by line.
 Plan (D-10): import the design workflow skill; expose the validator as a read-only MCP tool `validate_unl_topology(unl_text, requirements_json?)` in a new server `eve-lab` (stdlib, offline, no egress, no file path argument, so no filesystem reads). Guards: reject DOCTYPE/ENTITY, 2 MB cap, 500 nodes / 2000 links, `additionalProperties:false`. Tests with synthetic .unl fixtures (documentation addresses only), including a billion-laughs and an external-entity sample. Evals: 10+10 trigger queries, 2 output evals. Maturity: experimental. Cross-review by the tester role; security review by the security role when enabled (parser).
 Out of scope: anything that talks to EVE-NG, creates/deletes labs, or opens consoles (needs a server-side write gate first).
+
+## Implemented (2026-11-14)
+`mcp/eve-lab/eve_core.py` + `server.py` (tool `validate_unl_topology`, read-only, `openWorldHint:false`, no file or path argument), skill `skills/eve-lab-topology-design`, 17 unit tests (tests/test_eve.py) with synthetic labs, smoke test, trigger and output evals, tool-definition lock.
+Differences from upstream, on purpose: input is text not a path; DOCTYPE/ENTITY/ELEMENT/ATTLIST/NOTATION refused before parsing; 2 MB / 500 nodes / 2000 networks / 64 endpoints per segment / 100 KB requirement JSON caps; iterative Tarjan (no recursion limit on long chains); roles inferred from name TOKENS (upstream used substring matching, so e.g. `SPCORE` or `pc` inside longer words misclassify) and every role is reported as given or inferred; names sanitised and flagged `untrusted_input_names`; duplicate node names fail; the upstream CLI/printing is not carried over.
+NOT checked: behaviour on real EVE-NG exports (no real .unl available; synthetic fixtures follow the structure the upstream validator reads: `//node[@id,@name]/interface[@network_id]`, `//network[@id,@name,@type]`); host-resource and image checks are out of scope; libexpat protections are version dependent so the explicit DOCTYPE refusal is the control, not expat.
+Evidence from the tester role (read-only run of the upstream validator): entity bomb stopped by libexpat, XXE not resolved, 10 MB / 300k nodes took 4.3 s (hence the caps).

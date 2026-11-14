@@ -31,7 +31,23 @@ async def rfc():
             assert bad.isError and "RFC number" in bad.content[0].text, bad
             print("rfc-lookup ok", sorted(t.name for t in tl))
 
+async def eve():
+    e = json.loads((R/".mcp.json").read_text())["mcpServers"]["eve-lab"]
+    args = [a.replace("${CLAUDE_PLUGIN_ROOT}", str(R)) for a in e["args"]]
+    async with stdio_client(StdioServerParameters(command=e["command"], args=args)) as (r, w):
+        async with ClientSession(r, w) as s:
+            await s.initialize()
+            tl = (await s.list_tools()).tools
+            assert [t.name for t in tl] == ["validate_unl_topology"] and tl[0].annotations.readOnlyHint and not tl[0].annotations.openWorldHint
+            lab = '<lab name="t"><node id="1" name="R1"><interface id="0" network_id="1"/></node><node id="2" name="R2"><interface id="0" network_id="1"/></node><network id="1"/></lab>'
+            ok = await s.call_tool("validate_unl_topology", {"unl_text": lab})
+            assert not ok.isError and '"nodes": 2' in ok.content[0].text, ok
+            bad = await s.call_tool("validate_unl_topology", {"unl_text": "<!DOCTYPE x><lab/>"})
+            assert bad.isError and "DOCTYPE" in bad.content[0].text, bad
+            print("eve-lab ok")
+
 async def main():
+    await eve()
     await rfc()
     await other("fwrule", "list_supported_vendors", {"parse_policy", "analyze_firewall_rule_overlap", "list_supported_vendors", "batch_analyze_overlap"})
     e = json.loads((R/".mcp.json").read_text())["mcpServers"]["subnet-calc"]
