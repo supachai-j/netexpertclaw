@@ -52,6 +52,21 @@ class Hostile(unittest.TestCase):
         with self.assertRaises(core.RfcError): core._fetch("https://evil.invalid/x", 100)
 
 
+class Invisible(unittest.TestCase):
+    def test_control_and_bidi_removed_text_kept(self):
+        raw = "Hi\x1b[31m red\x07 \u202eevil\u202c zero\u200bwidth\ttab\x0cpage"
+        got = core.strip_invisible(raw)
+        for ch in ("\x1b", "\x07", "\u202e", "\u202c", "\u200b", "\x0c"): self.assertNotIn(ch, got)
+        self.assertIn("\ttab", got); self.assertIn("[31m red", got)
+    def test_clean_applies_it_and_still_drops_form_feeds(self):
+        self.assertEqual(core.clean("a\u202eb\x1bc\x0c"), ["abc"])
+    def test_search_rejects_more_than_eight_words(self):
+        core._cache.clear(); f = core._fetch; core._fetch = fake_fetch
+        try:
+            with self.assertRaises(core.RfcError): core.search("one two three four five six seven eight nine")
+        finally: core._fetch = f
+
+
 class Cache(unittest.TestCase):
     def test_cache_is_bounded(self):
         core._cache.clear(); f = core._fetch; n = []; core._fetch = lambda url, cap: (n.append(url), "x")[1]
