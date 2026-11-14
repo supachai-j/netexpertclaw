@@ -1,53 +1,37 @@
-# ความปลอดภัย
+# Safety
 
-อ้างอิง: OWASP Top 10 for LLM Apps, NIST SSDF, security-by-design rule ของทีม รายงานรีวิวเต็ม: `docs/SECURITY-REVIEW.md` (ทุกข้อติดป้าย VERIFIED / INTERPRETIVE / NOT CHECKED)
+References: OWASP Top 10 for LLM applications, OWASP MCP security guidance, NIST SSDF, the MCP specification. Full review log with evidence labels (VERIFIED / INTERPRETIVE / NOT CHECKED): `docs/SECURITY-REVIEW.md`. Report vulnerabilities as in `SECURITY.md`.
 
-## หลักการ
+## Threat model in short
 
-### 1. Read-only เป็นค่าเริ่มต้น
-skill แต่ละตัวประกาศ `risk: read|write` และ server ประกาศ `capability: read|write`; lint ปฏิเสธ skill แบบ read ที่ใช้ server แบบเขียน
+The agent reads untrusted text (RFCs, Wikipedia, device output, firewall configs, `.unl` files) and runs tools with your user's privileges. Risks: prompt injection through fetched text, a tool doing more than it says, a tool definition changing after you reviewed it, a poisoned dependency, secrets or customer data leaking into a model or a repo.
 
-### 2. ด่านกั้นการเขียนต้องอยู่ใน MCP server
-ไม่ใช่ใน SKILL.md และไม่ใช่ที่ approval ของ runtime ผลทดสอบจริง:
+## Controls
 
-| Runtime / โหมด | tool เขียนที่ไม่มีคนอนุมัติ |
-|---|---|
-| Codex `exec` | ถูกบล็อก (fail-closed) |
-| thClaws `-p` (headless) | **รันเอง** แม้ตั้ง ask |
-| thClaws REPL ตั้ง ask | ถามก่อน ตอบ n แล้วไม่รัน |
-| OpenClaw `agent --local` | **รันเอง** |
+1. **Read-only by default.** Skills declare `risk: read|write` and servers `capability: read|write`; lint rejects a read skill that uses a write server. All current tools set `readOnlyHint` and none needs credentials.
+2. **Approval lives in the server.** Measured: Codex `exec` blocks an unapproved write tool; thClaws `-p` and OpenClaw `--local` run it without asking. Therefore a future write tool must enforce change request, baseline, approval bound to device and payload, verify and audit itself. Skill text and the agent's approval prompt are not controls.
+3. **Declared egress.** Each server lists the hosts it may contact; rfc-lookup and wikipedia use one host each over HTTPS, refuse redirects, enforce a 15 s overall deadline and size caps. Lint fails if network modules are imported without a declaration.
+4. **Strict input.** Every tool rejects unknown fields; identifiers are validated (RFC numbers, page titles, CIDR); files are never read by path (eve-lab takes text and refuses `DOCTYPE`/`ENTITY` before parsing; the fwrule proxy does the same for XML declarations and caps rulesets at 4 MiB).
+5. **Untrusted output.** Text from the internet is labelled `untrusted_external_text` and stripped of control, bidi, zero-width, variation-selector and Unicode tag characters. This lowers risk; it does not make the text trustworthy. A real-model injection test with several payloads (instruction override, fake system tags, tool-call lures, tampered content) found no compliance; it used one model family and few samples. Tampered content is only stopped by the pinned host and TLS, not by the model.
+6. **Pinned and locked.** `uv run --no-project --isolated` (a project in the working directory cannot run its build backend), exact `mcp` version, hash-locked requirements for fwrule, GitHub Actions pinned by commit, the full `tools/list` of every server hash-locked and checked in CI so a changed tool definition fails the build.
+7. **CI security jobs.** gitleaks, bandit, semgrep (project rules), pip-audit, zizmor, official `skills-ref` validation, SBOM; releases carry build provenance.
+8. **Skill scanning.** Cisco Skill Scanner and NVIDIA SkillSpector were run offline on all skills with a deliberately malicious control skill to prove the scanners fire. They read skill folders only, not `mcp/` code.
+9. **No secrets or customer data in the repo.** Lint checks for network-device credential patterns; examples use documentation address ranges only.
 
-ดังนั้น tool เขียน config ในอนาคตต้องบังคับเอง: ตรวจ change request, เก็บ baseline, ผูกอนุมัติกับอุปกรณ์+payload, verify หลังเปลี่ยน, rollback, audit log (JSONL), redact
+## What was found and fixed
 
-### 3. tool read ต้องมี `readOnlyHint` ทุกตัว
-tool เขียนห้ามมี (smoke test ตรวจ)
+Selected: `uv` running a project build backend from the working directory (fixed with `--no-project --isolated`, lint-enforced); CGNAT classified as global; symlinks and stray files copied into builds; unpinned dependencies; a DOCTYPE-strip bypass in the upstream fwrule PAN-OS parser (mitigated in our proxy, **not fixed upstream**); a deadline that did not bound slow servers; a header regex with super-linear time; hidden characters surviving a search path. Details and repro evidence: `docs/SECURITY-REVIEW.md`, `docs/security-evidence/`.
 
-### 4. ไม่เก็บ secret ใน repo
-lint ตรวจรูปแบบ credential ของอุปกรณ์เครือข่าย (`enable secret 5`, `password 7`, SNMP community, bearer, PEM, AWS key, GitHub PAT, credential ใน URL) และสแกนไฟล์ `.yml/.sh/.txt/.env`
+## Residual risk
 
-### 5. ถือ output จากอุปกรณ์เป็น untrusted
-กัน prompt injection OpenClaw ห่อผล MCP เป็นเนื้อหา untrusted ให้เอง runtime อื่นต้องระวังเองใน skill
+- The upstream fwrule parsers (other than the proxy's guard) are not fuzzed; the upstream repo ships no LICENSE file.
+- First start downloads packages from PyPI (hashes are enforced for fwrule; the small stdlib servers need only the `mcp` package).
+- Only Claude Code was run with a real model against the tools. Other agents were run with a mock model.
+- No write skill exists, so the approval gate has never been tested against a device.
+- Trademark status of the name `netpaw` is unchecked; a similarly named Windows tool exists.
 
-## ช่องโหว่ที่เจอและปิดแล้ว
+## When you use it
 
-| รหัส | เรื่อง | การแก้ |
-|---|---|---|
-| F-8 | `uv run` รัน build backend ของโปรเจกต์ใน cwd (ทดสอบแล้วใน Codex/thClaws/OpenClaw) | ทุก server ใช้ `--no-project --isolated` และ lint บังคับ |
-| F-10 | resolve dependency ใหม่ทุกครั้งที่เปิด | pin `mcp==1.30.0` และ requirements แบบ pin |
-| F-6/F-7 | symlink และไฟล์แปลกปลอมใน skill ถูกคัดลอกลง `dist/` | lint ปฏิเสธ symlink และไฟล์นอก allow-list; build fail ถ้าเจอ symlink |
-| F-4/F-5/F-9 | ด่านอนุมัติเป็นแค่ข้อความ, `allowed-tools: Bash(*)` ผ่าน lint | บังคับ field `approval: required` + หัวข้อ `## Approval`, ห้าม key นอก allow-list, ตรวจ capability ของ server |
-| F-1 | จัด CGNAT เป็น "global" | ตารางช่วงที่รู้จัก + test |
-| F-11 | ขาด LICENSE/NOTICE | เพิ่มแล้ว lint ตรวจ |
-
-## ความเสี่ยงที่ยังเหลือ
-
-- cold start ต้อง resolve package จาก PyPI (ยังไม่มี hash)
-- fwrule: repo ต้นทางไม่มีไฟล์ LICENSE (ระบุ Apache-2.0 ใน pyproject เท่านั้น), parser XML ยังไม่ได้ fuzz
-- ยังไม่ทดสอบกับโมเดลจริงใน Codex/OpenClaw/thClaws
-- ยังไม่มี skill แบบเขียน จึงยังไม่ได้ทดสอบด่านอนุมัติกับอุปกรณ์จริง
-
-## ข้อควรทำเมื่อใช้งาน
-
-- ใช้ lab หรือ config ที่ sanitize แล้วกับ `fwrule-analyzer`
-- ห้ามใส่ข้อมูลลูกค้า (ชื่อ, เบอร์, อีเมล, ที่อยู่) ลงใน skill/ตัวอย่าง/commit
-- ถ้าเปิด Claude Code/agent ในโฟลเดอร์ที่ไม่น่าไว้ใจ ให้เชื่อ trust prompt ของ runtime แต่เราก็กัน build backend ด้วย `--no-project`
+- Use lab data or sanitised configs. Anything sent to an agent may reach its model provider. Do not paste customer names, personal contact data, credentials or real addresses.
+- Treat a clean scan or review as evidence, not proof. Keep human approval on anything that changes a network.
+- Open agents only in directories you trust.

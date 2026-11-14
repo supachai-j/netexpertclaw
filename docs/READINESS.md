@@ -9,7 +9,7 @@ Every skill carries `metadata.maturity` (checked by lint, shown by `netpaw list`
 | recommended | tested + output eval beats the no-skill baseline on the hard cases + tried on realistic (synthetic or sanitized) data without serious errors |
 
 ## Current state (evidence, 2026-11-14)
-- All three skills are `experimental`; none is `tested`.
+- All five skills are `experimental`; none is `tested`.
 - Cisco Skill Scanner 2.3.2 (static, YARA, bytecode, pipeline, correlation, behavioral; no LLM, nothing sent out) on commit edc52d668ae7, on a worker: 3 skills, 0 findings. Control run in the same session worked (bad skill: 2 critical, 1 high; clean skill: 1 info). Installed copy hash equals source.
 - The scanner reads the skill folders only (SKILL.md and evals). It does not read `mcp/` code; that is covered by bandit, semgrep, review and tests. A clean scan is not proof of safety.
 - Trigger eval (Claude Code, 1 run per query, noisy): see docs/evals/TRIGGER-RESULTS.md. subnet-calculator is below the 80% bar.
