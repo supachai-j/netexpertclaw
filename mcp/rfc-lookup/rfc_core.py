@@ -39,7 +39,7 @@ def _read(r, limit: int) -> bytes:
     end, buf = time.monotonic() + TIMEOUT, bytearray()
     while len(buf) < limit:
         if time.monotonic() > end: raise RfcError("response too slow (overall timeout)")
-        chunk = r.read(min(65536, limit - len(buf)))
+        chunk = r.read1(min(65536, limit - len(buf)))   # read1: one recv, so the deadline is checked between packets (read(n) would block until n bytes)
         if not chunk: break
         buf += chunk
     return bytes(buf)
@@ -80,7 +80,7 @@ def load_rfc(number) -> tuple[int, str, str]:
 
 
 _FOOT = re.compile(r".*\[Page \d+\]\s*$")
-_HEAD = re.compile(r"^RFC \d+\s{2,}.+\s{2,}\w+ \d{4}\s*$")
+_HEAD = re.compile(r"^RFC \d{1,5} {2,40}[^ ].{0,100}? {2,40}\w{3,9} \d{4} *$")   # bounded: the unbounded form was cubic on hostile whitespace (review H2-3)
 
 
 def strip_invisible(text: str) -> str:
@@ -92,7 +92,7 @@ def clean(text: str) -> list[str]:
     """Drop page-break furniture (form feeds, page footers/headers); keep the text."""
     out = []
     for line in strip_invisible(text.replace("\r", "")).split("\n"):
-        if _FOOT.match(line) or _HEAD.match(line):
+        if len(line) <= 200 and (_FOOT.match(line) or _HEAD.match(line)):
             continue
         out.append(line.rstrip())
     return out
@@ -161,7 +161,7 @@ def get_section(number, section: str, max_chars: int = 20000) -> dict:
 
 def _index() -> list[tuple[int, str]]:
     url = f"https://{HOST}/rfc-index.txt"
-    text = _cached(url, MAX_INDEX_BYTES)
+    text = strip_hidden(_cached(url, MAX_INDEX_BYTES))   # every string a tool returns passes the hidden-character stripper (review H2-4)
     entries, cur = [], None
     for line in text.replace("\r", "").split("\n"):
         m = re.match(r"^([0-9]{4,5}) (\S.*)$", line)
@@ -188,5 +188,5 @@ def search(query: str, limit: int = 10) -> dict:
             title = re.split(r"\.\s+(?=[A-Z][A-Za-z.\- ,]+(?:,|\.\s+[A-Z][a-z]+ [0-9]{4}))", t, maxsplit=1)[0]
             hits.append({"rfc": n, "title": title[:160], "status": status.group(1) if status else "", "entry": t[:400]})
     hits.sort(key=lambda h: -h["rfc"])   # newest first
-    return {"source": f"https://{HOST}/rfc-index.txt", "untrusted_external_text": True, "query": query,
+    return {"source": f"https://{HOST}/rfc-index.txt", "untrusted_external_text": True, "query": strip_hidden(query),
             "total_matches": len(hits), "results": hits[:limit]}

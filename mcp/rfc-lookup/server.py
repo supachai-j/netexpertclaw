@@ -13,6 +13,8 @@ mcp = FastMCP("rfc-lookup")
 def _run(fn, *a, **k):
     try: return fn(*a, **k)
     except core.RfcError as e: raise ValueError(str(e)) from None
+    except (RecursionError, MemoryError, UnicodeError, TypeError, AttributeError, KeyError, IndexError):
+        raise ValueError("internal error while processing this request") from None
 
 @mcp.tool(annotations=RO)
 def get_rfc(number: str, offset: int = 0, max_chars: int = 12000) -> dict:

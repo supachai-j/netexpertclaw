@@ -12,7 +12,8 @@
       "{root}/mcp/subnet-calc/server.py"
     ],
     "env": {},
-    "capability": "read"
+    "capability": "read",
+    "egress": []
   },
   "fwrule": {
     "command": "python3",
@@ -34,7 +35,8 @@
       "git+https://github.com/AutomateIP/fwrule-mcp@3bd52d79919b0aa5124e5d34fcbb12fb6112accd",
       "python",
       "{root}/mcp/fwrule/launch.py"
-    ]
+    ],
+    "egress": []
   },
   "rfc-lookup": {
     "command": "uv",

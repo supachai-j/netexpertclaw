@@ -16,6 +16,8 @@ def validate_unl_topology(unl_text: str, requirements_json: str = "", roles_json
     """Validate the text of an EVE-NG .unl lab: orphan nodes, dangling interfaces, partitions, forbidden role adjacency, single points of failure, link symmetry, and optional requirements (required_links, forbidden_links, redundancy_groups as JSON). Returns PASS/WARN/FAIL lists and a resilience level. Pass the file CONTENT, not a path. Node names in the result come from the file (untrusted)."""
     try: return core.validate(unl_text, requirements_json, roles_json)
     except core.UnlError as e: raise ValueError(str(e)) from None
+    except (RecursionError, MemoryError, UnicodeError, TypeError, AttributeError, KeyError, IndexError):
+        raise ValueError("internal error while processing this request") from None
 
 
 harden(mcp)

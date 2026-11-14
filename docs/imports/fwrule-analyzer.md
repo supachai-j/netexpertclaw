@@ -18,3 +18,6 @@ Codex `exec` drops a server that answers `initialize` late (the runtime-test age
 - Child environment is allow-listed (PATH, HOME, LANG, TMPDIR, XDG_*, SSL_CERT_*, UV_*); no shell; argv list only.
 - Regenerate the cache after any bump of the fwrule pin: `uv run --with mcp==1.30.0 python scripts/gen_tools_cache.py fwrule`, re-review the diff of the tool list, commit.
 - NOT verified: that Codex now registers fwrule (needs the runtime-test agent's cold-cache run on worker-A); behaviour with clients that use server notifications or `tools/list_changed` (this server does not emit them).
+
+## Security review H2 follow-up
+H2-1 (PAN-OS DOCTYPE strip bypass by nesting, upstream @3bd52d7 parser.py): the netpaw proxy now rejects any tool argument containing `<!DOCTYPE`, `<!ENTITY`, `<!ELEMENT`, `<!ATTLIST` or `<!NOTATION` (case-insensitive, whitespace tolerant, searched through nested arguments) with -32602 before the child starts, and sets `FOMC_MAX_RULESET_BYTES` to 4 MiB for the child (user may lower it via the environment; default upstream 64 MiB). Not fixed upstream; the owner decides whether to report it to the upstream project. Tests: tests/test_hardening.py (Review2).
