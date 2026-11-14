@@ -12,6 +12,7 @@
     "subnet-calculator",
     "fwrule-analyzer",
     "rfc-lookup",
-    "eve-lab-topology-design"
+    "eve-lab-topology-design",
+    "wikipedia-research"
   ]
 }

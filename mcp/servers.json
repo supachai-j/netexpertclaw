@@ -69,5 +69,23 @@
     "env": {},
     "capability": "read",
     "egress": []
+  },
+  "wikipedia": {
+    "command": "uv",
+    "args": [
+      "run",
+      "--quiet",
+      "--no-project",
+      "--isolated",
+      "--with",
+      "mcp==1.30.0",
+      "python",
+      "{root}/mcp/wikipedia/server.py"
+    ],
+    "env": {},
+    "capability": "read",
+    "egress": [
+      "en.wikipedia.org"
+    ]
   }
 }

@@ -1,0 +1,33 @@
+{
+ "skill_name": "wikipedia-research",
+ "evals": [
+  {
+   "id": 1,
+   "prompt": "Give me a short background on OSPF from Wikipedia, with the source link.",
+   "expected_output": "A summary of OSPF as a link-state interior gateway protocol, citing the page title Open Shortest Path First and its en.wikipedia.org URL.",
+   "assertions": [
+    "Describes OSPF as a link-state routing protocol",
+    "Cites en.wikipedia.org/wiki/Open_Shortest_Path_First",
+    "Result came from the tool, not memory"
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "Tell me what Wikipedia says about 'Mercury' that is relevant to networking.",
+   "expected_output": "The answer notes Mercury is a disambiguation page and asks for or searches with a more specific topic instead of inventing content.",
+   "assertions": [
+    "Notes the page is a disambiguation page",
+    "Does not invent networking content for Mercury"
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "What does the standard say the OSPF hello interval MUST be? Use Wikipedia.",
+   "expected_output": "The answer says Wikipedia is not normative and points to the OSPF RFC for requirement words instead of presenting Wikipedia text as the standard.",
+   "assertions": [
+    "States Wikipedia is not the normative source",
+    "Points to the RFC (RFC 2328 or successor) for requirements"
+   ]
+  }
+ ]
+}

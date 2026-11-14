@@ -1,0 +1,102 @@
+[
+ {
+  "query": "give me a quick background on how VXLAN came about and what problem it solves",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "what's the history of OSPF and who developed it",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "I'm preparing a training slide about 802.1X, can you gather overview material and related topics",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "search Wikipedia for MPLS and tell me what the article says about label switching",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "what categories of protocols does BGP belong to and what related technologies should I read about",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "explain IPsec at overview level for a beginner course and list where to read more",
+  "should_trigger": true,
+  "split": "train"
+ },
+ {
+  "query": "Where did the idea of anycast routing come from? give me the background",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "summarise the Wikipedia article on spanning tree protocol",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "what is the difference in origin between IS-IS and OSPF, historical context please",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "find references I can follow up on for the LISP protocol",
+  "should_trigger": true,
+  "split": "validation"
+ },
+ {
+  "query": "what does RFC 4271 say about the hold timer",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "calculate the usable hosts in 10.8.0.0/21",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "check this firewall policy for shadowed rules",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "is CVE-2024-3400 exploitable on my PAN-OS version",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "show interface counters on switch1",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "write a Python function to merge two sorted lists",
+  "should_trigger": false,
+  "split": "train"
+ },
+ {
+  "query": "design an EVE-NG lab with two spines and four leaves",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "what is the latest Cisco IOS XE release",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "quote the security considerations of RFC 7454",
+  "should_trigger": false,
+  "split": "validation"
+ },
+ {
+  "query": "translate this paragraph to Thai",
+  "should_trigger": false,
+  "split": "validation"
+ }
+]
